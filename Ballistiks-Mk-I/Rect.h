@@ -64,6 +64,18 @@ public:
 		left = max( left,rect.left );
 		right = min( right,rect.right );
 	}
+	inline	T GetWidth( ) const
+	{
+		return right - left;
+	}
+	inline	T GetHeight( ) const
+	{
+		return bottom - top;
+	}
+	inline	bool Contains( _Vec2< T > p ) const
+	{
+		return bool( ( p.y >= top ) & ( p.y <= bottom ) & ( p.x >= left ) & ( p.y <= right ) );
+	}
 
 public:
 	T top;

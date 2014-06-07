@@ -84,21 +84,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="D3DGraphics.h" />
+    <ClInclude Include="Drawable.h" />
+    <ClInclude Include="DrawTarget.h" />
+    <ClInclude Include="dxflib\dl_attributes.h" />
+    <ClInclude Include="dxflib\dl_codes.h" />
+    <ClInclude Include="dxflib\dl_creationadapter.h" />
+    <ClInclude Include="dxflib\dl_creationinterface.h" />
+    <ClInclude Include="dxflib\dl_dxf.h" />
+    <ClInclude Include="dxflib\dl_entities.h" />
+    <ClInclude Include="dxflib\dl_exception.h" />
+    <ClInclude Include="dxflib\dl_extrusion.h" />
+    <ClInclude Include="dxflib\dl_writer.h" />
+    <ClInclude Include="dxflib\dl_writer_ascii.h" />
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Mat3.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="PolyClosed.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vec2.h" />
+    <ClInclude Include="Viewport.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DGraphics.cpp" />
+    <ClCompile Include="dxflib\dl_dxf.cpp" />
+    <ClCompile Include="dxflib\dl_writer_ascii.cpp" />
     <ClCompile Include="Game.cpp">
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</BufferSecurityCheck>

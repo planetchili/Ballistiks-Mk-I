@@ -19,20 +19,66 @@
  *	along with The Chili DirectX Framework.  If not, see <http://www.gnu.org/licenses/>.  *
  ******************************************************************************************/
 #pragma once
+#include <queue>
 
 class MouseServer;
+
+class MouseEvent
+{
+public:
+	enum Type
+	{
+		LPress,
+		LRelease,
+		RPress,
+		RRelease,
+		WheelUp,
+		WheelDown,
+		Move,
+		Invalid
+	};
+private:
+	const Type type;
+	const int x;
+	const int y;
+public:
+	MouseEvent( Type type,int x,int y )
+		:
+		type( type ),
+		x( x ),
+		y( y )
+	{}
+	bool IsValid() const
+	{
+		return type != Invalid;
+	}
+	Type GetType() const
+	{
+		return type;
+	}
+	int GetX() const
+	{
+		return x;
+	}
+	int GetY() const
+	{
+		return y;
+	}
+};
 
 class MouseClient
 {
 public:
-	MouseClient( const MouseServer& server );
+	MouseClient( MouseServer& server );
 	int GetMouseX() const;
 	int GetMouseY() const;
 	bool LeftIsPressed() const;
 	bool RightIsPressed() const;
 	bool IsInWindow() const;
+	MouseEvent ReadMouse();
+	bool MouseEmpty() const;
 private:
-	const MouseServer& server;
+	MouseServer& server;
 };
 
 class MouseServer
@@ -43,10 +89,12 @@ public:
 	void OnMouseMove( int x,int y );
 	void OnMouseLeave();
 	void OnMouseEnter();
-	void OnLeftPressed();
-	void OnLeftReleased();
-	void OnRightPressed();
-	void OnRightReleased();
+	void OnLeftPressed( int x,int y );
+	void OnLeftReleased( int x,int y );
+	void OnRightPressed( int x,int y );
+	void OnRightReleased( int x,int y );
+	void OnWheelUp( int x,int y );
+	void OnWheelDown( int x,int y );
 	bool IsInWindow() const;
 private:
 	int x;
@@ -54,4 +102,6 @@ private:
 	bool leftIsPressed;
 	bool rightIsPressed;
 	bool isInWindow;
+	static const int bufferSize = 4;
+	std::queue< MouseEvent > buffer;
 };

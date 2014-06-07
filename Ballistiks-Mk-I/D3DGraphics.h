@@ -22,6 +22,7 @@
 
 #include <d3d9.h>
 #include "Vec2.h"
+#include "Rect.h"
 #include "Colors.h"
 
 class D3DGraphics
@@ -29,23 +30,35 @@ class D3DGraphics
 public:
 	D3DGraphics( HWND hWnd );
 	~D3DGraphics();
-	void PutPixel( int x,int y,D3DCOLOR c );
-	D3DCOLOR GetPixel( int x,int y ) const;
-	inline void DrawLine( Vec2& pt1,Vec2& pt2,D3DCOLOR c )
+	template< typename T >
+	inline void PutPixel( _Vec2<T> p,Color c )
 	{
-		DrawLine( (int)pt1.x,(int)pt1.y,(int)pt2.x,(int)pt2.y,c );
+		PutPixel( (int)p.x,(int)p.y,c );
 	}
-	void DrawLine( int x1,int y1,int x2,int y2,D3DCOLOR c );
-	void DrawCircle( int centerX,int centerY,int radius,D3DCOLOR c );
+	inline void PutPixel( int x,int y,Color c );
+	inline Color GetPixel( int x,int y ) const;
+	template< typename T >
+	inline void DrawLine( _Vec2<T> p0, _Vec2<T> p1,Color c )
+	{
+		DrawLine( (int)p0.x,(int)p0.y,(int)p1.x,(int)p1.y,c );
+	}
+	void DrawLine( int x0,int y0,int x1,int y1,Color c );
+	void DrawLineClip( Vec2 p0,Vec2 p1,D3DCOLOR color,const RectF& clip );
+	template< typename T >
+	inline void DrawCircle( _Vec2<T> center,int radius,Color c )
+	{
+		DrawCircle( (int)center.x,(int)center.y,c );
+	}
+	void DrawCircle( int centerX,int centerY,int radius,Color c );
 	void BeginFrame();
 	void EndFrame();
 public:
 	static const unsigned int	SCREENWIDTH =	800;
 	static const unsigned int	SCREENHEIGHT =	600;
 private:
-	const D3DCOLOR		FILLVALUE =		BLACK;
+	const Color			FILLVALUE =	BLACK;
 	IDirect3D9*			pDirect3D;
 	IDirect3DDevice9*	pDevice;
 	IDirect3DSurface9*	pBackBuffer;
-	D3DCOLOR*			pSysBuffer;
+	Color*				pSysBuffer;
 };

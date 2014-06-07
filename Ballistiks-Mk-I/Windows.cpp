@@ -53,50 +53,80 @@ LRESULT WINAPI MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 
 		// ************ MOUSE MESSAGES ************ //
 		case WM_MOUSEMOVE:
+		{
+			int x = (short)LOWORD( lParam );
+			int y = (short)HIWORD( lParam );
+			if( x > 0 && x < D3DGraphics::SCREENWIDTH && y > 0 && y < D3DGraphics::SCREENHEIGHT )
 			{
-				int x = (short)LOWORD( lParam );
-				int y = (short)HIWORD( lParam );
-				if( x > 0 && x < D3DGraphics::SCREENWIDTH && y > 0 && y < D3DGraphics::SCREENHEIGHT )
+				mServ.OnMouseMove( x,y );
+				if( !mServ.IsInWindow( ) )
 				{
+					SetCapture( hWnd );
+					mServ.OnMouseEnter( );
+				}
+			}
+			else
+			{
+				if( wParam & ( MK_LBUTTON | MK_RBUTTON ) )
+				{
+					x = max( 0,x );
+					x = min( D3DGraphics::SCREENWIDTH - 1,x );
+					y = max( 0,y );
+					y = min( D3DGraphics::SCREENHEIGHT - 1,y );
 					mServ.OnMouseMove( x,y );
-					if( !mServ.IsInWindow() )
-					{
-						SetCapture( hWnd );
-						mServ.OnMouseEnter();
-					}
 				}
 				else
 				{
-					if( wParam & (MK_LBUTTON | MK_RBUTTON) )
-					{
-						x = max( 0,x );
-						x = min( D3DGraphics::SCREENWIDTH - 1,x );
-						y = max( 0,y );
-						y = min( D3DGraphics::SCREENHEIGHT - 1,y );
-						mServ.OnMouseMove( x,y );
-					}
-					else
-					{
-						ReleaseCapture();
-						mServ.OnMouseLeave();
-						mServ.OnLeftReleased();
-						mServ.OnRightReleased();
-					}
+					ReleaseCapture( );
+					mServ.OnMouseLeave( );
+					mServ.OnLeftReleased( x,y );
+					mServ.OnRightReleased( x,y );
 				}
 			}
 			break;
+		}
 		case WM_LBUTTONDOWN:
-			mServ.OnLeftPressed();
+		{
+			int x = (short)LOWORD( lParam );
+			int y = (short)HIWORD( lParam );
+			mServ.OnLeftPressed( x,y );
 			break;
+		}
 		case WM_RBUTTONDOWN:
-			mServ.OnRightPressed();
+		{
+			int x = (short)LOWORD( lParam );
+			int y = (short)HIWORD( lParam );
+			mServ.OnRightPressed( x,y );
 			break;
+		}
 		case WM_LBUTTONUP:
-			mServ.OnLeftReleased();
+		{
+			int x = (short)LOWORD( lParam );
+			int y = (short)HIWORD( lParam );
+			mServ.OnLeftReleased( x,y );
 			break;
+		}
 		case WM_RBUTTONUP:
-			mServ.OnRightReleased();
+		{
+			int x = (short)LOWORD( lParam );
+			int y = (short)HIWORD( lParam );
+			mServ.OnRightReleased( x,y );
 			break;
+		}
+		case WM_MOUSEWHEEL:
+		{
+			int x = (short)LOWORD( lParam );
+			int y = (short)HIWORD( lParam );
+			if( GET_WHEEL_DELTA_WPARAM( wParam ) > 0 )
+			{
+				mServ.OnWheelUp( x,y );
+			}
+			else if( GET_WHEEL_DELTA_WPARAM( wParam ) < 0 )
+			{
+				mServ.OnWheelDown( x,y );
+			}
+			break;
+		}
 		// ************ END MOUSE MESSAGES ************ //
     }
 

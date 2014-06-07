@@ -21,6 +21,7 @@
 #include "D3DGraphics.h"
 #include "ChiliMath.h"
 #include <assert.h>
+#include <functional>
 #pragma comment( lib,"d3d9.lib" )
 
 D3DGraphics::D3DGraphics( HWND hWnd )
@@ -50,7 +51,7 @@ pSysBuffer( NULL )
 	result = pDevice->GetBackBuffer( 0,0,D3DBACKBUFFER_TYPE_MONO,&pBackBuffer );
 	assert( !FAILED( result ) );
 
-	pSysBuffer = new D3DCOLOR[ SCREENWIDTH * SCREENHEIGHT ];
+	pSysBuffer = new Color[ SCREENWIDTH * SCREENHEIGHT ];
 }
 
 D3DGraphics::~D3DGraphics()
@@ -79,7 +80,7 @@ D3DGraphics::~D3DGraphics()
 
 void D3DGraphics::BeginFrame()
 {
-	memset( pSysBuffer,FILLVALUE,sizeof(D3DCOLOR)* SCREENWIDTH * SCREENHEIGHT );
+	memset( pSysBuffer,FILLVALUE,sizeof(Color)* SCREENWIDTH * SCREENHEIGHT );
 }
 
 void D3DGraphics::EndFrame()
@@ -92,7 +93,7 @@ void D3DGraphics::EndFrame()
 
 	for( int y = 0; y < SCREENHEIGHT; y++ )
 	{
-		memcpy( &((BYTE*)backRect.pBits)[backRect.Pitch * y],&pSysBuffer[SCREENWIDTH * y],sizeof(D3DCOLOR)* SCREENWIDTH );
+		memcpy( &((BYTE*)backRect.pBits)[backRect.Pitch * y],&pSysBuffer[SCREENWIDTH * y],sizeof(Color)* SCREENWIDTH );
 	}
 
 	result = pBackBuffer->UnlockRect( );
@@ -102,7 +103,7 @@ void D3DGraphics::EndFrame()
 	assert( !FAILED( result ) );
 }
 
-void D3DGraphics::PutPixel( int x,int y,D3DCOLOR c )
+void D3DGraphics::PutPixel( int x,int y,Color c )
 {	
 	assert( x >= 0 );
 	assert( y >= 0 );
@@ -111,7 +112,7 @@ void D3DGraphics::PutPixel( int x,int y,D3DCOLOR c )
 	pSysBuffer[ x + SCREENWIDTH * y ] = c;
 }
 
-D3DCOLOR D3DGraphics::GetPixel( int x,int y ) const
+Color D3DGraphics::GetPixel( int x,int y ) const
 {
 	assert( x >= 0 );
 	assert( y >= 0 );
@@ -120,7 +121,7 @@ D3DCOLOR D3DGraphics::GetPixel( int x,int y ) const
 	return pSysBuffer[ x + SCREENWIDTH * y ];
 }
 
-void D3DGraphics::DrawLine( int x1,int y1,int x2,int y2,D3DCOLOR c )
+void D3DGraphics::DrawLine( int x1,int y1,int x2,int y2,Color c )
 {	
 	const int dx = x2 - x1;
 	const int dy = y2 - y1;
@@ -169,7 +170,105 @@ void D3DGraphics::DrawLine( int x1,int y1,int x2,int y2,D3DCOLOR c )
 	}
 }
 
-void D3DGraphics::DrawCircle( int centerX,int centerY,int radius,D3DCOLOR color )
+void D3DGraphics::DrawLineClip( Vec2 p0,Vec2 p1,D3DCOLOR color,const RectF& clip )
+{
+	enum OutCode
+	{
+		INSIDE = 0, // 0000
+		LEFT = 1,   // 0001
+		RIGHT = 2,  // 0010
+		BOTTOM = 4, // 0100
+		TOP = 8     // 1000
+	};
+
+	const std::function< OutCode( float,float ) > ComputeOutCode =
+		[&clip]( float x,float y ) -> OutCode
+	{
+		OutCode code = INSIDE;   // initialised as being inside of clip window
+
+		if( x < clip.left )           // to the left of clip window
+			code = (OutCode)( code | LEFT );
+		else if( x > clip.right )      // to the right of clip window
+			code = (OutCode)( code | RIGHT );
+		if( y < clip.top )           // below the clip window
+			code = (OutCode)( code | BOTTOM );
+		else if( y > clip.bottom )      // above the clip window
+			code = (OutCode)( code | TOP );
+
+		return code;
+	};
+
+	// compute outcodes for P0, P1, and whatever point lies outside the clip rectangle
+	OutCode outcode0 = ComputeOutCode( p0.x,p0.y );
+	OutCode outcode1 = ComputeOutCode( p1.x,p1.y );
+	bool accept = false;
+
+	while( true )
+	{
+		if( !( outcode0 | outcode1 ) )
+		{ // Bitwise OR is 0. Trivially accept and get out of loop
+			accept = true;
+			break;
+		}
+		else if( outcode0 & outcode1 )
+		{ // Bitwise AND is not 0. Trivially reject and get out of loop
+			break;
+		}
+		else
+		{
+			// failed both tests, so calculate the line segment to clip
+			// from an outside point to an intersection with clip edge
+			float x,y;
+
+			// At least one endpoint is outside the clip rectangle; pick it.
+			OutCode outcodeOut = outcode0 ? outcode0 : outcode1;
+
+			// Now find the intersection point;
+			// use formulas y = p0.y + slope * (x - p0.x), x = p0.x + (1 / slope) * (y - p0.y)
+			if( outcodeOut & TOP )
+			{           // point is above the clip rectangle
+				x = p0.x + ( p1.x - p0.x ) * ( clip.bottom - p0.y ) / ( p1.y - p0.y );
+				y = clip.bottom;
+			}
+			else if( outcodeOut & BOTTOM )
+			{ // point is below the clip rectangle
+				x = p0.x + ( p1.x - p0.x ) * ( clip.top - p0.y ) / ( p1.y - p0.y );
+				y = clip.top;
+			}
+			else if( outcodeOut & RIGHT )
+			{  // point is to the right of clip rectangle
+				y = p0.y + ( p1.y - p0.y ) * ( clip.right - p0.x ) / ( p1.x - p0.x );
+				x = clip.right;
+			}
+			else if( outcodeOut & LEFT )
+			{   // point is to the left of clip rectangle
+				y = p0.y + ( p1.y - p0.y ) * ( clip.left - p0.x ) / ( p1.x - p0.x );
+				x = clip.left;
+			}
+
+			// Now we move outside point to intersection point to clip
+			// and get ready for next pass.
+			if( outcodeOut == outcode0 )
+			{
+				p0.x = x;
+				p0.y = y;
+				outcode0 = ComputeOutCode( p0.x,p0.y );
+			}
+			else
+			{
+				p1.x = x;
+				p1.y = y;
+				outcode1 = ComputeOutCode( p1.x,p1.y );
+			}
+		}
+	}
+	if( accept )
+	{
+		DrawLine( (int)( p0.x + 0.5 ),(int)( p0.y + 0.5 ),(int)( p1.x + 0.5 ),(int)( p1.y + 0.5 ),color );
+	}
+}
+
+void D3DGraphics::DrawCircle( int centerX,int centerY,int radius,Color color )
 {
 	int rSquared = sq( radius );
 	int xPivot = (int)( radius * 0.70710678118f + 0.5f );

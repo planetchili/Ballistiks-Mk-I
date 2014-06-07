@@ -188,6 +188,12 @@ public:
 	{
 		return _Vec2( (x + p2.x) / 2.0f,(y + p2.y) / 2.0f );
 	}
+	inline _Vec2	Rotation( const float angle ) const
+	{
+		const float cosine = cosf( angle );
+		const float sine = sinf( angle );
+		return { x * cosine - y * sine,x * sine + y * cosine };
+	}
 
 public:
 	T x;

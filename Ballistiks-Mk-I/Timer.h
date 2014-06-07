@@ -29,6 +29,10 @@ public:
 	void StartWatch();
 	void StopWatch();
 	float GetTimeMilli() const;
+	inline float GetTimeSec() const
+	{
+		return GetTimeMilli() / 1000.0f;
+	}
 private:
 	float invFreqMilli;
 	bool watchStopped;

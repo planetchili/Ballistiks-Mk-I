@@ -30,7 +30,7 @@
 class Game
 {
 public:
-	Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer );
+	Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer );
 	~Game();
 	void Go();
 private:

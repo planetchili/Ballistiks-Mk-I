@@ -19,6 +19,15 @@
     <Filter Include="Source Files\Framework">
       <UniqueIdentifier>{d83c0ef5-8392-49c7-80c4-d48900829440}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Framework\dxflib">
+      <UniqueIdentifier>{b70fc088-4871-4273-9bd6-c9f5944c5470}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Framework\dxflib">
+      <UniqueIdentifier>{21aa8a45-5e54-4784-8d43-763b228795a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{dc8e42b2-128b-43ea-bfa9-56c6595b322d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -57,6 +66,54 @@
     <ClInclude Include="Vec2.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
+    <ClInclude Include="dxflib\dl_attributes.h">
+      <Filter>Header Files\Framework\dxflib</Filter>
+    </ClInclude>
+    <ClInclude Include="dxflib\dl_codes.h">
+      <Filter>Header Files\Framework\dxflib</Filter>
+    </ClInclude>
+    <ClInclude Include="dxflib\dl_creationadapter.h">
+      <Filter>Header Files\Framework\dxflib</Filter>
+    </ClInclude>
+    <ClInclude Include="dxflib\dl_creationinterface.h">
+      <Filter>Header Files\Framework\dxflib</Filter>
+    </ClInclude>
+    <ClInclude Include="dxflib\dl_dxf.h">
+      <Filter>Header Files\Framework\dxflib</Filter>
+    </ClInclude>
+    <ClInclude Include="dxflib\dl_entities.h">
+      <Filter>Header Files\Framework\dxflib</Filter>
+    </ClInclude>
+    <ClInclude Include="dxflib\dl_exception.h">
+      <Filter>Header Files\Framework\dxflib</Filter>
+    </ClInclude>
+    <ClInclude Include="dxflib\dl_extrusion.h">
+      <Filter>Header Files\Framework\dxflib</Filter>
+    </ClInclude>
+    <ClInclude Include="dxflib\dl_writer.h">
+      <Filter>Header Files\Framework\dxflib</Filter>
+    </ClInclude>
+    <ClInclude Include="dxflib\dl_writer_ascii.h">
+      <Filter>Header Files\Framework\dxflib</Filter>
+    </ClInclude>
+    <ClInclude Include="Mat3.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawTarget.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewport.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="PolyClosed.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -79,6 +136,12 @@
     </ClCompile>
     <ClCompile Include="Windows.cpp">
       <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="dxflib\dl_dxf.cpp">
+      <Filter>Source Files\Framework\dxflib</Filter>
+    </ClCompile>
+    <ClCompile Include="dxflib\dl_writer_ascii.cpp">
+      <Filter>Source Files\Framework\dxflib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

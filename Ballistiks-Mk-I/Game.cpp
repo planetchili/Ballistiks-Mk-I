@@ -20,7 +20,7 @@
  ******************************************************************************************/
 #include "Game.h"
 
-Game::Game( HWND hWnd,KeyboardServer& kServer,const MouseServer& mServer )
+Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 :	gfx( hWnd ),
 	audio( hWnd ),
 	kbd( kServer ),
