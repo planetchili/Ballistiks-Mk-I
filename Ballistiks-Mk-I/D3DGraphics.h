@@ -44,7 +44,7 @@ public:
 		DrawLine( (int)p0.x,(int)p0.y,(int)p1.x,(int)p1.y,c );
 	}
 	void DrawLine( int x0,int y0,int x1,int y1,Color c );
-	void DrawLineClip( Vec2 p0,Vec2 p1,D3DCOLOR color,const RectF& clip );
+	void DrawLineClip( Vec2 p0,Vec2 p1,Color color,const RectF& clip );
 	template< typename T >
 	inline void DrawCircle( _Vec2<T> center,int radius,Color c )
 	{

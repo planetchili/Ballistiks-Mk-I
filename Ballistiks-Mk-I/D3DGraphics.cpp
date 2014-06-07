@@ -170,7 +170,7 @@ void D3DGraphics::DrawLine( int x1,int y1,int x2,int y2,Color c )
 	}
 }
 
-void D3DGraphics::DrawLineClip( Vec2 p0,Vec2 p1,D3DCOLOR color,const RectF& clip )
+void D3DGraphics::DrawLineClip( Vec2 p0,Vec2 p1,Color color,const RectF& clip )
 {
 	enum OutCode
 	{
@@ -264,7 +264,7 @@ void D3DGraphics::DrawLineClip( Vec2 p0,Vec2 p1,D3DCOLOR color,const RectF& clip
 	}
 	if( accept )
 	{
-		DrawLine( (int)( p0.x + 0.5 ),(int)( p0.y + 0.5 ),(int)( p1.x + 0.5 ),(int)( p1.y + 0.5 ),color );
+		DrawLine( p0,p1,color );
 	}
 }
 
