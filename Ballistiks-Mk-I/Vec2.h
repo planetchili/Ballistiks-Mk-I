@@ -131,7 +131,7 @@ public:
 	{
 		return _Vec2( *this ) /= rhs;
 	}
-	inline T		CrossWith( const _Vec2 &rhs ) const
+	inline T		Cross( const _Vec2 &rhs ) const
 	{
 		return x * rhs.y - y * rhs.x;
 	}
@@ -188,7 +188,7 @@ public:
 	{
 		return _Vec2( (x + p2.x) / 2.0f,(y + p2.y) / 2.0f );
 	}
-	inline _Vec2	Rotation( const float angle ) const
+	inline _Vec2	Rotate( const float angle ) const
 	{
 		const float cosine = cosf( angle );
 		const float sine = sinf( angle );

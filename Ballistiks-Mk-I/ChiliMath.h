@@ -20,11 +20,58 @@
 ******************************************************************************************/
 #pragma once
 #include <math.h>
+#include <vector>
+#include <assert.h>
 
 #define PI (float)M_PI
 
 template <typename T>
-inline T sq( T val )
+T sgn( T val )
+{
+	return (T)( (T)0 <= val ) - ( val < (T)0 );
+}
+
+template <typename T>
+T sq( T val )
 {
 	return val * val;
+}
+
+// !assumes at least one real root exists!
+template <typename T>
+std::vector< T >&& quadratic_roots( T a,T b,T c )
+{
+	const T intermediate = sqrt( sq( b ) - (T)4 * a * c );
+	std::vector< T > roots;
+	roots.push_back( ( -b + intermediate ) / ( (T)2 * a ) );
+	roots.push_back( ( -b - intermediate ) / ( (T)2 * a ) );
+	return std::move( roots );
+}
+
+inline unsigned int factorial( unsigned int n )
+{
+	unsigned int result = 1;
+	for( ; n > 1; n-- )
+	{
+		result *= n;
+	}
+	return result;
+}
+
+inline unsigned int choose( unsigned int n,unsigned int k )
+{
+	assert( n >= k );
+	unsigned int num = 1;
+	for( ; n > k; n-- )
+	{
+		num *= n;
+	}
+	return num / factorial( n - k );
+}
+
+template <typename T>
+T gaussian( T x,T o )
+{
+	return ( ( T )1.0 / sqrt( ( T )2.0 * PI * sq( o ) ) ) 
+		* exp( -sq( x ) / ( ( T )2.0 * sq( o ) ) );
 }

@@ -29,7 +29,7 @@ D3DGraphics::D3DGraphics( HWND hWnd )
 pDirect3D( NULL ),
 pDevice( NULL ),
 pBackBuffer( NULL ),
-pSysBuffer( NULL )
+sysBuffer( SCREENWIDTH,SCREENHEIGHT )
 {
 	HRESULT result;
 	
@@ -50,8 +50,6 @@ pSysBuffer( NULL )
 
 	result = pDevice->GetBackBuffer( 0,0,D3DBACKBUFFER_TYPE_MONO,&pBackBuffer );
 	assert( !FAILED( result ) );
-
-	pSysBuffer = new Color[ SCREENWIDTH * SCREENHEIGHT ];
 }
 
 D3DGraphics::~D3DGraphics()
@@ -71,16 +69,11 @@ D3DGraphics::~D3DGraphics()
 		pBackBuffer->Release();
 		pBackBuffer = NULL;
 	}
-	if( pSysBuffer )
-	{
-		delete pSysBuffer;
-		pSysBuffer = NULL;
-	}
 }
 
 void D3DGraphics::BeginFrame()
 {
-	memset( pSysBuffer,FILLVALUE,sizeof(Color)* SCREENWIDTH * SCREENHEIGHT );
+	sysBuffer.Clear( FILLVALUE );
 }
 
 void D3DGraphics::EndFrame()
@@ -91,10 +84,9 @@ void D3DGraphics::EndFrame()
 	result = pBackBuffer->LockRect( &backRect,NULL,NULL );
 	assert( !FAILED( result ) );
 
-	for( int y = 0; y < SCREENHEIGHT; y++ )
-	{
-		memcpy( &((BYTE*)backRect.pBits)[backRect.Pitch * y],&pSysBuffer[SCREENWIDTH * y],sizeof(Color)* SCREENWIDTH );
-	}
+
+	sysBuffer.Present( SCREENHEIGHT,SCREENWIDTH,backRect.Pitch,(BYTE*)backRect.pBits );
+
 
 	result = pBackBuffer->UnlockRect( );
 	assert( !FAILED( result ) );
@@ -109,7 +101,7 @@ void D3DGraphics::PutPixel( int x,int y,Color c )
 	assert( y >= 0 );
 	assert( x < SCREENWIDTH );
 	assert( y < SCREENHEIGHT );
-	pSysBuffer[ x + SCREENWIDTH * y ] = c;
+	sysBuffer.PutPixel( x,y,c );
 }
 
 Color D3DGraphics::GetPixel( int x,int y ) const
@@ -118,32 +110,46 @@ Color D3DGraphics::GetPixel( int x,int y ) const
 	assert( y >= 0 );
 	assert( x < SCREENWIDTH );
 	assert( y < SCREENHEIGHT );
-	return pSysBuffer[ x + SCREENWIDTH * y ];
+	return sysBuffer.GetPixel( x,y );
 }
 
-void D3DGraphics::DrawLine( int x1,int y1,int x2,int y2,Color c )
+void D3DGraphics::PutPixelAlpha( int x,int y,Color c )
+{
+	// load source pixel
+	const Color d = GetPixel( x,y );
+
+	// blend channels
+	const unsigned char rsltRed = ( c.r * c.x + d.r * ( 255 - c.x ) ) / 255;
+	const unsigned char rsltGreen = ( c.g * c.x + d.g * ( 255 - c.x ) ) / 255;
+	const unsigned char rsltBlue = ( c.b * c.x + d.b * ( 255 - c.x ) ) / 255;
+
+	// pack channels back into pixel and fire pixel onto backbuffer
+	PutPixel( x,y,{ rsltRed,rsltGreen,rsltBlue } );
+}
+
+void D3DGraphics::DrawLine( int x0,int y0,int x1,int y1,Color c )
 {	
-	const int dx = x2 - x1;
-	const int dy = y2 - y1;
+	const int dx = x1 - x0;
+	const int dy = y1 - y0;
 
 	if( dy == 0 && dx == 0 )
 	{
-		PutPixel( x1,y1,c );
+		PutPixel( x0,y0,c );
 	}
 	else if( abs( dy ) > abs( dx ) )
 	{
 		if( dy < 0 )
 		{
-			int temp = x1;
-			x1 = x2;
-			x2 = temp;
-			temp = y1;
-			y1 = y2;
-			y2 = temp;
+			int temp = x0;
+			x0 = x1;
+			x1 = temp;
+			temp = y0;
+			y0 = y1;
+			y1 = temp;
 		}
 		const float m = (float)dx / (float)dy;
-		const float b = x1 - m*y1;
-		for( int y = y1; y <= y2; y = y + 1 )
+		const float b = x0 - m*y0;
+		for( int y = y0; y <= y1; y = y + 1 )
 		{
 			int x = (int)(m*y + b + 0.5f);
 			PutPixel( x,y,c );
@@ -153,16 +159,16 @@ void D3DGraphics::DrawLine( int x1,int y1,int x2,int y2,Color c )
 	{
 		if( dx < 0 )
 		{
-			int temp = x1;
-			x1 = x2;
-			x2 = temp;
-			temp = y1;
-			y1 = y2;
-			y2 = temp;
+			int temp = x0;
+			x0 = x1;
+			x1 = temp;
+			temp = y0;
+			y0 = y1;
+			y1 = temp;
 		}
 		const float m = (float)dy / (float)dx;
-		const float b = y1 - m*x1;
-		for( int x = x1; x <= x2; x = x + 1 )
+		const float b = y0 - m*x0;
+		for( int x = x0; x <= x1; x = x + 1 )
 		{
 			int y = (int)(m*x + b + 0.5f);
 			PutPixel( x,y,c );
@@ -283,5 +289,85 @@ void D3DGraphics::DrawCircle( int centerX,int centerY,int radius,Color color )
 		PutPixel( centerX - y,centerY + x,color );
 		PutPixel( centerX + y,centerY - x,color );
 		PutPixel( centerX - y,centerY - x,color );
+	}
+}
+
+void D3DGraphics::DrawFlatTriangle( float y0,float y1,float m0,float m1,
+	float b0,float b1,const RectI& clipRect,Color c )
+{
+	// calculate start and end scanlines
+	const int yStart = max( int( y0 + 0.5f ),clipRect.top );
+	const int yEnd = min( int( y1 + 0.5f ),clipRect.bottom + 1 ); // does not include this scanline
+
+	for( int y = yStart; y < yEnd; y++ )
+	{
+		const int x0 = max( int( m0 * ( float( y ) + 0.5f ) + b0 + 0.5f ),clipRect.left );
+		const int x1 = min( int( m1 * ( float( y ) + 0.5f ) + b1 + 0.5f ),clipRect.right + 1 );
+
+		for( int x = x0; x < x1; x++ )
+		{
+			PutPixel( x,y,c );
+		}
+	}
+}
+
+void D3DGraphics::DrawTriangle( Vec2 p0,Vec2 p1,Vec2 p2,const RectI& clipRect,Color c )
+{
+	// sort vectors
+	if( p1.y < p0.y ) {
+		p0.Swap( p1 );
+	}
+	if( p2.y < p1.y ) {
+		p1.Swap( p2 );
+	}
+	if( p1.y < p0.y ) {
+		p1.Swap( p0 );
+	}
+
+	// determine triangle case if flat top
+	if( p0.y == p1.y )
+	{
+		if( p0.x > p1.x ) p0.Swap( p1 );
+		const float m0 = ( p2.x - p0.x ) / ( p2.y - p0.y );
+		const float m1 = ( p2.x - p1.x ) / ( p2.y - p1.y );
+		const float b0 = p2.x - m0 * p2.y;
+		const float b1 = p2.x - m1 * p2.y;
+		DrawFlatTriangle( p0.y,p2.y,m0,m1,b0,b1,clipRect,c );
+	}
+	else if( p1.y == p2.y )
+	{
+		if( p1.x > p2.x ) p1.Swap( p2 );
+		const float m0 = ( p1.x - p0.x ) / ( p1.y - p0.y );
+		const float m1 = ( p2.x - p0.x ) / ( p2.y - p0.y );
+		const float b0 = p1.x - m0 * p1.y;
+		const float b1 = p2.x - m1 * p2.y;
+		DrawFlatTriangle( p0.y,p2.y,m0,m1,b0,b1,clipRect,c );
+	}
+	else
+	{
+		// calculate the slopes and intercepts before top/bottom splitting is performed
+		// need m2 b2?
+		// need to match point used for x-intercept calc
+		const float m0 = ( p1.x - p0.x ) / ( p1.y - p0.y );
+		const float m1 = ( p2.x - p0.x ) / ( p2.y - p0.y );
+		const float m2 = ( p2.x - p1.x ) / ( p2.y - p1.y );
+		const float b0 = p1.x - m0 * p1.y;
+		const float b1 = p2.x - m1 * p2.y;
+		const float b2 = p2.x - m2 * p2.y;
+
+		// qy == p1.y
+		const float qx = ( p1.y - p0.y ) * m1 + p0.x;
+
+		// if major right
+		if( p1.x < qx )
+		{
+			DrawFlatTriangle( p0.y,p1.y,m0,m1,b0,b1,clipRect,c );
+			DrawFlatTriangle( p1.y,p2.y,m2,m1,b2,b1,clipRect,c );
+		}
+		else
+		{
+			DrawFlatTriangle( p0.y,p1.y,m1,m0,b1,b0,clipRect,c );
+			DrawFlatTriangle( p1.y,p2.y,m1,m2,b1,b2,clipRect,c );
+		}
 	}
 }

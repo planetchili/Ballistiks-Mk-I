@@ -70,30 +70,25 @@ public:
 	}
 	static _Mat3 Identity()
 	{
-		_Mat3 i = { (T)1.0,(T)0.0,(T)0.0,(T)0.0,(T)1.0,(T)0.0,(T)0.0,(T)0.0,(T)1.0 };
-		return i;
+		return { (T)1.0,(T)0.0,(T)0.0,(T)0.0,(T)1.0,(T)0.0,(T)0.0,(T)0.0,(T)1.0 };
 	}
 	static _Mat3 Rotation( const T theta )
 	{
 		const T cosTheta = cos( theta );
 		const T sinTheta = sin( theta );
-		_Mat3 r = { cosTheta,-sinTheta,(T)0.0,sinTheta,cosTheta,(T)0.0,(T)0.0,(T)0.0,(T)1.0 };
-		return r;
+		return { cosTheta,-sinTheta,(T)0.0,sinTheta,cosTheta,(T)0.0,(T)0.0,(T)0.0,(T)1.0 };
 	}
 	static _Mat3 Scaling( const T factor )
 	{
-		_Mat3 s = { factor,(T)0.0,(T)0.0,(T)0.0,factor,(T)0.0,(T)0.0,(T)0.0,(T)1.0 };
-		return s;
+		return { factor,(T)0.0,(T)0.0,(T)0.0,factor,(T)0.0,(T)0.0,(T)0.0,(T)1.0 };
 	}
 	static _Mat3 Translation( const _Vec2<T> offset )
 	{
-		_Mat3 t = { (T)1.0,(T)0.0,offset.x,(T)0.0,(T)1.0,offset.y,(T)0.0,(T)0.0,(T)1.0 };
-		return t;
+		return { (T)1.0,(T)0.0,offset.x,(T)0.0,(T)1.0,offset.y,(T)0.0,(T)0.0,(T)1.0 };
 	}
 	static _Mat3 Stretch( const T x,const T y )
 	{
-		Mat3 s = { x,0.0f,0.0f,0.0f,y,0.0f,0.0f,0.0f,1.0f };
-		return s;
+		return { x,(T)0.0,(T)0.0,(T)0.0,y,(T)0.0,(T)0.0,(T)0.0,(T)1.0 };
 	}
 public:
 	// [ row ][ col ]

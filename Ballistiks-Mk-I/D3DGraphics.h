@@ -25,19 +25,31 @@
 #include "Rect.h"
 #include "Colors.h"
 #include "DrawTarget.h"
+#include "Surface.h"
 
 class D3DGraphics : public DrawTarget
 {
 public:
 	D3DGraphics( HWND hWnd );
-	~D3DGraphics();
+	~D3DGraphics( );
+	template< typename T >
+	inline Color GetPixel( _Vec2<T> p ) const
+	{
+		return GetPixel( (int)p.x,(int)p.y );
+	}
+	inline Color GetPixel( int x,int y ) const;
 	template< typename T >
 	inline void PutPixel( _Vec2<T> p,Color c )
 	{
 		PutPixel( (int)p.x,(int)p.y,c );
 	}
 	inline void PutPixel( int x,int y,Color c );
-	inline Color GetPixel( int x,int y ) const;
+	template< typename T >
+	inline void PutPixelAlpha( _Vec2<T> p,Color c )
+	{
+		PutPixelAlpha( (int)p.x,(int)p.y,c );
+	}
+	inline void PutPixelAlpha( int x,int y,Color c );
 	template< typename T >
 	inline void DrawLine( _Vec2<T> p0, _Vec2<T> p1,Color c )
 	{
@@ -51,19 +63,23 @@ public:
 		DrawCircle( (int)center.x,(int)center.y,c );
 	}
 	void DrawCircle( int centerX,int centerY,int radius,Color c );
+	void DrawTriangle( Vec2 p0,Vec2 p1,Vec2 p2,const RectI& clipRect,Color c );
 	void BeginFrame();
-	void EndFrame( );
+	void EndFrame();
 	virtual void Draw( Drawable& obj ) override
 	{
 		obj.Rasterize( *this );
 	}
 public:
 	static const unsigned int	SCREENWIDTH =	800;
-	static const unsigned int	SCREENHEIGHT =	600;
+	static const unsigned int	SCREENHEIGHT = 600;
+private:
+	void DrawFlatTriangle( float y1,float y2,float m1,float m2,
+		float b1,float b2,const RectI& clipRect,Color c );
 private:
 	const Color			FILLVALUE =	BLACK;
 	IDirect3D9*			pDirect3D;
 	IDirect3DDevice9*	pDevice;
 	IDirect3DSurface9*	pBackBuffer;
-	Color*				pSysBuffer;
+	Surface				sysBuffer;
 };

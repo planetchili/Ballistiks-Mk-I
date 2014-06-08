@@ -24,8 +24,6 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Sound.h"
-#include "Timer.h"
-#include "FrameTimer.h"
 
 class Game
 {
