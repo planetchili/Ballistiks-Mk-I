@@ -9,6 +9,7 @@
 // via offset (wall) or via ear removal (triangularization)
 class TriangleStrip
 {
+	// TODO: unify color ownership of drawable entities?
 public:
 	class Drawable : public ::Drawable
 	{
@@ -35,7 +36,7 @@ public:
 	};
 public:
 	// TODO: fix winding (cw/ccw) intolerances (might need to fix in PolyClosed as well)
-	static TriangleStrip&& ExtractClosedWall( const std::vector< const Vec2 >& lineVerts,float width )
+	static TriangleStrip ExtractClosedWall( const std::vector< const Vec2 >& lineVerts,float width )
 	{
 		std::vector< const Vec2 > stripVerts;
 		for( auto i = lineVerts.begin(),end = lineVerts.end() - 2; i != end; i++ )
@@ -70,9 +71,9 @@ public:
 		}
 		stripVerts.push_back( stripVerts[0] );
 		stripVerts.push_back( stripVerts[1] );
-		return std::move( TriangleStrip( std::move( stripVerts ) ) );
+		return TriangleStrip( std::move( stripVerts ) );
 	}
-	static std::vector< const TriangleStrip >&& ExtractSolidStripCollection( 
+	static std::vector< const TriangleStrip > ExtractSolidStripCollection( 
 		const std::vector< const Vec2 >& line )
 	{
 		// make the list of input vertices
@@ -84,12 +85,12 @@ public:
 		// keep extracting strips from the vertice list until no more triangles remain
 		while( inputVerts.size() > 2 )
 		{
-			strips.push_back( std::move( ExtractSolidStrip( inputVerts ) ) );
+			strips.push_back( ExtractSolidStrip( inputVerts ) );
 		}
 		// return the vector of strips
-		return std::move( strips );
+		return strips;
 	}
-	static TriangleStrip&& ExtractSolidStrip( std::list< const Vec2 >& inputVerts )
+	static TriangleStrip ExtractSolidStrip( std::list< const Vec2 >& inputVerts )
 	{
 		// need at least 1 triangle in the set
 		assert( inputVerts.size() > 2 );
@@ -208,9 +209,9 @@ public:
 			}
 		}
 		// return the triangle strip
-		return std::move( TriangleStrip( std::move( vertices ) ) );
+		return TriangleStrip( std::move( vertices ) );
 	}
-	static TriangleStrip&& GenerateSemicircle( float radius,int nVertices )
+	static TriangleStrip GenerateSemicircle( float radius,int nVertices )
 	{
 		std::vector< const Vec2 > vertices;
 		float dTheta = PI / (nVertices - 1);
@@ -223,7 +224,7 @@ public:
 			vertices.push_back( r.Rotate( dTheta * n ) );
 		}
 		vertices.push_back( { 0.0f,radius } );
-		return std::move( TriangleStrip( std::move( vertices ) ) );
+		return TriangleStrip( std::move( vertices ) );
 	}
 public:
 	TriangleStrip( TriangleStrip&& strip )
