@@ -4,11 +4,6 @@
 class CollidableCircle
 {
 public:
-	CollidableCircle( float radius,Vec2 pos = {0.0f,0.0f} )
-		:
-		pos( pos ),
-		radius( radius )
-	{}
 	inline RectF GetAABB() const
 	{
 		const Vec2 c = GetCenter();
@@ -28,6 +23,12 @@ public:
 	virtual void Rebound( Vec2 normal ) = 0;
 	virtual void ApplyImpulse( Vec2 j ) = 0;
 protected:
+	CollidableCircle( float radius,Vec2 pos = { 0.0f,0.0f } )
+		:
+		pos( pos ),
+		radius( radius )
+	{}
+protected:
 	Vec2 pos;
 	float radius;
 };
@@ -35,12 +36,6 @@ protected:
 class PhysicalCircle : public CollidableCircle
 {
 public:
-	PhysicalCircle( float radius,float mass,Vec2 vel = { 0.0f,0.0f },Vec2 pos = { 0.0f,0.0f } )
-		:
-		CollidableCircle( radius,pos ),
-		mass( mass ),
-		vel( vel )
-	{}
 	virtual Vec2 GetVel() const override
 	{
 		return vel;
@@ -58,6 +53,13 @@ public:
 		vel += j / mass;
 	}
 protected:
+	PhysicalCircle( float radius,float mass,Vec2 vel = { 0.0f,0.0f },Vec2 pos = { 0.0f,0.0f } )
+		:
+		CollidableCircle( radius,pos ),
+		mass( mass ),
+		vel( vel )
+	{}
+protected:
 	Vec2 vel;
 	float mass;
 };
@@ -65,10 +67,6 @@ protected:
 class LogicalCircle : public CollidableCircle
 {
 public:
-	LogicalCircle( float radius,Vec2 pos = { 0.0f,0.0f } )
-		:
-		CollidableCircle( radius,pos )
-	{}
 	virtual Vec2 GetVel() const override
 	{
 		_wassert( L"Cannot get velocity from LogicalCircle",_CRT_WIDE( __FILE__ ),__LINE__ );
@@ -85,4 +83,9 @@ public:
 	{
 		_wassert( L"Cannot apply impulse to LogicalCircle",_CRT_WIDE( __FILE__ ),__LINE__ );
 	}
+protected:
+	LogicalCircle( float radius,Vec2 pos = { 0.0f,0.0f } )
+		:
+		CollidableCircle( radius,pos )
+	{}
 };
