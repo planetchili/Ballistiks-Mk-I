@@ -23,6 +23,7 @@
 #include <assert.h>
 #include <functional>
 #pragma comment( lib,"d3d9.lib" )
+#pragma comment( lib,"gdiplus.lib" )
 
 D3DGraphics::D3DGraphics( HWND hWnd )
 	:
@@ -50,6 +51,10 @@ sysBuffer( SCREENWIDTH,SCREENHEIGHT )
 
 	result = pDevice->GetBackBuffer( 0,0,D3DBACKBUFFER_TYPE_MONO,&pBackBuffer );
 	assert( !FAILED( result ) );
+
+	// initialize gdi+
+	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+	Gdiplus::GdiplusStartup( &gdiplusToken,&gdiplusStartupInput,NULL );
 }
 
 D3DGraphics::~D3DGraphics()
@@ -69,6 +74,9 @@ D3DGraphics::~D3DGraphics()
 		pBackBuffer->Release();
 		pBackBuffer = NULL;
 	}
+
+	// clean up gdi+
+	Gdiplus::GdiplusShutdown( gdiplusToken );
 }
 
 void D3DGraphics::BeginFrame()
@@ -289,6 +297,41 @@ void D3DGraphics::DrawCircle( int centerX,int centerY,int radius,Color color )
 		PutPixel( centerX - y,centerY + x,color );
 		PutPixel( centerX + y,centerY - x,color );
 		PutPixel( centerX - y,centerY - x,color );
+	}
+}
+
+void D3DGraphics::DrawCircleClip( int centerX,int centerY,int radius,const RectI& clip,Color color )
+{
+	int rSquared = sq( radius );
+	int xPivot = (int)( radius * 0.70710678118f + 0.5f );
+	for( int x = 0; x <= xPivot; x++ )
+	{
+		int y = (int)( sqrt( (float)( rSquared - sq( x ) ) ) + 0.5f );
+
+		Vei2 pout = { centerX + x,centerY + y };
+		if( clip.Contains( pout ) )
+			PutPixel( pout,color );
+		pout = { centerX - x,centerY + y };
+		if( clip.Contains( pout ) )
+			PutPixel( pout,color );
+		pout = { centerX + x,centerY - y };
+		if( clip.Contains( pout ) )
+			PutPixel( pout,color );
+		pout = { centerX - x,centerY - y };
+		if( clip.Contains( pout ) )
+			PutPixel( pout,color );
+		pout = { centerX + y,centerY + x };
+		if( clip.Contains( pout ) )
+			PutPixel( pout,color );
+		pout = { centerX + y,centerY - x };
+		if( clip.Contains( pout ) )
+			PutPixel( pout,color );
+		pout = { centerX - y,centerY + x };
+		if( clip.Contains( pout ) )
+			PutPixel( pout,color );
+		pout = { centerX - y,centerY - x };
+		if( clip.Contains( pout ) )
+			PutPixel( pout,color );
 	}
 }
 

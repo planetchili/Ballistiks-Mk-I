@@ -28,13 +28,13 @@
     <Filter Include="Header Files\Graphics">
       <UniqueIdentifier>{dc8e42b2-128b-43ea-bfa9-56c6595b322d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Framework\Math">
+      <UniqueIdentifier>{71f70b9d-5822-44cc-8907-28faa521f36d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChiliMath.h">
-      <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Colors.h">
       <Filter>Header Files\Framework</Filter>
@@ -51,9 +51,6 @@
     <ClInclude Include="Mouse.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="Rect.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
@@ -61,9 +58,6 @@
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="Vec2.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="dxflib\dl_attributes.h">
@@ -96,9 +90,6 @@
     <ClInclude Include="dxflib\dl_writer_ascii.h">
       <Filter>Header Files\Framework\dxflib</Filter>
     </ClInclude>
-    <ClInclude Include="Mat3.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="Drawable.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
@@ -119,6 +110,24 @@
     </ClInclude>
     <ClInclude Include="TriangleStrip.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>Header Files\Framework\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Mat3.h">
+      <Filter>Header Files\Framework\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="ChiliMath.h">
+      <Filter>Header Files\Framework\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>Header Files\Framework\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Vec2.h">
+      <Filter>Header Files\Framework\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="CollidableCircle.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

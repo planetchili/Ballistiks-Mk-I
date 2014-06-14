@@ -23,13 +23,9 @@
 MouseClient::MouseClient( MouseServer& server )
 : server( server )
 {}
-int MouseClient::GetMouseX() const
+Vei2 MouseClient::GetPos() const
 {
-	return server.x;
-}
-int MouseClient::GetMouseY() const
-{
-	return server.y;
+	return { server.x,server.y };
 }
 bool MouseClient::LeftIsPressed() const
 {

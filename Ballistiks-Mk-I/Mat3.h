@@ -68,6 +68,7 @@ public:
 	{
 		return { element[0][2],element[1][2] };
 	}
+public:
 	static _Mat3 Identity()
 	{
 		return { (T)1.0,(T)0.0,(T)0.0,(T)0.0,(T)1.0,(T)0.0,(T)0.0,(T)0.0,(T)1.0 };

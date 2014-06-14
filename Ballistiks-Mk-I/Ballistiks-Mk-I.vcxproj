@@ -86,6 +86,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChiliMath.h" />
+    <ClInclude Include="CollidableCircle.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="D3DGraphics.h" />
     <ClInclude Include="Drawable.h" />
@@ -111,6 +112,7 @@
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="TriangleStrip.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Viewport.h" />

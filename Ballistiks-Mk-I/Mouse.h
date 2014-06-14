@@ -20,6 +20,7 @@
  ******************************************************************************************/
 #pragma once
 #include <queue>
+#include "Vec2.h"
 
 class MouseServer;
 
@@ -56,13 +57,9 @@ public:
 	{
 		return type;
 	}
-	int GetX() const
+	Vei2 GetPos() const
 	{
-		return x;
-	}
-	int GetY() const
-	{
-		return y;
+		return { x,y };
 	}
 };
 
@@ -70,8 +67,7 @@ class MouseClient
 {
 public:
 	MouseClient( MouseServer& server );
-	int GetMouseX() const;
-	int GetMouseY() const;
+	Vei2 GetPos() const;
 	bool LeftIsPressed() const;
 	bool RightIsPressed() const;
 	bool IsInWindow() const;

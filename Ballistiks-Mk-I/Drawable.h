@@ -8,8 +8,12 @@ class Drawable
 public:
 	Drawable()
 		:
-		trans( Mat3::Identity() ),
-		clip( -INT_MAX,INT_MAX,-INT_MAX,INT_MAX )
+		Drawable( Mat3::Identity() )
+	{}
+	Drawable( Mat3 trans )
+		:
+		trans( trans ),
+		clip( INT_MIN,( INT_MAX - 100 ),INT_MIN,( INT_MAX - 100 ) )
 	{}
 	void Transform( const Mat3& mat )
 	{

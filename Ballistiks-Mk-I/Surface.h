@@ -3,8 +3,6 @@
 #include "Colors.h"
 #include <gdiplus.h>
 #include <string>
-#pragma comment( lib,"gdiplus.lib" )
-
 
 class Surface
 {
@@ -28,7 +26,7 @@ public:
 	}
 	void Save( const std::wstring filename )
 	{
-		auto GetEncoderClsid = []( const WCHAR* format,CLSID* pClsid ) -> int
+		auto GetEncoderClsid = []( const WCHAR* const format,CLSID* const pClsid ) -> int
 		{
 			UINT  num = 0;          // number of image encoders
 			UINT  size = 0;         // size of the image encoder array in bytes
@@ -59,18 +57,12 @@ public:
 			return -1;  // Failure
 		};
 
-		Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-		ULONG_PTR gdiplusToken;
-		Gdiplus::GdiplusStartup( &gdiplusToken,&gdiplusStartupInput,NULL );
-
-		{
-			Gdiplus::Bitmap bitmap( width,height,pitch * sizeof( Color ),PixelFormat32bppARGB,(BYTE*)buffer );
-			CLSID bmpID;
-			GetEncoderClsid( L"image/bmp",&bmpID );
-			bitmap.Save( filename.c_str(),&bmpID,NULL );
-		}
-
-		Gdiplus::GdiplusShutdown( gdiplusToken );
+		// get encoder class ID information for .bmp format
+		CLSID bmpID;
+		GetEncoderClsid( L"image/bmp",&bmpID );
+		// create bitmap object attached to this surface buffer and save it
+		Gdiplus::Bitmap( width,height,pitch * sizeof( Color ),
+			PixelFormat32bppARGB,(BYTE*)buffer ).Save( filename.c_str(),&bmpID,NULL );
 	}
 	inline void Clear( Color fillValue  )
 	{

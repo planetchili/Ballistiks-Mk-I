@@ -60,10 +60,16 @@ public:
 	template< typename T >
 	inline void DrawCircle( _Vec2<T> center,int radius,Color c )
 	{
-		DrawCircle( (int)center.x,(int)center.y,c );
+		DrawCircle( (int)center.x,(int)center.y,radius,c );
 	}
 	void DrawCircle( int centerX,int centerY,int radius,Color c );
-	void DrawTriangle( Vec2 p0,Vec2 p1,Vec2 p2,const RectI& clipRect,Color c );
+	template< typename T >
+	inline void DrawCircleClip( _Vec2<T> center,int radius,const RectI& clip,Color c )
+	{
+		DrawCircleClip( (int)center.x,(int)center.y,radius,clip,c );
+	}
+	void DrawCircleClip( int centerX,int centerY,int radius,const RectI& clip,Color c );
+	void DrawTriangle( Vec2 p0,Vec2 p1,Vec2 p2,const RectI& clip,Color c );
 	void BeginFrame();
 	void EndFrame();
 	virtual void Draw( Drawable& obj ) override
@@ -71,15 +77,20 @@ public:
 		obj.Rasterize( *this );
 	}
 public:
+	static RectI GetScreenRect()
+	{
+		return { 0,SCREENHEIGHT - 1,0,SCREENWIDTH - 1 };
+	}
 	static const unsigned int	SCREENWIDTH =	800;
-	static const unsigned int	SCREENHEIGHT = 600;
+	static const unsigned int	SCREENHEIGHT =	600;
 private:
 	void DrawFlatTriangle( float y1,float y2,float m1,float m2,
-		float b1,float b2,const RectI& clipRect,Color c );
+		float b1,float b2,const RectI& clip,Color c );
 private:
 	const Color			FILLVALUE =	BLACK;
 	IDirect3D9*			pDirect3D;
 	IDirect3DDevice9*	pDevice;
 	IDirect3DSurface9*	pBackBuffer;
 	Surface				sysBuffer;
+	ULONG_PTR			gdiplusToken;
 };

@@ -44,7 +44,8 @@ private:
 	DSound audio;
 	/********************************/
 	/*  User Variables              */
-	
+
+
 	/********************************/
 	void UpdateModel();
 };

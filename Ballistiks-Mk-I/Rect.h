@@ -23,18 +23,25 @@
 #include "Vec2.h"
 
 template < typename T >
-class Rect
+class _Rect
 {
 public:
-	inline	Rect() {}
-	inline	Rect( T top,T bottom,T left,T right )
+	inline	_Rect( ) {}
+	inline	_Rect( T top,T bottom,T left,T right )
 		:
 	top( top ),
 	bottom( bottom ),
 	left( left ),
 	right( right )
 	{}
-	inline	Rect( const Rect& rect )
+	inline	_Rect( _Vec2< T > p0,_Vec2< T > p1 )
+		:
+		top( min( p0.y,p1.y ) ),
+		bottom( max( p0.y,p1.y ) ),
+		left( min( p0.x,p1.x ) ),
+		right( max( p0.x,p1.x ) )
+	{}
+	inline	_Rect( const _Rect& rect )
 		:
 	top( rect.top ),
 	bottom( rect.bottom ),
@@ -53,11 +60,11 @@ public:
 		right += dx;
 	}
 	template < typename T2 >
-	inline	operator Rect< T2 >() const
+	inline	operator _Rect< T2 >( ) const
 	{
 		return { (T2)top,(T2)bottom,(T2)left,(T2)right };
 	}
-	inline	void ClipTo( const Rect& rect )
+	inline	void ClipTo( const _Rect& rect )
 	{
 		top = max( top,rect.top );
 		bottom = min( bottom,rect.bottom );
@@ -74,7 +81,13 @@ public:
 	}
 	inline	bool Contains( _Vec2< T > p ) const
 	{
-		return bool( ( p.y >= top ) & ( p.y <= bottom ) & ( p.x >= left ) & ( p.y <= right ) );
+		// branchless (but is it faster...?)
+		return bool( ( p.y >= top ) & ( p.y <= bottom ) & ( p.x >= left ) & ( p.x <= right ) );
+	}
+	inline	bool Overlaps( _Rect r ) const
+	{
+		// branchless (but is it faster...? or do I even care?)
+		return bool( ( r.bottom > top ) & (r.top < bottom ) & ( r.right > left ) & (r.left < right ) );
 	}
 
 public:
@@ -84,5 +97,5 @@ public:
 	T right;
 };
 
-typedef Rect< int > RectI;
-typedef Rect< float > RectF;
+typedef _Rect< int > RectI;
+typedef _Rect< float > RectF;

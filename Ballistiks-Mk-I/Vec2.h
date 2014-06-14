@@ -20,6 +20,7 @@
 ******************************************************************************************/
 #pragma once
 
+#include <vector>
 #include "ChiliMath.h"
 
 template <typename T>
@@ -56,18 +57,18 @@ public:
 		y /= length;
 		return *this;
 	}
-	inline _Vec2&	CW90()
+	inline _Vec2&	CW90( ) // clockwise in screen (y down)
 	{
-		T temp = y;
-		y = -x;
-		x = temp;
-		return *this;
-	}
-	inline _Vec2&	CCW90()
-	{		
 		T temp = y;
 		y = x;
 		x = -temp;
+		return *this;
+	}
+	inline _Vec2&	CCW90( ) // counter clockwise in screen (y down)
+	{		
+		T temp = y;
+		y = -x;
+		x = temp;
 		return *this;
 	}
 	inline _Vec2&	Swap( _Vec2& vect )
@@ -188,10 +189,10 @@ public:
 	{
 		return _Vec2( (x + p2.x) / 2.0f,(y + p2.y) / 2.0f );
 	}
-	inline _Vec2	Rotate( const float angle ) const
+	inline _Vec2	Rotation( const T angle ) const // positive angle -> clockwise rotation
 	{
-		const float cosine = cosf( angle );
-		const float sine = sinf( angle );
+		const T cosine = cos( angle );
+		const T sine = sin( angle );
 		return { x * cosine - y * sine,x * sine + y * cosine };
 	}
 
@@ -202,3 +203,31 @@ public:
 
 typedef _Vec2< float > Vec2;
 typedef _Vec2< double > Ved2;
+typedef _Vec2< int > Vei2;
+
+template< typename T >
+inline std::vector< _Vec2<T> > CircleLineIntersection( _Vec2<T> q,_Vec2<T> p1,_Vec2<T> p2,T r )
+{
+	std::vector< _Vec2<T> > points;
+	// calculate discriminant
+	const _Vec2<T> d = p2 - p1;
+	const T dr2 = d.LenSq( );
+	const T D = ( p1 - q ).Cross( p2 - q );
+	const T disc = sq( r ) * dr2 - sq( D );
+	// line intersection test
+	if( disc >= ( T )0.0 )
+	{
+		// calculate points of intersection
+		const T sqrtDisc = sqrt( disc );
+		const T lhsx = D * d.y;
+		const T rhsx = sgn( d.y ) * d.x * sqrtDisc;
+		const T lhsy = -D * d.x;
+		const T rhsy = abs( d.y ) * sqrtDisc;
+		points.push_back( _Vec2<T> { ( lhsx + rhsx ) / dr2,( lhsy + rhsy ) / dr2 } +q );
+		if( disc > ( T )0.0 )
+		{
+			points.push_back( _Vec2<T> { ( lhsx - rhsx ) / dr2,( lhsy - rhsy ) / dr2 } +q );
+		}
+	}
+	return points;
+}

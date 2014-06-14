@@ -1,5 +1,6 @@
 #pragma once
 #include "PolyClosed.h"
+#include "Triangle.h"
 #include <assert.h>
 #include <functional>
 #include <list>
@@ -9,11 +10,18 @@
 // via offset (wall) or via ear removal (triangularization)
 class TriangleStrip
 {
-	// TODO: unify color ownership of drawable entities?
 public:
 	class Drawable : public ::Drawable
 	{
 	public:
+		Drawable( const TriangleStrip& parent,Color color,Mat3 trans ) 
+			:
+			::Drawable( trans ),
+			color( color ),
+			vertices( parent.vertices )
+		{
+
+		}
 		Drawable( const TriangleStrip& parent,Color color )
 			:
 			color( color ),
@@ -35,7 +43,6 @@ public:
 		const Color color;
 	};
 public:
-	// TODO: fix winding (cw/ccw) intolerances (might need to fix in PolyClosed as well)
 	static TriangleStrip ExtractClosedWall( const std::vector< const Vec2 >& lineVerts,float width )
 	{
 		std::vector< const Vec2 > stripVerts;
@@ -77,9 +84,7 @@ public:
 		const std::vector< const Vec2 >& line )
 	{
 		// make the list of input vertices
-		// reverse so that the winding matches our requirements
 		std::list< const Vec2 > inputVerts( line.begin( ),line.end( ) );
-		inputVerts.reverse();
 		// make the vector of output triangle strips
 		std::vector< const TriangleStrip > strips;
 		// keep extracting strips from the vertice list until no more triangles remain
@@ -105,14 +110,14 @@ public:
 			auto a = std::prev( b );
 			auto c = std::next( b );
 			// return false if not convex to the polygon
-			if( !IsConvex( *a,*b,*c ) )
+			if( !Triangle::IsConvex( *a,*b,*c ) )
 			{
 				return false;
 			}
 			// return false if there is a vertex before the triangle inside
 			for( auto iPre = inputVerts.cbegin( ); iPre != a; iPre++ )
 			{
-				if( ContainsPoint( *a,*b,*c,*iPre ) )
+				if( Triangle::ContainsPoint( *a,*b,*c,*iPre ) )
 				{
 					return false;
 				}
@@ -120,7 +125,7 @@ public:
 			// return false if there is a vertex after the triangle inside
 			for( auto iPost = std::next( c ),end = inputVerts.cend( ); iPost != end; iPost++ )
 			{
-				if( ContainsPoint( *a,*b,*c,*iPost ) )
+				if( Triangle::ContainsPoint( *a,*b,*c,*iPost ) )
 				{
 					return false;
 				}
@@ -129,6 +134,7 @@ public:
 			return true;
 		};
 
+		// range of i such that next and prev always exist
 		for( auto end = std::prev( inputVerts.end() ),
 			i = std::next( inputVerts.begin() ); i != end; i++ )
 		{
@@ -213,15 +219,16 @@ public:
 	}
 	static TriangleStrip GenerateSemicircle( float radius,int nVertices )
 	{
+		assert( nVertices % 2 != 0 );
 		std::vector< const Vec2 > vertices;
 		float dTheta = PI / (nVertices - 1);
 		const int nIterations = nVertices / 2;
 		for( int n = 0; n < nIterations; n++ )
 		{
-			Vec2 l = { -radius,0.0f };
-			Vec2 r = { radius,0.0f };
-			vertices.push_back( l.Rotate( -dTheta * n ) );
-			vertices.push_back( r.Rotate( dTheta * n ) );
+			const Vec2 l = { -radius,0.0f };
+			const Vec2 r = { radius,0.0f };
+			vertices.push_back( l.Rotation( -dTheta * n ) );
+			vertices.push_back( r.Rotation( dTheta * n ) );
 		}
 		vertices.push_back( { 0.0f,radius } );
 		return TriangleStrip( std::move( vertices ) );
@@ -237,25 +244,15 @@ public:
 	{
 		return Drawable( *this,color );
 	}
+	Drawable GetDrawable( Mat3 trans,Color color = WHITE ) const
+	{
+		return Drawable( *this,color,trans );
+	}
 private:
 	TriangleStrip( std::vector< const Vec2 >&& vertices )
 		:
 		vertices( vertices )
 	{}
-	static bool IsConvex( Vec2 v0,Vec2 v1,Vec2 v2 )
-	{
-		return (v1 - v0).Cross( v2 - v1 ) <= 0.0f;
-	}
-	static bool ContainsPoint( Vec2 v0,Vec2 v1,Vec2 v2,Vec2 p )
-	{
-		auto IsSameSide = [p]( Vec2 a,Vec2 b,Vec2 c ) -> bool
-		{ 
-			const Vec2 ab = b - a;
-			return ab.Cross( p - a ) * ab.Cross( c - a ) >= 0.0f;
-		};
-		return IsSameSide( v0,v1,v2 ) && IsSameSide( v1,v2,v0 )
-			&& IsSameSide( v2,v0,v1 );
-	}
 private:
 	std::vector< const Vec2 > vertices;	
 };
