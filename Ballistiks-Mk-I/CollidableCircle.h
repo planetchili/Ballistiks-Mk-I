@@ -63,6 +63,7 @@ protected:
 	{}
 protected:
 	Vec2 vel;
+	Vec2 force = { 0.0f,0.0f };
 	float mass;
 };
 
