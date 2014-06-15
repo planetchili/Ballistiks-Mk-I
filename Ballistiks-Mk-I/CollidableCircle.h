@@ -71,19 +71,19 @@ class LogicalCircle : public CollidableCircle
 public:
 	virtual Vec2 GetVel() const override
 	{
-		_wassert( L"Cannot get velocity from LogicalCircle",_CRT_WIDE( __FILE__ ),__LINE__ );
+		assert( false );
 	}
 	virtual float GetMass() const override
 	{
-		_wassert( L"Cannot get mass from LogicalCircle",_CRT_WIDE( __FILE__ ),__LINE__ );
+		assert( false );
 	}
 	virtual void Rebound( Vec2 normal ) override
 	{
-		_wassert( L"Cannot rebound LogicalCircle",_CRT_WIDE( __FILE__ ),__LINE__ );
+		assert( false );
 	}
 	virtual void ApplyImpulse( Vec2 j ) override
 	{
-		_wassert( L"Cannot apply impulse to LogicalCircle",_CRT_WIDE( __FILE__ ),__LINE__ );
+		assert( false );
 	}
 protected:
 	LogicalCircle( float radius,Vec2 pos = { 0.0f,0.0f } )

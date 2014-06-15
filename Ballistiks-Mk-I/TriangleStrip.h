@@ -192,9 +192,10 @@ public:
 					auto last = std::prev( inputVerts.end( ) );
 					if( i == last )
 					{
+						// wtf bro @size=5
 						// rotate list so that last is at the middle
 						begin = inputVerts.begin();
-						inputVerts.splice( last,inputVerts,begin,std::next( begin,size / 2 + size % 2  ) );
+						inputVerts.splice( begin,inputVerts,std::next( begin,size / 2 ),inputVerts.end() );
 					}
 					// if cw vertice is not prunable
 					if( !IsPrunable( i ) )
