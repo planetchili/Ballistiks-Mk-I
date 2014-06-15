@@ -3,92 +3,81 @@
 #include "Rect.h"
 #include <assert.h>
 
-class CollidableCircle
+class PhysicalCircle
 {
 public:
-	inline RectF GetAABB() const
-	{
-		const Vec2 c = GetCenter();
-		const float r = GetRadius();
-		return { c.y - r,c.y + r,c.x - r,c.x + r };
-	}
-	inline Vec2 GetCenter() const
+	inline Vec2 GetCenter( ) const
 	{
 		return pos;
 	}
-	inline float GetRadius() const
+	inline float GetRadius( ) const
 	{
 		return radius;
 	}
-	virtual Vec2 GetVel() const = 0;
-	virtual float GetMass() const = 0;
-	virtual void Rebound( Vec2 normal ) = 0;
-	virtual void ApplyImpulse( Vec2 j ) = 0;
-protected:
-	CollidableCircle( float radius,Vec2 pos = { 0.0f,0.0f } )
-		:
-		pos( pos ),
-		radius( radius )
-	{}
-protected:
-	Vec2 pos;
-	float radius;
-};
-
-class PhysicalCircle : public CollidableCircle
-{
-public:
-	virtual Vec2 GetVel() const override
+	inline RectF GetAABB( ) const
+	{
+		return { pos.y - radius,pos.y + radius,pos.x - radius,pos.x + radius };
+	}
+	inline Vec2 GetVel( ) const
 	{
 		return vel;
 	}
-	virtual float GetMass() const override
+	inline float GetMass( ) const
 	{
 		return mass;
 	}
-	virtual void Rebound( Vec2 normal ) override
+	inline void Rebound( Vec2 normal )
 	{
 		vel -= normal * ( vel * normal ) * 2.0f;
 	}
-	virtual void ApplyImpulse( Vec2 j ) override
+	inline void ApplyImpulse( Vec2 j )
 	{
 		vel += j / mass;
+	}
+	inline void ApplyForce( Vec2 f )
+	{
+		force += f;
+	}
+	bool HandleCollision( PhysicalCircle& other )
+	{
+		bool collided = false;
+		// dot : displacement from other to this
+		Vec2 dot = pos - other.GetCenter( );
+		if( dot.LenSq( ) < sq( other.GetRadius( ) + radius ) )
+		{
+			// velocity of other relative to that of this
+			const Vec2 vot = other.GetVel( ) - vel;
+			// only collide on approach
+			if( vot * dot > 0.0f )
+			{
+				collided = true;
+				const float mo = other.GetMass( );
+				const float mt = mass;
+				const float j = -2.0f * ( vot * dot.Normalize( ) ) * mo * mt / ( mo + mt );
+				other.ApplyImpulse( dot * j );
+				ApplyImpulse( dot * -j );
+			}
+		}
+		return collided;
+	}
+	virtual void Update( const float dt )
+	{
+		vel += ( force / mass ) * dt;
+		pos += vel * dt;
+		force = { 0.0f,0.0f };
 	}
 protected:
 	PhysicalCircle( float radius,float mass,Vec2 vel = { 0.0f,0.0f },Vec2 pos = { 0.0f,0.0f } )
 		:
-		CollidableCircle( radius,pos ),
+		radius( radius ),
+		pos( pos ),
 		mass( mass ),
 		vel( vel )
 	{}
 protected:
+	Vec2 pos;
 	Vec2 vel;
 	Vec2 force = { 0.0f,0.0f };
+	float radius;
 	float mass;
-};
-
-class LogicalCircle : public CollidableCircle
-{
-public:
-	virtual Vec2 GetVel() const override
-	{
-		assert( false );
-	}
-	virtual float GetMass() const override
-	{
-		assert( false );
-	}
-	virtual void Rebound( Vec2 normal ) override
-	{
-		assert( false );
-	}
-	virtual void ApplyImpulse( Vec2 j ) override
-	{
-		assert( false );
-	}
-protected:
-	LogicalCircle( float radius,Vec2 pos = { 0.0f,0.0f } )
-		:
-		CollidableCircle( radius,pos )
-	{}
 };

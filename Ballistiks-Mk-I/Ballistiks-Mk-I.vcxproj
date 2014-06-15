@@ -88,7 +88,9 @@
     <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="CollidableCircle.h" />
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="Controller.h" />
     <ClInclude Include="D3DGraphics.h" />
+    <ClInclude Include="DragProcessor.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="DrawTarget.h" />
     <ClInclude Include="dxflib\dl_attributes.h" />
@@ -104,6 +106,7 @@
     <ClInclude Include="FrameTimer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="KeyboardController.h" />
     <ClInclude Include="Mat3.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Player.h" />

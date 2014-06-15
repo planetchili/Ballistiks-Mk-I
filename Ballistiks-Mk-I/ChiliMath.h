@@ -32,7 +32,7 @@ T sgn( T val )
 }
 
 template <typename T>
-T sq( T val )
+auto sq( T val ) -> decltype( val * val )
 {
 	return val * val;
 }

@@ -100,7 +100,7 @@ public:
 	{
 		return vertices;
 	}
-	bool HandleCollision( CollidableCircle& obj,ReboundType dir )
+	bool HandleCollision( PhysicalCircle& obj,ReboundType dir )
 	{
 		bool collided = false;
 
