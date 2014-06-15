@@ -82,7 +82,7 @@ public:
 	}
 	inline Color GetPixel( unsigned int x,unsigned int y ) const
 	{
-		return buffer[y * pitch + x * sizeof( Color )];
+		return buffer[y * pitch + x];
 	}
 	inline unsigned int GetWidth() const
 	{
