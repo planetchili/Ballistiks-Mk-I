@@ -25,7 +25,7 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 	//audio( hWnd ),
 	kbd( kServer ),
 	mouse( mServer ),
-	bounds( { { 50.0f,50.0f },{ 750.0f,50.0f },{ 750.0f,550.0f },{50.0f,550.0f} } ),
+	bounds( { { 40.0f,40.0f },{ 1240.0f,40.0f },{ 1240.0f,680.0f },{ 40.0f,680.0f } } ),
 	player( {400.0f,300.0f} ),
 	controller( player,kbd ),
 	ball( {450.0f,300.0} )

@@ -81,8 +81,8 @@ public:
 	{
 		return { 0,SCREENHEIGHT - 1,0,SCREENWIDTH - 1 };
 	}
-	static const unsigned int	SCREENWIDTH =	800;
-	static const unsigned int	SCREENHEIGHT =	600;
+	static const unsigned int	SCREENWIDTH =	1280;
+	static const unsigned int	SCREENHEIGHT =	720;
 private:
 	void DrawFlatTriangle( float y1,float y2,float m1,float m2,
 		float b1,float b2,const RectI& clip,Color c );
