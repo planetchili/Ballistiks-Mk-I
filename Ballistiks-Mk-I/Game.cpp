@@ -22,9 +22,13 @@
 
 Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 :	gfx( hWnd ),
-	audio( hWnd ),
+	//audio( hWnd ),
 	kbd( kServer ),
-	mouse( mServer )
+	mouse( mServer ),
+	bounds( { { 50.0f,50.0f },{ 750.0f,50.0f },{ 750.0f,550.0f },{50.0f,550.0f} } ),
+	player( {400.0f,300.0f} ),
+	controller( player,kbd ),
+	ball( {450.0f,300.0} )
 {
 }
 
@@ -42,8 +46,19 @@ void Game::Go()
 
 void Game::UpdateModel( )
 {
+	controller.Process();
+	dp.ProcessDrag( player );
+	dp.ProcessDrag( ball );
+	player.Update( 1.0f / 60.0f );
+	ball.Update( 1.0f / 60.0f );
+	player.HandleCollision( ball );
+	bounds.HandleCollision( player,PolyClosed::ReboundInternal );
+	bounds.HandleCollision( ball,PolyClosed::ReboundInternal );
 }
 
 void Game::ComposeFrame()
 {
+	gfx.DrawCircle( player.GetCenter(),(int)player.GetRadius(),WHITE );
+	gfx.DrawCircle( ball.GetCenter(),(int)ball.GetRadius(),GREEN );
+	bounds.GetDrawable( WHITE ).Rasterize( gfx );
 }

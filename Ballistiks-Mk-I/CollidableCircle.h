@@ -26,6 +26,10 @@ public:
 	{
 		return mass;
 	}
+	inline float GetDragCoefficient() const
+	{
+		return dragCoefficient;
+	}
 	inline void Rebound( Vec2 normal )
 	{
 		vel -= normal * ( vel * normal ) * 2.0f;
@@ -67,17 +71,21 @@ public:
 		force = { 0.0f,0.0f };
 	}
 protected:
-	PhysicalCircle( float radius,float mass,Vec2 vel = { 0.0f,0.0f },Vec2 pos = { 0.0f,0.0f } )
+	PhysicalCircle( float radius,float density,Vec2 pos,float dragCoefficient = 1.0f,Vec2 vel = { 0.0f,0.0f })
 		:
 		radius( radius ),
 		pos( pos ),
-		mass( mass ),
-		vel( vel )
+		density( density ),
+		mass( PI * sq( radius ) * density ),
+		vel( vel ),
+		dragCoefficient( dragCoefficient )
 	{}
 protected:
 	Vec2 pos;
 	Vec2 vel;
 	Vec2 force = { 0.0f,0.0f };
-	float radius;
-	float mass;
+	const float radius;
+	const float density;
+	const float mass;
+	const float dragCoefficient;
 };

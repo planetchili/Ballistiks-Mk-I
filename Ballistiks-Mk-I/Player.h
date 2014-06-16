@@ -1,5 +1,6 @@
 #pragma once
 #include "CollidableCircle.h"
+#include "Parameters.h"
 
 class ControllablePlayer
 {
@@ -12,13 +13,13 @@ class Player : public PhysicalCircle,
 			   public ControllablePlayer
 {
 public:
-	Player( Vec2 pos,float radius,float mass )
+	Player( Vec2 pos,float radius,float density )
 		:
-		PhysicalCircle( radius,mass,{ 0.0f,0.0f },pos )
+		PhysicalCircle( radius,density,pos )
 	{}
-	Player( Vec2 pos,float radius )
+	Player( Vec2 pos )
 		:
-		Player( pos,radius,sq( radius ) / 250.0f )
+		PhysicalCircle( PLAYER_RADIUS,PLAYER_DENSITY,pos,PLAYER_DRAG )
 	{}
 	virtual void SetThrustVector( Vec2 vector ) override
 	{
@@ -39,6 +40,6 @@ public:
 		return *this;
 	}
 private:
-	const float thrustForce = 1.0f;
+	const float thrustForce = PLAYER_THRUST;
 	Vec2 thrustVector = { 0.0f,0.0f };
 };

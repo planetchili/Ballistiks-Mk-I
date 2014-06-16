@@ -25,6 +25,12 @@
 #include "Mouse.h"
 #include "Sound.h"
 
+#include "PolyClosed.h"
+#include "Player.h"
+#include "KeyboardController.h"
+#include "DragProcessor.h"
+#include "Ball.h"
+
 class Game
 {
 public:
@@ -41,10 +47,14 @@ private:
 	D3DGraphics gfx;
 	KeyboardClient kbd;
 	MouseClient mouse;
-	DSound audio;
+	//DSound audio;
 	/********************************/
 	/*  User Variables              */
-
+	DragProcessor dp;
+	Player player;
+	PolyClosed bounds;
+	KeyboardController controller;
+	Ball ball;
 
 	/********************************/
 	void UpdateModel();

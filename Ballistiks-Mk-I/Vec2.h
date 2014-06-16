@@ -179,7 +179,7 @@ public:
 	}
 	inline bool		operator==( const _Vec2 &rhs ) const
 	{
-		return x == rhs.x && y == rhs.y;
+		return (x == rhs.x) & (y == rhs.y);
 	}
 	inline bool		operator!=(const _Vec2 &rhs) const
 	{

@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Ball.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="CollidableCircle.h" />
@@ -109,6 +110,7 @@
     <ClInclude Include="KeyboardController.h" />
     <ClInclude Include="Mat3.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="Parameters.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PolyClosed.h" />
     <ClInclude Include="Rect.h" />

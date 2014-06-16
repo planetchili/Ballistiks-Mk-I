@@ -12,6 +12,10 @@ public:
 	{}
 	virtual void Process() override
 	{
+		if( kbd.KeyIsPressed( VK_LEFT ) )
+		{
+			int x = 20;
+		}
 		player.SetThrustVector(
 			( kbd.KeyIsPressed( VK_UP )		? Vec2 {  0.0f,-1.0f } : Vec2 { 0.0f,0.0f } ) +
 			( kbd.KeyIsPressed( VK_DOWN )	? Vec2 {  0.0f, 1.0f } : Vec2 { 0.0f,0.0f } ) +
