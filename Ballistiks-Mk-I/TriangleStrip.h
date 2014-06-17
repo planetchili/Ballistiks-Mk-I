@@ -218,22 +218,6 @@ public:
 		// return the triangle strip
 		return TriangleStrip( std::move( vertices ) );
 	}
-	static TriangleStrip GenerateSemicircle( float radius,int nVertices )
-	{
-		assert( nVertices % 2 != 0 );
-		std::vector< const Vec2 > vertices;
-		float dTheta = PI / (nVertices - 1);
-		const int nIterations = nVertices / 2;
-		for( int n = 0; n < nIterations; n++ )
-		{
-			const Vec2 l = { -radius,0.0f };
-			const Vec2 r = { radius,0.0f };
-			vertices.push_back( l.Rotation( -dTheta * n ) );
-			vertices.push_back( r.Rotation( dTheta * n ) );
-		}
-		vertices.push_back( { 0.0f,radius } );
-		return TriangleStrip( std::move( vertices ) );
-	}
 public:
 	TriangleStrip( TriangleStrip&& strip )
 		:
