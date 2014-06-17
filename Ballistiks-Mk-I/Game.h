@@ -25,11 +25,7 @@
 #include "Mouse.h"
 #include "Sound.h"
 
-#include "PolyClosed.h"
-#include "Player.h"
-#include "KeyboardController.h"
-#include "DragProcessor.h"
-#include "Ball.h"
+#include "World.h"
 
 class Game
 {
@@ -50,12 +46,7 @@ private:
 	//DSound audio;
 	/********************************/
 	/*  User Variables              */
-	DragProcessor dp;
-	Player player;
-	Player opponent;
-	PolyClosed bounds;
-	KeyboardController controller;
-	Ball ball;
+	World world;
 
 	/********************************/
 	void UpdateModel();

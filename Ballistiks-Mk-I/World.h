@@ -27,9 +27,9 @@ public:
 			{ 30.0f,305.0f },
 			{ 80.0f,295.0f } } ),
 		players( 
-			Vec2{ 400.0f,300.0f },
-			Vec2{ 400.0f + 2.0f * PLAYER_RADIUS + 2.0f * BALL_RADIUS,300.0f } ),
-		balls( { 400.0f + PLAYER_RADIUS + BALL_RADIUS,300.0f } ),
+			{ Player( { 400.0f,300.0f } ),
+			  Player( Vec2 { 400.0f + 2.0f * PLAYER_RADIUS + 2.0f * BALL_RADIUS,300.0f } ) } ),
+		balls( { Ball( { 400.0f + PLAYER_RADIUS + BALL_RADIUS,300.0f } ) } ),
 		controller( players[ 0 ],kbd )
 	{
 		for( PhysicalCircle& c : players )
