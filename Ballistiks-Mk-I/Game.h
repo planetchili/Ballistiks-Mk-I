@@ -52,6 +52,7 @@ private:
 	/*  User Variables              */
 	DragProcessor dp;
 	Player player;
+	Player opponent;
 	PolyClosed bounds;
 	KeyboardController controller;
 	Ball ball;

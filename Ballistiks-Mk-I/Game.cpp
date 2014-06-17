@@ -28,7 +28,8 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 	bounds( { { 40.0f,40.0f },{ 1240.0f,40.0f },{ 1240.0f,680.0f },{ 40.0f,680.0f } } ),
 	player( {400.0f,300.0f} ),
 	controller( player,kbd ),
-	ball( {450.0f,300.0} )
+	opponent( { 400.0f + 2.0f * PLAYER_RADIUS + 2.0f * BALL_RADIUS,300.0f } ),
+	ball( {400.0f + PLAYER_RADIUS + BALL_RADIUS,300.0f} )
 {
 }
 
@@ -46,19 +47,26 @@ void Game::Go()
 
 void Game::UpdateModel( )
 {
+	const float dt = 1.0f / 60.0f;
 	controller.Process();
 	dp.ProcessDrag( player );
 	dp.ProcessDrag( ball );
-	player.Update( 1.0f / 60.0f );
-	ball.Update( 1.0f / 60.0f );
+	dp.ProcessDrag( opponent );
+	player.Update( dt );
+	opponent.Update( dt );
+	ball.Update( dt );
+	player.HandleCollision( opponent );
 	player.HandleCollision( ball );
+	opponent.HandleCollision( ball );
 	bounds.HandleCollision( player,PolyClosed::ReboundInternal );
+	bounds.HandleCollision( opponent,PolyClosed::ReboundInternal );
 	bounds.HandleCollision( ball,PolyClosed::ReboundInternal );
 }
 
 void Game::ComposeFrame()
 {
 	gfx.DrawCircle( player.GetCenter(),(int)player.GetRadius(),WHITE );
+	gfx.DrawCircle( opponent.GetCenter(),(int)opponent.GetRadius(),BLUE );
 	gfx.DrawCircle( ball.GetCenter(),(int)ball.GetRadius(),GREEN );
 	bounds.GetDrawable( WHITE ).Rasterize( gfx );
 }
