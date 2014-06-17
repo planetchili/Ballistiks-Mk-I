@@ -1,6 +1,7 @@
 #pragma once
 #include "CollidableCircle.h"
 #include "Parameters.h"
+#include "Drawable.h"
 
 class ControllablePlayer
 {
@@ -13,6 +14,24 @@ public:
 class Player : public PhysicalCircle,
 			   public ControllablePlayer
 {
+public:
+	class Drawable : ::Drawable
+	{
+	public:
+		Drawable( const Player& parent )
+			:
+			::Drawable( Mat3::Translation( parent.pos ) ),
+			parent( parent )
+		{}
+		virtual void Rasterize( D3DGraphics& gfx ) const override
+		{
+			const float scaledRadius = parent.radius * trans.ExtractScaleIsometric();
+			const Vec2 screenPos = trans * Vec2{ 0.0f,0.0f };
+			gfx.DrawCircleClip( screenPos,(int)scaledRadius,clip,parent.color );
+		}
+	private:
+		const Player& parent;
+	};
 public:
 	Player( Vec2 pos,float radius,float density )
 		:
@@ -63,4 +82,5 @@ private:
 	const float burstImpulse = PLAYER_BURST;
 	float refactoryTimeLeft = 0.0f;
 	Vec2 thrustVector = { 0.0f,0.0f };
+	const Color color = WHITE;
 };
