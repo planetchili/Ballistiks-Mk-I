@@ -31,7 +31,7 @@ public:
 		players.push_back( Player( { 400.0f + 2.0f * PLAYER_RADIUS + 2.0f * BALL_RADIUS,300.0f } ) );
 		balls.push_back( Ball( { 400.0f + PLAYER_RADIUS + BALL_RADIUS,300.0f } ) );
 
-		controller.AttachTo( players[0] );
+		controller = std::make_unique< KeyboardController >( players[ 0 ],kbd );
 
 		for( PhysicalCircle& c : players )
 		{
@@ -44,7 +44,7 @@ public:
 	}
 	void Step( const float dt )
 	{
-		controller.Process();
+		controller->Process();
 		for( auto& c : circles )
 		{
 			dp.ProcessDrag( *c );
@@ -76,6 +76,6 @@ private:
 	std::vector< Ball >	balls;
 	std::vector< std::shared_ptr< PhysicalCircle > > circles;
 	PolyClosed walls;
-	KeyboardController controller;
+	std::unique_ptr< KeyboardController > controller;
 	DragProcessor dp;
 };
