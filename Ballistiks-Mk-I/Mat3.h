@@ -55,18 +55,18 @@ public:
 	}
 	inline T ExtractScaleIsometric() const
 	{
-		return _Vec2<T>{ element[0][0],element[1][0] }.Length();
+		return _Vec2<T>{ elements[0][0],elements[1][0] }.Len();
 	}
 	inline _Vec2<T> ExtractStretch() const
 	{
 		return {
-			_Vec2<T>{ element[0][0],element[1][0] }.Length(),
-			_Vec2<T>{ element[0][1],element[1][1] }.Length()
+			_Vec2<T>{ elements[0][0],elements[1][0] }.Len(),
+			_Vec2<T>{ elements[0][1],elements[1][1] }.Len()
 		};
 	}
 	class _Vec2<T> ExtractTranslation() const
 	{
-		return { element[0][2],element[1][2] };
+		return { elements[0][2],elements[1][2] };
 	}
 public:
 	static _Mat3 Identity()
