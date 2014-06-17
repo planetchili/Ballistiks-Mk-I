@@ -76,6 +76,10 @@ public:
 	{
 		return refactoryPeriod;
 	}
+	Drawable GetDrawable() const
+	{
+		return Drawable( *this );
+	}
 private:
 	const float thrustForce = PLAYER_THRUST;
 	const float refactoryPeriod = PLAYER_REFACTORY;
