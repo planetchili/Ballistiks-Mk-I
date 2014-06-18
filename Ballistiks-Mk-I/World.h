@@ -42,9 +42,8 @@ public:
 			circles.push_back( &c );
 		}
 	}
-	void Step( const float dtTotal )
+	void Step( const float dt )
 	{
-		const float dt = dtTotal / (float)stepsPerFrame;
 		for( unsigned int x = 0; x < stepsPerFrame; x++ )
 		{
 			if( stepCount % stepsPerInput == 0 )
@@ -54,7 +53,7 @@ public:
 			for( auto& c : circles )
 			{
 				dp.ProcessDrag( *c );
-				c->Update( dt );
+				c->Update( dt / (float)stepsPerFrame );
 			}
 			for( auto i = circles.begin(),end = circles.end(); i != end; i++ )
 			{
