@@ -35,28 +35,35 @@ public:
 
 		for( PhysicalCircle& c : players )
 		{
-			circles.push_back( std::shared_ptr< PhysicalCircle >( &c ) );
+			circles.push_back( &c );
 		}
 		for( PhysicalCircle& c : balls )
 		{
-			circles.push_back( std::shared_ptr< PhysicalCircle >( &c ) );
+			circles.push_back( &c );
 		}
 	}
-	void Step( const float dt )
+	void Step( const float dtTotal )
 	{
-		controller->Process();
-		for( auto& c : circles )
+		const float dt = dtTotal / (float)stepsPerFrame;
+		for( unsigned int x = 0; x < stepsPerFrame; x++ )
 		{
-			dp.ProcessDrag( *c );
-			c->Update( dt );
-		}
-		for( auto i = circles.begin(),end = circles.end(); i != end; i++ )
-		{
-			for( auto j = std::next( i ); j != end; j++ )
+			if( stepCount % stepsPerInput == 0 )
 			{
-				( *i )->HandleCollision( **j );
+				controller->Process();
 			}
-			walls.HandleCollision( **i,PolyClosed::ReboundInternal );
+			for( auto& c : circles )
+			{
+				dp.ProcessDrag( *c );
+				c->Update( dt );
+			}
+			for( auto i = circles.begin(),end = circles.end(); i != end; i++ )
+			{
+				for( auto j = std::next( i ); j != end; j++ )
+				{
+					( *i )->HandleCollision( **j );
+				}
+				walls.HandleCollision( **i,PolyClosed::ReboundInternal );
+			}
 		}
 	}
 	void Render( D3DGraphics& gfx ) const
@@ -72,10 +79,13 @@ public:
 		walls.GetDrawable( WHITE ).Rasterize( gfx );
 	}
 private:
+	std::vector< PhysicalCircle* > circles;
 	std::vector< Player > players;
 	std::vector< Ball >	balls;
-	std::vector< std::shared_ptr< PhysicalCircle > > circles;
 	PolyClosed walls;
 	std::unique_ptr< KeyboardController > controller;
 	DragProcessor dp;
+	const unsigned int stepsPerFrame = 1;
+	const unsigned int stepsPerInput = 1;
+	unsigned int stepCount = 0;
 };
