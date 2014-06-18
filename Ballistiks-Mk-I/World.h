@@ -84,7 +84,7 @@ private:
 	PolyClosed walls;
 	std::unique_ptr< KeyboardController > controller;
 	DragProcessor dp;
-	const unsigned int stepsPerFrame = 1;
-	const unsigned int stepsPerInput = 1;
+	const unsigned int stepsPerFrame = 8;
+	const unsigned int stepsPerInput = 8;
 	unsigned int stepCount = 0;
 };
