@@ -4,7 +4,7 @@
 class Ball : public PhysicalCircle
 {
 public:
-	class Drawable : ::Drawable
+	class Drawable : public ::Drawable
 	{
 	public:
 		Drawable( const Ball& parent )
