@@ -288,14 +288,14 @@ void D3DGraphics::DrawCircle( int centerX,int centerY,int radius,Color color )
 	int radiusError = 1 - x;
 	while( x >= y )
 	{
-		PutPixel( Vei2 { centerX + x,centerY + y },color );
-		PutPixel( Vei2 { centerX - x,centerY + y },color );
-		PutPixel( Vei2 { centerX + x,centerY - y },color );
-		PutPixel( Vei2 { centerX - x,centerY - y },color );
-		PutPixel( Vei2 { centerX + y,centerY + x },color );
-		PutPixel( Vei2 { centerX + y,centerY - x },color );
-		PutPixel( Vei2 { centerX - y,centerY + x },color );
-		PutPixel( Vei2 { centerX - y,centerY - x },color );
+		PutPixel( centerX + x,centerY + y,color );
+		PutPixel( centerX - x,centerY + y,color );
+		PutPixel( centerX + x,centerY - y,color );
+		PutPixel( centerX - x,centerY - y,color );
+		PutPixel( centerX + y,centerY + x,color );
+		PutPixel( centerX + y,centerY - x,color );
+		PutPixel( centerX - y,centerY + x,color );
+		PutPixel( centerX - y,centerY - x,color );
 
 		y++;
 
