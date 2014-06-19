@@ -5,15 +5,15 @@
 class Walls
 {
 public:
-	Walls( PolyClosed&& poly )
+	Walls( std::vector< const Vec2 >&& vertices )
 		:
-		poly( poly ),
-		strip( this->poly )
+		poly( std::move( vertices ) ),
+		strip( TriangleStrip::ExtractClosedWall( this->poly,WALL_WIDTH ) )
 	{}
 	Walls( const PolyClosed& poly )
 		:
 		poly( poly ),
-		strip( poly )
+		strip( TriangleStrip::ExtractClosedWall( this->poly,WALL_WIDTH ) )
 	{}
 	void HandleCollision( PhysicalCircle& obj )
 	{
@@ -26,5 +26,5 @@ public:
 private:
 	PolyClosed poly;
 	TriangleStrip strip;
-	const Color color = GRAY;
+	const Color color = WHITE;
 };
