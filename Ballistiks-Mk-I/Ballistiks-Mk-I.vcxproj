@@ -124,6 +124,7 @@
     <ClInclude Include="TriangleStrip.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Viewport.h" />
+    <ClInclude Include="Walls.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
