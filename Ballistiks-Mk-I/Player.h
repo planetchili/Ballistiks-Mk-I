@@ -15,7 +15,7 @@ class Player : public PhysicalCircle,
 			   public ControllablePlayer
 {
 public:
-	class Drawable : ::Drawable
+	class Drawable : public ::Drawable
 	{
 	public:
 		Drawable( const Player& parent )
