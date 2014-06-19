@@ -20,12 +20,32 @@
  ******************************************************************************************/
 #pragma once
 
+#include <memory>
 #include "D3DGraphics.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Sound.h"
 
 #include "World.h"
+
+class GoalObserver : public AlertZoneObserver
+{
+public:
+	virtual void Notify() override
+	{
+		goalScored = true;
+	}
+	bool GoalScored() const
+	{
+		return goalScored;
+	}
+	void Reset()
+	{
+		goalScored = false;
+	}
+private:
+	bool goalScored = false;
+};
 
 class Game
 {
@@ -46,7 +66,8 @@ private:
 	//DSound audio;
 	/********************************/
 	/*  User Variables              */
-	World world;
+	std::unique_ptr< World > pWorld;
+	GoalObserver obs;
 
 	/********************************/
 	void UpdateModel();

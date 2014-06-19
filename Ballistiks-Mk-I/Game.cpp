@@ -25,7 +25,7 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 	//audio( hWnd ),
 	kbd( kServer ),
 	mouse( mServer ),
-	world( kbd )
+	pWorld( std::make_unique< World >( kbd, obs ) )
 {
 }
 
@@ -44,10 +44,16 @@ void Game::Go()
 void Game::UpdateModel( )
 {
 	const float dt = 1.0f / 60.0f;
-	world.Step( dt );
+	pWorld->Step( dt );
+
+	if( obs.GoalScored() )
+	{
+		pWorld = std::make_unique< World >( kbd,obs );
+		obs.Reset();
+	}
 }
 
 void Game::ComposeFrame()
 {
-	world.Render( gfx );
+	pWorld->Render( gfx );
 }
