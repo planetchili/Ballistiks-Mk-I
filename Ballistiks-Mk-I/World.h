@@ -66,17 +66,17 @@ public:
 			stepCount++;
 		}
 	}
-	void Render( D3DGraphics& gfx ) const
+	void Render( DrawTarget& tgt ) const
 	{
 		for( const auto& p : players )
 		{
-			p.GetDrawable().Rasterize( gfx );
+			tgt.Draw( p.GetDrawable() );
 		}
 		for( const auto& b : balls )
 		{
-			b.GetDrawable().Rasterize( gfx );
+			tgt.Draw( b.GetDrawable() );
 		}
-		walls.GetDrawable( WHITE ).Rasterize( gfx );
+		tgt.Draw( walls.GetDrawable( WHITE ) );
 	}
 private:
 	std::vector< PhysicalCircle* > circles;
