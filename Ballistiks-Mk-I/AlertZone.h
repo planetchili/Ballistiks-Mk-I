@@ -9,16 +9,16 @@ public:
 	virtual void Notify() = 0;
 };
 
-class AlertZone : private PolyClosed
+class AlertZone
 {
 public:
 	AlertZone( PolyClosed&& poly )
 		:
-		PolyClosed( poly )
+		poly( poly )
 	{}
 	AlertZone( const PolyClosed& poly )
 		:
-		PolyClosed( poly )
+		poly( poly )
 	{}
 	void AddObserver( AlertZoneObserver& observer )
 	{
@@ -26,7 +26,7 @@ public:
 	}
 	void HandleCollision( PhysicalCircle& obj )
 	{
-		if( PolyClosed::HandleCollision( obj,PolyClosed::ReboundNone ) )
+		if( poly.HandleCollision( obj,PolyClosed::ReboundNone ) )
 		{
 			for( AlertZoneObserver* const o : observers )
 			{
@@ -35,5 +35,6 @@ public:
 		}
 	}
 private:
+	PolyClosed poly;
 	std::vector< AlertZoneObserver* const > observers;
 };
