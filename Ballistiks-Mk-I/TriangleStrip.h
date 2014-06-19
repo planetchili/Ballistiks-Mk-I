@@ -221,7 +221,7 @@ public:
 public:
 	TriangleStrip( const PolyClosed& poly )
 		:
-		TriangleStrip( PolyClosed( poly ) )
+		TriangleStrip( (std::vector< const Vec2 >&&)PolyClosed( poly ) )
 	{}
 	TriangleStrip( TriangleStrip&& strip )
 		:
