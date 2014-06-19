@@ -302,12 +302,10 @@ void D3DGraphics::DrawCircle( int centerX,int centerY,int radius,Color color )
 
 void D3DGraphics::DrawCircleClip( int centerX,int centerY,int radius,const RectI& clip,Color color )
 {
-	int rSquared = sq( radius );
-	int xPivot = (int)( radius * 0.70710678118f + 0.5f );
-	for( int x = 0; x <= xPivot; x++ )
+	int x = radius,y = 0;
+	int radiusError = 1 - x;
+	while( x >= y )
 	{
-		int y = (int)( sqrt( (float)( rSquared - sq( x ) ) ) + 0.5f );
-
 		Vei2 pout = { centerX + x,centerY + y };
 		if( clip.Contains( pout ) )
 			PutPixel( pout,color );
@@ -332,6 +330,17 @@ void D3DGraphics::DrawCircleClip( int centerX,int centerY,int radius,const RectI
 		pout = { centerX - y,centerY - x };
 		if( clip.Contains( pout ) )
 			PutPixel( pout,color );
+
+		y++;
+		if( radiusError < 0 )
+		{
+			radiusError += 2 * y + 1;
+		}
+		else
+		{
+			x--;
+			radiusError += 2 * ( y - x + 1 );
+		}
 	}
 }
 

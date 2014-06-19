@@ -31,6 +31,12 @@
     <Filter Include="Header Files\Framework\Math">
       <UniqueIdentifier>{71f70b9d-5822-44cc-8907-28faa521f36d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entity">
+      <UniqueIdentifier>{8f74f716-b331-49ae-808c-27d2eda527b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Control">
+      <UniqueIdentifier>{03a7f22d-7b9f-4cb8-9d63-751ba61735d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -126,29 +132,29 @@
     <ClInclude Include="Vec2.h">
       <Filter>Header Files\Framework\Math</Filter>
     </ClInclude>
-    <ClInclude Include="CollidableCircle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DragProcessor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Controller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyboardController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ball.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Parameters.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="CollidableCircle.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>Header Files\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardController.h">
+      <Filter>Header Files\Control</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
