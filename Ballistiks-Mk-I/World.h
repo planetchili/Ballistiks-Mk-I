@@ -1,13 +1,14 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include "D3DGraphics.h"
 #include "PolyClosed.h"
 #include "Player.h"
 #include "Ball.h"
 #include "KeyboardController.h"
-#include "D3DGraphics.h"
 #include "DragProcessor.h"
 #include "AlertZone.h"
+#include "Walls.h"
 
 class World
 {
@@ -74,7 +75,7 @@ public:
 				{
 					( *i )->HandleCollision( **j );
 				}
-				walls.HandleCollision( **i,PolyClosed::ReboundInternal );
+				walls.HandleCollision( **i );
 			}
 			for( AlertZone& z : alertZones )
 			{
@@ -96,14 +97,14 @@ public:
 		{
 			tgt.Draw( b.GetDrawable() );
 		}
-		tgt.Draw( walls.GetDrawable( WHITE ) );
+		tgt.Draw( walls.GetDrawable() );
 	}
 private:
 	std::vector< PhysicalCircle* > circles;
 	std::vector< Player > players;
 	std::vector< Ball >	balls;
 	std::vector< AlertZone > alertZones;
-	PolyClosed walls;
+	Walls walls;
 	std::unique_ptr< KeyboardController > controller;
 	DragProcessor dp;
 	const unsigned int stepsPerFrame = 8;
