@@ -89,7 +89,7 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChiliMath.h" />
-    <ClInclude Include="CollidableCircle.h" />
+    <ClInclude Include="PhysicalCircle.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="D3DGraphics.h" />

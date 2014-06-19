@@ -6,7 +6,7 @@
 #include "dxflib\dl_dxf.h"
 #include "Mat3.h"
 #include "Drawable.h"
-#include "CollidableCircle.h"
+#include "PhysicalCircle.h"
 #include <vector>
 #include <memory>
 #include <algorithm>

@@ -1,5 +1,5 @@
 #pragma once
-#include "CollidableCircle.h"
+#include "PhysicalCircle.h"
 #include "Parameters.h"
 #include "Drawable.h"
 

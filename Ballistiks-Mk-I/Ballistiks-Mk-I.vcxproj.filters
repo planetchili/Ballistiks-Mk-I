@@ -156,7 +156,7 @@
     <ClInclude Include="AlertZone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CollidableCircle.h">
+    <ClInclude Include="PhysicalCircle.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,5 @@
 #pragma once
-#include "CollidableCircle.h"
+#include "PhysicalCircle.h"
 
 class DragProcessor
 {

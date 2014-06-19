@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "PolyClosed.h"
-#include "CollidableCircle.h"
+#include "PhysicalCircle.h"
 
 class AlertZoneObserver
 {
