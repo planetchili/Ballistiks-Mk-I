@@ -63,6 +63,7 @@ public:
 				}
 				walls.HandleCollision( **i,PolyClosed::ReboundInternal );
 			}
+			stepCount++;
 		}
 	}
 	void Render( D3DGraphics& gfx ) const
