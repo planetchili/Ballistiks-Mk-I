@@ -27,7 +27,8 @@ public:
 		{
 			const float scaledRadius = parent.radius * trans.ExtractScaleIsometric();
 			const Vec2 screenPos = trans * Vec2{ 0.0f,0.0f };
-			gfx.DrawCircleClip( screenPos,(int)scaledRadius,clip,parent.color );
+			gfx.DrawFilledCircleClip( screenPos,(int)scaledRadius,clip,parent.color0 );
+			gfx.DrawFilledCircleClip( screenPos,(int)( scaledRadius * 0.8f ),clip,parent.color1 );
 		}
 	private:
 		const Player& parent;
@@ -86,5 +87,6 @@ private:
 	const float burstImpulse = PLAYER_BURST;
 	float refactoryTimeLeft = 0.0f;
 	Vec2 thrustVector = { 0.0f,0.0f };
-	const Color color = WHITE;
+	const Color color0 = TEAM_LEFT_COLOR0;
+	const Color color1 = TEAM_LEFT_COLOR1;
 };
