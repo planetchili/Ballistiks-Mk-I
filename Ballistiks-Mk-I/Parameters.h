@@ -13,4 +13,6 @@
 #define TEAM_LEFT_COLOR0	Color( 0,0,128 )
 #define TEAM_LEFT_COLOR1	Color( 48,48,224 )
 #define TEAM_RIGHT_COLOR0	
-#define TEAM_RIGHT_COLOR1		
+#define TEAM_RIGHT_COLOR1	
+#define BALL_COLOR0			Color( 96,96,0 )
+#define BALL_COLOR1			Color( 224,244,48)
