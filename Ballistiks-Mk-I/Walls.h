@@ -26,5 +26,5 @@ public:
 private:
 	PolyClosed poly;
 	TriangleStrip strip;
-	const Color color;
+	const Color color = GRAY;
 };
