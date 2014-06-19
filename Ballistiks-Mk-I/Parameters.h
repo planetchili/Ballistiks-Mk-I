@@ -16,3 +16,4 @@
 #define TEAM_RIGHT_COLOR1	
 #define BALL_COLOR0			Color( 96,96,0 )
 #define BALL_COLOR1			Color( 224,244,48)
+#define WALL_WIDTH			22
