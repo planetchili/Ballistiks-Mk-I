@@ -284,19 +284,30 @@ void D3DGraphics::DrawLineClip( Vec2 p0,Vec2 p1,Color color,const RectF& clip )
 
 void D3DGraphics::DrawCircle( int centerX,int centerY,int radius,Color color )
 {
-	int rSquared = sq( radius );
-	int xPivot = (int)( radius * 0.70710678118f + 0.5f );
-	for( int x = 0; x <= xPivot; x++ )
+	int x = radius,y = 0;
+	int radiusError = 1 - x;
+	while( x >= y )
 	{
-		int y = (int)(sqrt( (float)( rSquared - sq( x ) ) ) + 0.5f);
-		PutPixel( centerX + x,centerY + y,color );
-		PutPixel( centerX - x,centerY + y,color );
-		PutPixel( centerX + x,centerY - y,color );
-		PutPixel( centerX - x,centerY - y,color );
-		PutPixel( centerX + y,centerY + x,color );
-		PutPixel( centerX - y,centerY + x,color );
-		PutPixel( centerX + y,centerY - x,color );
-		PutPixel( centerX - y,centerY - x,color );
+		PutPixel( Vei2 { centerX + x,centerY + y },color );
+		PutPixel( Vei2 { centerX - x,centerY + y },color );
+		PutPixel( Vei2 { centerX + x,centerY - y },color );
+		PutPixel( Vei2 { centerX - x,centerY - y },color );
+		PutPixel( Vei2 { centerX + y,centerY + x },color );
+		PutPixel( Vei2 { centerX + y,centerY - x },color );
+		PutPixel( Vei2 { centerX - y,centerY + x },color );
+		PutPixel( Vei2 { centerX - y,centerY - x },color );
+
+		y++;
+
+		if( radiusError < 0 )
+		{
+			radiusError += 2 * y + 1;
+		}
+		else
+		{
+			x--;
+			radiusError += 2 * ( y - x + 1 );
+		}
 	}
 }
 
@@ -332,6 +343,7 @@ void D3DGraphics::DrawCircleClip( int centerX,int centerY,int radius,const RectI
 			PutPixel( pout,color );
 
 		y++;
+
 		if( radiusError < 0 )
 		{
 			radiusError += 2 * y + 1;
