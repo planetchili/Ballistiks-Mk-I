@@ -356,6 +356,44 @@ void D3DGraphics::DrawCircleClip( int centerX,int centerY,int radius,const RectI
 	}
 }
 
+void D3DGraphics::DrawFilledCircleClip( int centerX,int centerY,int radius,const RectI& clip,Color color )
+{
+	auto DrawScanlineClip = [this,&clip,color]( int x0,int x1,int y )
+	{
+		if( ( y >= clip.top ) & ( y <= clip.bottom ) )
+		{
+			x0 = max( x0,clip.left );
+			x1 = min( x1,clip.right );
+			for( int x = x0; x <= x1; x++ )
+			{
+				PutPixel( x,y,color );
+			}
+		}
+	};
+	
+	int x = radius,y = 0;
+	int radiusError = 1 - x;
+	while( x >= y )
+	{
+		DrawScanlineClip( centerX - x,centerX + x,centerY - y );
+		DrawScanlineClip( centerX - x,centerX + x,centerY + y );
+		DrawScanlineClip( centerX - y,centerX + y,centerY - x );
+		DrawScanlineClip( centerX - y,centerX + y,centerY + x );
+
+		y++;
+
+		if( radiusError < 0 )
+		{
+			radiusError += 2 * y + 1;
+		}
+		else
+		{
+			x--;
+			radiusError += 2 * ( y - x + 1 );
+		}
+	}
+}
+
 void D3DGraphics::DrawFlatTriangle( float y0,float y1,float m0,float m1,
 	float b0,float b1,const RectI& clipRect,Color c )
 {
