@@ -141,9 +141,6 @@
     <ClInclude Include="Ball.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="CollidableCircle.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
@@ -155,6 +152,12 @@
     </ClInclude>
     <ClInclude Include="KeyboardController.h">
       <Filter>Header Files\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="AlertZone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollidableCircle.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
