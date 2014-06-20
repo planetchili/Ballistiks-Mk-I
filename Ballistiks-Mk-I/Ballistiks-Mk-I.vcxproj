@@ -89,6 +89,7 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChiliMath.h" />
+    <ClInclude Include="GoalZone.h" />
     <ClInclude Include="PhysicalCircle.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="Controller.h" />

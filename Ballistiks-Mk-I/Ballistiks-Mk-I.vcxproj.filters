@@ -162,6 +162,9 @@
     <ClInclude Include="Walls.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GoalZone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
