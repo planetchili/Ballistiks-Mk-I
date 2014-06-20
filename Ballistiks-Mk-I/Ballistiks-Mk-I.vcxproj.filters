@@ -165,6 +165,9 @@
     <ClInclude Include="GoalZone.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="GoalCrease.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">

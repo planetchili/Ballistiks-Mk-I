@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClInclude Include="AlertZone.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="GoalCrease.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="GoalZone.h" />
