@@ -8,6 +8,7 @@
 #include "KeyboardController.h"
 #include "DragProcessor.h"
 #include "GoalZone.h"
+#include "GoalCrease.h"
 #include "Walls.h"
 #include "Viewport.h"
 
@@ -48,6 +49,9 @@ public:
 		goalZones[0].AddObserver( obs );
 		goalZones[1].AddObserver( obs );
 
+		creases.push_back( GoalCrease( true,{ 79.0f,360.0f },100.0f ) );
+		creases.push_back( GoalCrease( false,{ 1200.0f,360.0f },100.0f ) );
+
 		controller = std::make_unique< KeyboardController >( players[ 0 ],kbd );
 
 		for( PhysicalCircle& c : players )
@@ -87,11 +91,22 @@ public:
 					z.HandleCollision( b );
 				}
 			}
+			for( GoalCrease& c : creases )
+			{
+				for( Player& p : players )
+				{
+					c.HandleCollision( p );
+				}
+			}
 			stepCount++;
 		}
 	}
 	void Render( DrawTarget& tgt ) const
 	{
+		for( const GoalCrease& c : creases )
+		{
+			tgt.Draw( c.GetDrawable() );
+		}
 		for( const GoalZone& z : goalZones )
 		{
 			tgt.Draw( z.GetDrawable() );
@@ -111,6 +126,7 @@ private:
 	std::vector< Player > players;
 	std::vector< Ball >	balls;
 	std::vector< GoalZone > goalZones;
+	std::vector< GoalCrease > creases;
 	Walls walls;
 	std::unique_ptr< KeyboardController > controller;
 	DragProcessor dp;
