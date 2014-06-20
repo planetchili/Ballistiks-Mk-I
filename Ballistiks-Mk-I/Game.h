@@ -38,13 +38,22 @@ public:
 	}
 	bool GoalScored() const
 	{
-		return goalScored;
+		return goalScored && timeSinceScored >= 2.0f;
 	}
 	void Reset()
 	{
 		goalScored = false;
+		timeSinceScored = 0.0f;
+	}
+	void Step( const float dt )
+	{
+		if( goalScored )
+		{
+			timeSinceScored += dt;
+		}
 	}
 private:
+	float timeSinceScored = 0.0f;
 	bool goalScored = false;
 };
 

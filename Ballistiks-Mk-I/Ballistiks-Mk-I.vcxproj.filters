@@ -166,7 +166,7 @@
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
     <ClInclude Include="GoalCrease.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

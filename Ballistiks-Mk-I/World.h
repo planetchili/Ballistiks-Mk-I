@@ -12,6 +12,21 @@
 #include "Walls.h"
 #include "Viewport.h"
 
+class GoalObs : public AlertZoneObserver
+{
+public:
+	GoalObs( std::unique_ptr< KeyboardController >& controller )
+		:
+		controller( controller )
+	{}
+	virtual void Notify() override
+	{
+		controller->Disable();
+	}
+private:
+	std::unique_ptr< KeyboardController >& controller;
+};
+
 class World
 {
 public:
@@ -29,7 +44,8 @@ public:
 			{ 80.0f,425.0f },
 			{ 30.0f,415.0f },
 			{ 30.0f,305.0f },
-			{ 80.0f,295.0f } } )
+			{ 80.0f,295.0f } } ),
+		wobs( controller )
 	{
 		players.push_back( Player( 
 			{ vp.GetWidth() / 2.0f - vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f } ) );
@@ -48,6 +64,8 @@ public:
 										{ 1200.0f,425.0f } } } ) );
 		goalZones[0].AddObserver( obs );
 		goalZones[1].AddObserver( obs );
+		goalZones[0].AddObserver( wobs );
+		goalZones[1].AddObserver( wobs );
 
 		creases.push_back( GoalCrease( true,{ 79.0f,360.0f },100.0f ) );
 		creases.push_back( GoalCrease( false,{ 1200.0f,360.0f },100.0f ) );
@@ -133,4 +151,5 @@ private:
 	const unsigned int stepsPerFrame = 8;
 	const unsigned int stepsPerInput = 8;
 	unsigned int stepCount = 0;
+	GoalObs wobs;
 };

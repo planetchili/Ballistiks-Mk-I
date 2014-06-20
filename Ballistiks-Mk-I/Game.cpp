@@ -46,6 +46,7 @@ void Game::UpdateModel( )
 {
 	const float dt = 1.0f / 60.0f;
 	pWorld->Step( dt );
+	obs.Step( dt );
 
 	if( obs.GoalScored() )
 	{
