@@ -153,17 +153,17 @@
     <ClInclude Include="KeyboardController.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
-    <ClInclude Include="AlertZone.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PhysicalCircle.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
     <ClInclude Include="Walls.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="AlertZone.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
     <ClInclude Include="GoalZone.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
