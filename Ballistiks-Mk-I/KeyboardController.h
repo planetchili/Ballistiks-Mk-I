@@ -10,7 +10,8 @@ public:
 		Controller( player ),
 		kbd( kbd )
 	{}
-	virtual void Process() override
+protected:
+	virtual void _Process() override
 	{
 		player.SetThrustVector(
 			( kbd.KeyIsPressed( VK_UP )		? Vec2 {  0.0f,-1.0f } : Vec2 { 0.0f,0.0f } ) +

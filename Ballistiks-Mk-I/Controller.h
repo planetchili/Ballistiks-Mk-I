@@ -8,7 +8,29 @@ public:
 		:
 		player( player )
 	{}
-	virtual void Process() = 0;
+	void Process()
+	{
+		if( enabled )
+		{
+			_Process();
+		}
+	}
+	void Enable()
+	{
+		enabled = true;
+	}
+	void Disable()
+	{
+		enabled = false;
+	}
+	bool IsEnabled() const
+	{
+		return enabled;
+	}
+protected:
+	virtual void _Process() = 0;
 protected:
 	ControllablePlayer& player;
+private:
+	bool enabled = true;
 };
