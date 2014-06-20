@@ -5,7 +5,7 @@
 class GoalZone : public AlertZone
 {
 public:
-	class Drawable : ::Drawable
+	class Drawable : public ::Drawable
 	{
 	public:
 		Drawable( const GoalZone& parent )
@@ -34,5 +34,5 @@ public:
 	}
 private:
 	const std::vector< const TriangleStrip > strips;
-	const Color color = Color( 80,0,0 );
+	const Color color = Color( 160,32,32 );
 };
