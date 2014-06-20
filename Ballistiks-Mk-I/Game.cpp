@@ -56,5 +56,5 @@ void Game::UpdateModel( )
 
 void Game::ComposeFrame()
 {
-	pWorld->Render( gfx );
+	pWorld->Render( vp );
 }
