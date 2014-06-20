@@ -27,6 +27,7 @@
 #include "Sound.h"
 
 #include "World.h"
+#include "Viewport.h"
 
 class GoalObserver : public AlertZoneObserver
 {
@@ -66,6 +67,7 @@ private:
 	//DSound audio;
 	/********************************/
 	/*  User Variables              */
+	Viewport vp;
 	std::unique_ptr< World > pWorld;
 	GoalObserver obs;
 

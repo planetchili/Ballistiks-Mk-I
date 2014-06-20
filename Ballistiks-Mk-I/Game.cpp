@@ -25,7 +25,8 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 	//audio( hWnd ),
 	kbd( kServer ),
 	mouse( mServer ),
-	pWorld( std::make_unique< World >( kbd, obs ) )
+	vp( gfx,gfx.GetScreenRect() ),
+	pWorld( std::make_unique< World >( kbd,vp,obs ) )
 {
 }
 
@@ -48,7 +49,7 @@ void Game::UpdateModel( )
 
 	if( obs.GoalScored() )
 	{
-		pWorld = std::make_unique< World >( kbd,obs );
+		pWorld = std::make_unique< World >( kbd,vp,obs );
 		obs.Reset();
 	}
 }
