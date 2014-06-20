@@ -177,16 +177,20 @@ public:
 	}
 	static PolyClosed GenerateSemicircle( float radius,int nVertices )
 	{
+		return GenerateSemicircle( radius,nVertices,Mat3::Identity() );
+	}
+	static PolyClosed GenerateSemicircle( float radius,int nVertices,Mat3& trans )
+	{
 		assert( nVertices > 2 );
 		std::vector< const Vec2 > vertices;
 		float dTheta = PI / ( nVertices - 1 );
 		const int nIterations = nVertices - 2;
-		vertices.push_back( { radius,0.0f } );
+		vertices.push_back( trans * Vec2 { radius,0.0f } );
 		for( int n = 0; n < nIterations; n++ )
 		{
-			vertices.push_back( Vec2 { radius,0.0f }.Rotation( dTheta * n ) );
+			vertices.push_back( trans * Vec2 { radius,0.0f }.Rotation( dTheta * n ) );
 		}
-		vertices.push_back( { -radius,0.0f } );
+		vertices.push_back( trans * Vec2 { -radius,0.0f } );
 		return PolyClosed( move( vertices ) );
 	}
 private:
