@@ -13,7 +13,7 @@ public:
 	Walls( const PolyClosed& poly )
 		:
 		poly( poly ),
-		strip( TriangleStrip::ExtractClosedWall( this->poly,WALL_WIDTH ) )
+		strip( TriangleStrip::ExtractClosedWall( poly,WALL_WIDTH ) )
 	{}
 	void HandleCollision( PhysicalCircle& obj )
 	{

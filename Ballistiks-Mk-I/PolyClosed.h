@@ -96,7 +96,7 @@ public:
 	{
 		return Drawable( *this,color,trans );
 	}
-	operator const std::vector< const Vec2 >&( )
+	operator const std::vector< const Vec2 >&() const
 	{
 		return vertices;
 	}
