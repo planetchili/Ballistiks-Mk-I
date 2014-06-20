@@ -9,11 +9,12 @@
 #include "DragProcessor.h"
 #include "GoalZone.h"
 #include "Walls.h"
+#include "Viewport.h"
 
 class World
 {
 public:
-	World( KeyboardClient& kbd,AlertZoneObserver& obs )
+	World( KeyboardClient& kbd,const Viewport& vp,AlertZoneObserver& obs )
 		:
 		walls( 
 			{ { 80.0f,40.0f },
@@ -29,9 +30,11 @@ public:
 			{ 30.0f,305.0f },
 			{ 80.0f,295.0f } } )
 	{
-		players.push_back( Player( { 400.0f,300.0f } ) );
-		players.push_back( Player( { 400.0f + 2.0f * PLAYER_RADIUS + 2.0f * BALL_RADIUS,300.0f } ) );
-		balls.push_back( Ball( { 400.0f + PLAYER_RADIUS + BALL_RADIUS,300.0f } ) );
+		players.push_back( Player( 
+			{ vp.GetWidth() / 2.0f - vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f } ) );
+		players.push_back( Player(
+			{ vp.GetWidth() / 2.0f + vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f } ) );
+		balls.push_back( Ball( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) );
 		goalZones.push_back( 
 			GoalZone( PolyClosed { {	{ 80.0f,425.0f },
 										{ 30.0f,415.0f },
