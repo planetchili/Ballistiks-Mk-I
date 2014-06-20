@@ -21,6 +21,7 @@ public:
 	}
 	void Disable()
 	{
+		player.SetThrustVector( { 0.0f,0.0f } );
 		enabled = false;
 	}
 	bool IsEnabled() const
