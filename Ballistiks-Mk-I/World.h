@@ -7,7 +7,7 @@
 #include "Ball.h"
 #include "KeyboardController.h"
 #include "DragProcessor.h"
-#include "AlertZone.h"
+#include "GoalZone.h"
 #include "Walls.h"
 
 class World
@@ -32,18 +32,18 @@ public:
 		players.push_back( Player( { 400.0f,300.0f } ) );
 		players.push_back( Player( { 400.0f + 2.0f * PLAYER_RADIUS + 2.0f * BALL_RADIUS,300.0f } ) );
 		balls.push_back( Ball( { 400.0f + PLAYER_RADIUS + BALL_RADIUS,300.0f } ) );
-		alertZones.push_back( 
-			AlertZone( PolyClosed { {	{ 80.0f,425.0f },
+		goalZones.push_back( 
+			GoalZone( PolyClosed { {	{ 80.0f,425.0f },
 										{ 30.0f,415.0f },
 										{ 30.0f,305.0f },
 										{ 80.0f,295.0f } } } ) );		
-		alertZones.push_back(
-			AlertZone( PolyClosed { {	{ 1200.0f,295.0f },
+		goalZones.push_back(
+			GoalZone( PolyClosed { {	{ 1200.0f,295.0f },
 										{ 1250.0f,305.0f },
 										{ 1250.0f,415.0f },
 										{ 1200.0f,425.0f } } } ) );
-		alertZones[0].AddObserver( obs );
-		alertZones[1].AddObserver( obs );
+		goalZones[0].AddObserver( obs );
+		goalZones[1].AddObserver( obs );
 
 		controller = std::make_unique< KeyboardController >( players[ 0 ],kbd );
 
@@ -77,7 +77,7 @@ public:
 				}
 				walls.HandleCollision( **i );
 			}
-			for( AlertZone& z : alertZones )
+			for( GoalZone& z : goalZones )
 			{
 				for( Ball& b : balls )
 				{
@@ -89,6 +89,10 @@ public:
 	}
 	void Render( DrawTarget& tgt ) const
 	{
+		for( const GoalZone& z : goalZones )
+		{
+			tgt.Draw( z.GetDrawable() );
+		}
 		for( const auto& p : players )
 		{
 			tgt.Draw( p.GetDrawable() );
@@ -103,7 +107,7 @@ private:
 	std::vector< PhysicalCircle* > circles;
 	std::vector< Player > players;
 	std::vector< Ball >	balls;
-	std::vector< AlertZone > alertZones;
+	std::vector< GoalZone > goalZones;
 	Walls walls;
 	std::unique_ptr< KeyboardController > controller;
 	DragProcessor dp;
