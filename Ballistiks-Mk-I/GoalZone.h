@@ -16,7 +16,9 @@ public:
 		{
 			for( const TriangleStrip& s : parent.strips )
 			{
-				s.GetDrawable( parent.color ).Rasterize( gfx );
+				TriangleStrip::Drawable d = s.GetDrawable( trans,parent.color );
+				d.Clip( clip );
+				d.Rasterize( gfx );
 			}
 		}
 	private:
