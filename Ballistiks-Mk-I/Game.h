@@ -28,13 +28,22 @@
 
 #include "World.h"
 #include "Viewport.h"
+#include "Camera.h"
 
 class GoalObserver : public AlertZoneObserver
 {
 public:
+	GoalObserver( Sound& whistle )
+		:
+		whistle( whistle )
+	{}
 	virtual void Notify() override
 	{
-		goalScored = true;
+		if( !goalScored )
+		{
+			goalScored = true;
+			whistle.Play();
+		}
 	}
 	bool GoalScored() const
 	{
@@ -55,6 +64,7 @@ public:
 private:
 	float timeSinceScored = 0.0f;
 	bool goalScored = false;
+	Sound& whistle;
 };
 
 class Game
@@ -73,12 +83,19 @@ private:
 	D3DGraphics gfx;
 	KeyboardClient kbd;
 	MouseClient mouse;
-	//DSound audio;
+	DSound audio;
 	/********************************/
 	/*  User Variables              */
+	Sound whistle;
+	Sound batman;
 	Viewport vp;
+	Camera cam;
 	std::unique_ptr< World > pWorld;
 	GoalObserver obs;
+	std::vector< const TriangleStrip > dick;
+	bool transitioning = false;
+	const float transitionDuration = 1.5f;
+	float transitionTime = 0.0f;
 
 	/********************************/
 	void UpdateModel();

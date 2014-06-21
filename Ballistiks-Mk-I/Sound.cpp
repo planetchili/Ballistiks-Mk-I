@@ -54,11 +54,11 @@ DSound::DSound( HWND hWnd )
 	assert( !FAILED( result ) );
 
 	// Setup the format of the primary sound bufffer.
-	// In this case it is a .WAV file recorded at 44,100 samples per second in 16-bit stereo (cd audio format).
+	// In this case it is a .WAV file recorded at <changed!>44,100 samples per second in 16-bit stereo (cd audio format).
 	waveFormat.wFormatTag = WAVE_FORMAT_PCM;
-	waveFormat.nSamplesPerSec = 44100;
+	waveFormat.nSamplesPerSec = 22050;
 	waveFormat.wBitsPerSample = 16;
-	waveFormat.nChannels = 2;
+	waveFormat.nChannels = 1;
 	waveFormat.nBlockAlign = (waveFormat.wBitsPerSample / 8) * waveFormat.nChannels;
 	waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
 	waveFormat.cbSize = 0;
@@ -129,10 +129,10 @@ Sound DSound::CreateSound( char* wavFileName )
 	assert( waveFileHeader.audioFormat == WAVE_FORMAT_PCM );
 
 	// Check that the wave file was recorded in stereo format.
-	assert( waveFileHeader.numChannels == 2 );
+	assert( waveFileHeader.numChannels == 1 );
 
 	// Check that the wave file was recorded at a sample rate of 44.1 KHz.
-	assert( waveFileHeader.sampleRate == 44100 );
+	assert( waveFileHeader.sampleRate == 22050 );
 
 	// Ensure that the wave file was recorded in 16 bit format.
 	assert( waveFileHeader.bitsPerSample == 16 );
@@ -145,9 +145,9 @@ Sound DSound::CreateSound( char* wavFileName )
 
 	// Set the wave format of secondary buffer that this wave file will be loaded onto.
 	waveFormat.wFormatTag = WAVE_FORMAT_PCM;
-	waveFormat.nSamplesPerSec = 44100;
+	waveFormat.nSamplesPerSec = 22050;
 	waveFormat.wBitsPerSample = 16;
-	waveFormat.nChannels = 2;
+	waveFormat.nChannels = 1;
 	waveFormat.nBlockAlign = (waveFormat.wBitsPerSample / 8) * waveFormat.nChannels;
 	waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
 	waveFormat.cbSize = 0;

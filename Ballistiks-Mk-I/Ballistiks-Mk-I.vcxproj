@@ -147,6 +147,13 @@
   <ItemGroup>
     <Resource Include="ChiliDirectXFramework.res" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="shipd.dxf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="batman.wav" />
+    <Media Include="whistle.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

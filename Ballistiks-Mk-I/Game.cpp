@@ -22,11 +22,16 @@
 
 Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 :	gfx( hWnd ),
-	//audio( hWnd ),
+	audio( hWnd ),
 	kbd( kServer ),
 	mouse( mServer ),
 	vp( gfx,gfx.GetScreenRect() ),
-	pWorld( std::make_unique< World >( kbd,vp,obs ) )
+	pWorld( std::make_unique< World >( kbd,vp,obs ) ),
+	cam( vp,vp.GetWidth(),vp.GetHeight(),{ vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ),
+	dick(TriangleStrip::ExtractSolidStripCollection(PolyClosed("shipd.dxf"))),
+	whistle(audio.CreateSound("whistle.wav")),
+	batman(audio.CreateSound("batman.wav")),
+	obs( whistle )
 {
 }
 
@@ -45,17 +50,62 @@ void Game::Go()
 void Game::UpdateModel( )
 {
 	const float dt = 1.0f / 60.0f;
-	pWorld->Step( dt );
-	obs.Step( dt );
-
-	if( obs.GoalScored() )
+	if( !transitioning )
 	{
-		pWorld = std::make_unique< World >( kbd,vp,obs );
-		obs.Reset();
+		pWorld->Step( dt );
+		obs.Step( dt );
+
+		if( obs.GoalScored() )
+		{
+			transitioning = true;
+			batman.Play();
+		}
+	}
+	else
+	{
+		transitionTime += dt;
+		if( transitionTime >= transitionDuration )
+		{
+			transitionTime = 0.0f;
+			transitioning = false;
+			pWorld = std::make_unique< World >( kbd,vp,obs );
+			obs.Reset();
+			cam.SetZoom( 1.0f );
+		}
 	}
 }
 
 void Game::ComposeFrame()
 {
-	pWorld->Render( vp );
+	if( !transitioning )
+	{
+		pWorld->Render( cam );
+	}
+	else
+	{
+		const float theta = ( transitionTime / transitionDuration ) * 2.0f * PI * 4.0f;
+		cam.SetZoom( 0.7f + 0.4f * -sin( theta ) );
+		pWorld->Render( cam );
+		for( const TriangleStrip& s : dick )
+		{
+			vp.Draw( s.GetDrawable(
+				Mat3::Translation( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) *
+				Mat3::Rotation( theta * 0.5f + PI / 2.3f ) *
+				Mat3::Scaling( 5.0f ),GREEN ) );
+		}
+		for( const TriangleStrip& s : dick )
+		{
+			vp.Draw( s.GetDrawable(
+				Mat3::Translation( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) *
+				Mat3::Rotation( -theta * 1.0f + PI / 2.3f ) *
+				Mat3::Scaling( 5.0f ),BROWN ) );
+		}
+		for( const TriangleStrip& s : dick )
+		{
+			vp.Draw( s.GetDrawable(
+				Mat3::Translation( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) *
+				Mat3::Rotation( theta * 1.5f ) *
+				Mat3::Scaling( 5.0f ),PURPLE ) );
+		}
+	}
 }
