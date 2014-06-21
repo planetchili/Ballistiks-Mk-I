@@ -30,7 +30,7 @@
 #include "Viewport.h"
 #include "Camera.h"
 
-class GoalObserver : public AlertZoneObserver
+class GoalObserver : public AlertZone::Observer
 {
 public:
 	GoalObserver( DSound& audio )

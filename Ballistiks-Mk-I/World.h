@@ -12,7 +12,7 @@
 #include "Walls.h"
 #include "Viewport.h"
 
-class GoalObs : public AlertZoneObserver
+class GoalObs : public AlertZone::Observer
 {
 public:
 	GoalObs( std::unique_ptr< KeyboardController >& controller )
@@ -30,7 +30,7 @@ private:
 class World
 {
 public:
-	World( KeyboardClient& kbd,const Viewport& vp,AlertZoneObserver& obs )
+	World( KeyboardClient& kbd,const Viewport& vp,AlertZone::Observer& obs )
 		:
 		walls( 
 			{ { 80.0f,40.0f },

@@ -3,14 +3,15 @@
 #include "PolyClosed.h"
 #include "PhysicalCircle.h"
 
-class AlertZoneObserver
-{
-public:
-	virtual void Notify() = 0;
-};
 
 class AlertZone
 {
+public:
+	class Observer
+	{
+	public:
+		virtual void Notify() = 0;
+	};
 public:
 	AlertZone( PolyClosed&& poly )
 		:
@@ -20,7 +21,7 @@ public:
 		:
 		poly( poly )
 	{}
-	void AddObserver( AlertZoneObserver& observer )
+	void AddObserver( Observer& observer )
 	{
 		observers.push_back( &observer );
 	}
@@ -28,7 +29,7 @@ public:
 	{
 		if( poly.HandleCollision( obj,PolyClosed::ReboundNone ) )
 		{
-			for( AlertZoneObserver* const o : observers )
+			for( Observer* const o : observers )
 			{
 				o->Notify();
 			}
@@ -36,5 +37,5 @@ public:
 	}
 private:
 	PolyClosed poly;
-	std::vector< AlertZoneObserver* const > observers;
+	std::vector< Observer* const > observers;
 };
