@@ -29,9 +29,8 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 	pWorld( std::make_unique< World >( kbd,vp,obs ) ),
 	cam( vp,vp.GetWidth(),vp.GetHeight(),{ vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ),
 	dick(TriangleStrip::ExtractSolidStripCollection(PolyClosed("shipd.dxf"))),
-	whistle(audio.CreateSound("whistle.wav")),
 	batman(audio.CreateSound("batman.wav")),
-	obs( whistle )
+	obs( audio )
 {
 }
 
@@ -84,28 +83,26 @@ void Game::ComposeFrame()
 	else
 	{
 		const float theta = ( transitionTime / transitionDuration ) * 2.0f * PI * 4.0f;
-		cam.SetZoom( 0.7f + 0.4f * -sin( theta ) );
+		cam.SetZoom( 0.7f - 0.4f * sin( theta ) );
 		pWorld->Render( cam );
+
+		const Mat3 trans =
+			Mat3::Translation( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) *
+			Mat3::Scaling( 5.0f );
 		for( const TriangleStrip& s : dick )
 		{
 			vp.Draw( s.GetDrawable(
-				Mat3::Translation( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) *
-				Mat3::Rotation( theta * 0.5f + PI / 2.3f ) *
-				Mat3::Scaling( 5.0f ),GREEN ) );
+				trans * Mat3::Rotation( theta * 0.33f ),GREEN ) );
 		}
 		for( const TriangleStrip& s : dick )
 		{
 			vp.Draw( s.GetDrawable(
-				Mat3::Translation( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) *
-				Mat3::Rotation( -theta * 1.0f + PI / 2.3f ) *
-				Mat3::Scaling( 5.0f ),BROWN ) );
+				trans * Mat3::Rotation( -theta * 0.73f + PI / 0.7f - PI / 4.0f ),RED ) );
 		}
 		for( const TriangleStrip& s : dick )
 		{
 			vp.Draw( s.GetDrawable(
-				Mat3::Translation( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) *
-				Mat3::Rotation( theta * 1.5f ) *
-				Mat3::Scaling( 5.0f ),PURPLE ) );
+				trans * Mat3::Rotation( theta * 1.17f + PI / 2.43f + PI / 6.0f ),PURPLE ) );
 		}
 	}
 }

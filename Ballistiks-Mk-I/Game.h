@@ -33,9 +33,9 @@
 class GoalObserver : public AlertZoneObserver
 {
 public:
-	GoalObserver( Sound& whistle )
+	GoalObserver( DSound& audio )
 		:
-		whistle( whistle )
+		whistle( audio.CreateSound( "whistle.wav" ) )
 	{}
 	virtual void Notify() override
 	{
@@ -64,7 +64,7 @@ public:
 private:
 	float timeSinceScored = 0.0f;
 	bool goalScored = false;
-	Sound& whistle;
+	Sound whistle;
 };
 
 class Game
@@ -86,7 +86,6 @@ private:
 	DSound audio;
 	/********************************/
 	/*  User Variables              */
-	Sound whistle;
 	Sound batman;
 	Viewport vp;
 	Camera cam;
