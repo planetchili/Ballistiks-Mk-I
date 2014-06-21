@@ -11,6 +11,7 @@
 #include "GoalCrease.h"
 #include "Walls.h"
 #include "Viewport.h"
+#include "ViewableWorld.h"
 
 class GoalObs : public AlertZone::Observer
 {
@@ -27,7 +28,7 @@ private:
 	std::unique_ptr< KeyboardController >& controller;
 };
 
-class World
+class World : public ViewableWorld
 {
 public:
 	World( KeyboardClient& kbd,const Viewport& vp,AlertZone::Observer& obs )
@@ -138,6 +139,15 @@ public:
 			tgt.Draw( b.GetDrawable() );
 		}
 		tgt.Draw( walls.GetDrawable() );
+	}
+public: // viewer interface
+	inline virtual const std::vector< Player >& GetPlayers() const override
+	{
+		return players;
+	}
+	inline virtual const std::vector< Ball >& GetBalls() const override
+	{
+		return balls;
 	}
 private:
 	std::vector< PhysicalCircle* > circles;
