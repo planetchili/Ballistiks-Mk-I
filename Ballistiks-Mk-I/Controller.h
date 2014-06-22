@@ -8,23 +8,23 @@ public:
 		:
 		player( player )
 	{}
-	void Process()
+	inline void Process()
 	{
 		if( enabled )
 		{
 			_Process();
 		}
 	}
-	void Enable()
+	inline void Enable()
 	{
 		enabled = true;
 	}
-	void Disable()
+	inline void Disable()
 	{
 		player.SetThrustVector( { 0.0f,0.0f } );
 		enabled = false;
 	}
-	bool IsEnabled() const
+	inline bool IsEnabled() const
 	{
 		return enabled;
 	}
