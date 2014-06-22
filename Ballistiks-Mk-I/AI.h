@@ -10,6 +10,7 @@ public:
 	{
 	public:
 		virtual std::unique_ptr< AI > Make() const = 0;
+		virtual ~Factory() {}
 	};
 public:
 	AI( ControllablePlayer& player,const ViewableWorld& view )
