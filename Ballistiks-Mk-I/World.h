@@ -70,15 +70,15 @@ public:
 										{ 1250.0f,305.0f },
 										{ 1250.0f,415.0f },
 										{ 1200.0f,425.0f } } } ) );
+		creases.push_back( GoalCrease( true,{ 79.0f,360.0f },100.0f ) );
+		creases.push_back( GoalCrease( false,{ 1200.0f,360.0f },100.0f ) );
+
 		goalZones[0].AddObserver( obs );
 		goalZones[1].AddObserver( obs );
 		goalZones[0].AddObserver( wobs );
 		goalZones[1].AddObserver( wobs );
 
-		creases.push_back( GoalCrease( true,{ 79.0f,360.0f },100.0f ) );
-		creases.push_back( GoalCrease( false,{ 1200.0f,360.0f },100.0f ) );
-
-		controllers.push_back( codex.GetRandomFactory().Make( players[0],*this ) );
+		controllers.push_back( std::make_unique< KeyboardController >(players[0],kbd) );
 		controllers.push_back( codex.GetRandomFactory().Make( players[1],*this ) );
 
 		for( PhysicalCircle& c : players )
