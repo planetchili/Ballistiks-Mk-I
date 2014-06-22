@@ -7,6 +7,6 @@ class Randomizer
 public:
 	Randomizer()
 	{
-		srand( time( nullptr ) );
+		srand( (unsigned int)time( nullptr ) );
 	}
 };
