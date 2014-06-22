@@ -74,7 +74,7 @@ public:
 		creases.push_back( GoalCrease( false,{ 1200.0f,360.0f },100.0f ) );
 
 		controller = std::make_unique< KeyboardController >( players[ 0 ],kbd );
-		ai = TestFactory( *this ).Make( players[ 1 ] );
+		ai = TestFactory().Make( players[ 1 ],*this );
 
 		for( PhysicalCircle& c : players )
 		{

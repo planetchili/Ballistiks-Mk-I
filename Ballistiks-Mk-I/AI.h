@@ -9,14 +9,8 @@ public:
 	class Factory
 	{
 	public:
-		Factory( const ViewableWorld& view )
-			:
-			view( view )
-		{}
-		virtual std::unique_ptr< AI > Make( ControllablePlayer& player ) = 0;
+		virtual std::unique_ptr< AI > Make( ControllablePlayer& player,const ViewableWorld& view ) = 0;
 		virtual ~Factory() {}
-	protected:
-		const ViewableWorld& view;
 	};
 public:
 	AI( ControllablePlayer& player,const ViewableWorld& view )

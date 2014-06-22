@@ -19,11 +19,7 @@ protected:
 class TestFactory : public AI::Factory
 {
 public:
-	TestFactory( const ViewableWorld& view )
-		:
-		Factory( view )
-	{}
-	virtual std::unique_ptr< AI > Make( ControllablePlayer& player ) override
+	virtual std::unique_ptr< AI > Make( ControllablePlayer& player,const ViewableWorld& view ) override
 	{
 		return std::make_unique< TestAI >( player,view );
 	}
