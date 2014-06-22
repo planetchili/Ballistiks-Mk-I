@@ -56,7 +56,10 @@ public:
 			{ vp.GetWidth() / 2.0f - vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f },0 ) );
 		players.push_back( Player(
 			{ vp.GetWidth() / 2.0f + vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f },1 ) );
-		balls.push_back( Ball( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) );
+		balls.push_back( Ball( { 
+			vp.GetWidth()  / 2.0f + float( rand() % 11 - 5 ),
+			vp.GetHeight() / 2.0f + float( rand() % 11 - 5 )
+		} ) );
 		goalZones.push_back( 
 			GoalZone( PolyClosed { {	{ 80.0f,425.0f },
 										{ 30.0f,415.0f },
