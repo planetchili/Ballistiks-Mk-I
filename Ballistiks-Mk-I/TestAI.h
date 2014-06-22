@@ -16,7 +16,7 @@ protected:
 	}
 };
 
-class TestFactory : public AI::Factory
+class TestAIFactory : public AI::Factory
 {
 public:
 	virtual std::unique_ptr< AI > Make( ControllablePlayer& player,const ViewableWorld& view ) override
