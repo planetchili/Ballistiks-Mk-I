@@ -60,10 +60,10 @@ void Game::UpdateModel( )
 			batman.Play();
 		}
 
-		while( !kbd.KeyEmpty() )
+		while( !mouse.MouseEmpty() )
 		{
-			KeyEvent e = kbd.ReadKey();
-			if( e.GetCode() == VK_SPACE && e.IsPress() )
+			MouseEvent e = mouse.ReadMouse();
+			if( e.GetType() == MouseEvent::LPress )
 			{
 				obs.Notify();
 			}
