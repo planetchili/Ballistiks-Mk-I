@@ -12,6 +12,8 @@
 #include "Walls.h"
 #include "Viewport.h"
 #include "ViewableWorld.h"
+#include "AI.h"
+#include "TestAI.h"
 
 class GoalObs : public AlertZone::Observer
 {
@@ -72,6 +74,7 @@ public:
 		creases.push_back( GoalCrease( false,{ 1200.0f,360.0f },100.0f ) );
 
 		controller = std::make_unique< KeyboardController >( players[ 0 ],kbd );
+		ai = std::make_unique< TestAI >( players[ 1 ],*this );
 
 		for( PhysicalCircle& c : players )
 		{
@@ -89,6 +92,7 @@ public:
 			if( stepCount % stepsPerInput == 0 )
 			{
 				controller->Process();
+				ai->Process();
 			}
 			for( auto& c : circles )
 			{
@@ -157,6 +161,7 @@ private:
 	std::vector< GoalCrease > creases;
 	Walls walls;
 	std::unique_ptr< KeyboardController > controller;
+	std::unique_ptr< TestAI > ai;
 	DragProcessor dp;
 	const unsigned int stepsPerFrame = 8;
 	const unsigned int stepsPerInput = 8;
