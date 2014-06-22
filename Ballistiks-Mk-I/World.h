@@ -74,7 +74,7 @@ public:
 		creases.push_back( GoalCrease( false,{ 1200.0f,360.0f },100.0f ) );
 
 		controller = std::make_unique< KeyboardController >( players[ 0 ],kbd );
-		ai = std::make_unique< TestAI >( players[ 1 ],*this );
+		ai = TestFactory( *this ).Make( players[ 1 ] );
 
 		for( PhysicalCircle& c : players )
 		{
@@ -161,7 +161,7 @@ private:
 	std::vector< GoalCrease > creases;
 	Walls walls;
 	std::unique_ptr< KeyboardController > controller;
-	std::unique_ptr< TestAI > ai;
+	std::unique_ptr< AI > ai;
 	DragProcessor dp;
 	const unsigned int stepsPerFrame = 8;
 	const unsigned int stepsPerInput = 8;
