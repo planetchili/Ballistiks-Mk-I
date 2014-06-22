@@ -16,13 +16,14 @@ protected:
 		{
 			for( const Player& p : view.GetPlayers() )
 			{
-				if( &p != &me )
+				if( p != me )
 				{
 					return p;
 				}
-				// should not ever see this... unless <= 1 player in game :?
-				assert( false );
 			}
+			// should not ever see this... unless <= 1 player in game :?
+			assert( false );
+			return me;
 		}();
 		
 		const Vec2 d = other.GetCenter() - me.GetCenter();

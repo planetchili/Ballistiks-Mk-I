@@ -53,9 +53,9 @@ public:
 		wobs( controllers )
 	{
 		players.push_back( Player( 
-			{ vp.GetWidth() / 2.0f - vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f } ) );
+			{ vp.GetWidth() / 2.0f - vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f },0 ) );
 		players.push_back( Player(
-			{ vp.GetWidth() / 2.0f + vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f } ) );
+			{ vp.GetWidth() / 2.0f + vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f },1 ) );
 		balls.push_back( Ball( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) );
 		goalZones.push_back( 
 			GoalZone( PolyClosed { {	{ 80.0f,425.0f },
