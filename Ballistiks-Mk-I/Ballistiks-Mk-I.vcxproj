@@ -86,7 +86,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AI.h" />
+    <ClInclude Include="AIFactoryCodex.h" />
     <ClInclude Include="AlertZone.h" />
+    <ClInclude Include="AssholeAI.h" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="GoalCrease.h" />
     <ClInclude Include="Camera.h" />

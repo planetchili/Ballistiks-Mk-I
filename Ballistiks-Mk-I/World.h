@@ -12,22 +12,24 @@
 #include "Walls.h"
 #include "Viewport.h"
 #include "ViewableWorld.h"
-#include "AI.h"
-#include "TestAI.h"
+#include "AIFactoryCodex.h"
 
 class GoalObs : public AlertZone::Observer
 {
 public:
-	GoalObs( std::unique_ptr< KeyboardController >& controller )
+	GoalObs( std::vector< std::unique_ptr< Controller > >& controllers )
 		:
-		controller( controller )
+		controllers( controllers )
 	{}
 	virtual void Notify() override
 	{
-		controller->Disable();
+		for( std::unique_ptr< Controller >& c : controllers )
+		{
+			c->Disable();
+		}
 	}
 private:
-	std::unique_ptr< KeyboardController >& controller;
+	std::vector< std::unique_ptr< Controller > >& controllers;
 };
 
 class World : public ViewableWorld
@@ -48,7 +50,7 @@ public:
 			{ 30.0f,415.0f },
 			{ 30.0f,305.0f },
 			{ 80.0f,295.0f } } ),
-		wobs( controller )
+		wobs( controllers )
 	{
 		players.push_back( Player( 
 			{ vp.GetWidth() / 2.0f - vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f } ) );
@@ -73,8 +75,8 @@ public:
 		creases.push_back( GoalCrease( true,{ 79.0f,360.0f },100.0f ) );
 		creases.push_back( GoalCrease( false,{ 1200.0f,360.0f },100.0f ) );
 
-		controller = std::make_unique< KeyboardController >( players[ 0 ],kbd );
-		ai = TestFactory().Make( players[ 1 ],*this );
+		controllers.push_back( codex.GetRandomFactory().Make( players[0],*this ) );
+		controllers.push_back( codex.GetRandomFactory().Make( players[1],*this ) );
 
 		for( PhysicalCircle& c : players )
 		{
@@ -91,8 +93,10 @@ public:
 		{
 			if( stepCount % stepsPerInput == 0 )
 			{
-				controller->Process();
-				ai->Process();
+				for( std::unique_ptr< Controller >& c : controllers )
+				{
+					c->Process();
+				}
 			}
 			for( auto& c : circles )
 			{
@@ -160,8 +164,8 @@ private:
 	std::vector< GoalZone > goalZones;
 	std::vector< GoalCrease > creases;
 	Walls walls;
-	std::unique_ptr< KeyboardController > controller;
-	std::unique_ptr< AI > ai;
+	std::vector< std::unique_ptr< Controller > > controllers;
+	AIFactoryCodex codex;
 	DragProcessor dp;
 	const unsigned int stepsPerFrame = 8;
 	const unsigned int stepsPerInput = 8;
