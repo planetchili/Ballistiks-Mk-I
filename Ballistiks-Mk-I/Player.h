@@ -69,6 +69,11 @@ public:
 	{
 		return *this;
 	}
+	Drawable GetDrawable() const
+	{
+		return Drawable( *this );
+	}
+public:	// viewer interface
 	inline float GetRefactoryTime() const
 	{
 		return refactoryTimeLeft;
@@ -76,10 +81,6 @@ public:
 	inline float GetRefactoryPeriod() const
 	{
 		return refactoryPeriod;
-	}
-	Drawable GetDrawable() const
-	{
-		return Drawable( *this );
 	}
 private:
 	const float thrustForce = PLAYER_THRUST;

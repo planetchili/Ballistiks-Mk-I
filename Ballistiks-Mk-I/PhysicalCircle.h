@@ -5,7 +5,7 @@
 
 class PhysicalCircle
 {
-public:
+public: // view interface
 	inline Vec2 GetCenter( ) const
 	{
 		return pos;
@@ -30,6 +30,7 @@ public:
 	{
 		return dragCoefficient;
 	}
+public:
 	inline void Rebound( Vec2 normal )
 	{
 		vel -= normal * ( vel * normal ) * 2.0f;
