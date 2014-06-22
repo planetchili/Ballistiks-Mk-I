@@ -8,7 +8,7 @@ public:
 		:
 		player( player )
 	{}
-	virtual ~Controller();
+	virtual ~Controller() {}
 	inline void Process()
 	{
 		if( enabled )

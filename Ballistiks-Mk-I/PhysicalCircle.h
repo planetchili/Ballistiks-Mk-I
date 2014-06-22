@@ -81,7 +81,7 @@ protected:
 		vel( vel ),
 		dragCoefficient( dragCoefficient )
 	{}
-	~PhysicalCircle();
+	~PhysicalCircle() {}
 protected:
 	Vec2 pos;
 	Vec2 vel;
