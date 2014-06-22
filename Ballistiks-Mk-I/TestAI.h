@@ -15,3 +15,16 @@ protected:
 			( view.GetBalls().front().GetCenter() - player.PlayerConst().GetCenter() ).Normalize() );
 	}
 };
+
+class TestFactory : public AI::Factory
+{
+public:
+	TestFactory( const ViewableWorld& view )
+		:
+		Factory( view )
+	{}
+	virtual std::unique_ptr< AI > Make( ControllablePlayer& player ) override
+	{
+		return std::make_unique< TestAI >( player,view );
+	}
+};
