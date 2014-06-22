@@ -9,7 +9,7 @@ public:
 	class Factory
 	{
 	public:
-		virtual std::unique_ptr< AI > Make() const = 0;
+		virtual std::unique_ptr< AI > Make() = 0;
 		virtual ~Factory() {}
 	};
 public:
