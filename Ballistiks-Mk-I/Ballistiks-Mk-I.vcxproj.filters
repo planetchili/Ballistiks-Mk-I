@@ -183,6 +183,9 @@
     <ClInclude Include="AssholeAI.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
+    <ClInclude Include="Randomizer.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">

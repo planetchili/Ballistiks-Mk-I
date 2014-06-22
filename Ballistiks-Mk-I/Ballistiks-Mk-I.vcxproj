@@ -120,6 +120,7 @@
     <ClInclude Include="Parameters.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PolyClosed.h" />
+    <ClInclude Include="Randomizer.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Sound.h" />
