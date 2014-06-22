@@ -27,14 +27,14 @@
 #pragma comment(lib, "winmm.lib" )
 
 DSound::DSound( HWND hWnd )
-: pDirectSound( NULL ),
-  pPrimaryBuffer( NULL )
+: pDirectSound( nullptr ),
+  pPrimaryBuffer( nullptr )
 {
 	HRESULT result;
 	DSBUFFERDESC bufferDesc;
 	WAVEFORMATEX waveFormat;
 
-	result = DirectSoundCreate8( NULL,&pDirectSound,NULL );
+	result = DirectSoundCreate8( nullptr,&pDirectSound,nullptr );
 	assert( !FAILED( result ) );
 
 	// Set the cooperative level to priority so the format of the primary sound buffer can be modified.
@@ -46,11 +46,11 @@ DSound::DSound( HWND hWnd )
 	bufferDesc.dwFlags = DSBCAPS_PRIMARYBUFFER | DSBCAPS_CTRLVOLUME;
 	bufferDesc.dwBufferBytes = 0;
 	bufferDesc.dwReserved = 0;
-	bufferDesc.lpwfxFormat = NULL;
+	bufferDesc.lpwfxFormat = nullptr;
 	bufferDesc.guid3DAlgorithm = GUID_NULL;
 
 	// Get control of the primary sound buffer on the default sound device.
-	result = pDirectSound->CreateSoundBuffer( &bufferDesc,&pPrimaryBuffer,NULL );
+	result = pDirectSound->CreateSoundBuffer( &bufferDesc,&pPrimaryBuffer,nullptr );
 	assert( !FAILED( result ) );
 
 	// Setup the format of the primary sound bufffer.
@@ -73,12 +73,12 @@ DSound::~DSound()
 	if( pPrimaryBuffer )
 	{
 		pPrimaryBuffer->Release();
-		pPrimaryBuffer = NULL;
+		pPrimaryBuffer = nullptr;
 	}
 	if( pDirectSound )
 	{
 		pDirectSound->Release();
-		pDirectSound = NULL;
+		pDirectSound = nullptr;
 	}
 }
 
@@ -161,7 +161,7 @@ Sound DSound::CreateSound( char* wavFileName )
 	bufferDesc.guid3DAlgorithm = GUID_NULL;
 
 	// Create a temporary sound buffer with the specific buffer settings.
-	result = pDirectSound->CreateSoundBuffer( &bufferDesc,&tempBuffer,NULL );
+	result = pDirectSound->CreateSoundBuffer( &bufferDesc,&tempBuffer,nullptr );
 	assert( !FAILED( result ) );
 
 	// Test the buffer format against the direct sound 8 interface and create the secondary buffer.
@@ -188,19 +188,19 @@ Sound DSound::CreateSound( char* wavFileName )
 	assert( error == 0 );
 
 	// Lock the secondary buffer to write wave data into it.
-	result = pSecondaryBuffer->Lock( 0,waveFileHeader.dataSize,(void**)&bufferPtr,(DWORD*)&bufferSize,NULL,0,0 );
+	result = pSecondaryBuffer->Lock( 0,waveFileHeader.dataSize,(void**)&bufferPtr,(DWORD*)&bufferSize,nullptr,0,0 );
 	assert( !FAILED( result ) );
 
 	// Copy the wave data into the buffer.
 	memcpy( bufferPtr,waveData,waveFileHeader.dataSize );
 
 	// Unlock the secondary buffer after the data has been written to it.
-	result = pSecondaryBuffer->Unlock( (void*)bufferPtr,bufferSize,NULL,0 );
+	result = pSecondaryBuffer->Unlock( (void*)bufferPtr,bufferSize,nullptr,0 );
 	assert( !FAILED( result ) );
 	
 	// Release the wave data since it was copied into the secondary buffer.
 	delete [] waveData;
-	waveData = NULL;
+	waveData = nullptr;
 
 	return Sound( pSecondaryBuffer );
 }
@@ -210,7 +210,7 @@ Sound::Sound( IDirectSoundBuffer8* pSecondaryBuffer )
 {}
 
 Sound::Sound()
-: pBuffer( NULL )
+: pBuffer( nullptr )
 {}
 
 Sound::Sound( const Sound& base )
@@ -224,7 +224,7 @@ Sound::~Sound()
 	if( pBuffer )
 	{
 		pBuffer->Release();
-		pBuffer = NULL;
+		pBuffer = nullptr;
 	}
 }
 
@@ -244,7 +244,7 @@ void Sound::Play( int attn )
 	HRESULT result;
 
 	// check that we have a valid buffer
-	assert( pBuffer != NULL );
+	assert( pBuffer != nullptr );
 
 	// Set position at the beginning of the sound buffer.
 	result = pBuffer->SetCurrentPosition( 0 );

@@ -27,15 +27,15 @@
 
 D3DGraphics::D3DGraphics( HWND hWnd )
 	:
-pDirect3D( NULL ),
-pDevice( NULL ),
-pBackBuffer( NULL ),
+pDirect3D( nullptr ),
+pDevice( nullptr ),
+pBackBuffer( nullptr ),
 sysBuffer( SCREENWIDTH,SCREENHEIGHT )
 {
 	HRESULT result;
 	
 	pDirect3D = Direct3DCreate9( D3D_SDK_VERSION );
-	assert( pDirect3D != NULL );
+	assert( pDirect3D != nullptr );
 
     D3DPRESENT_PARAMETERS d3dpp;
     ZeroMemory( &d3dpp,sizeof( d3dpp ) );
@@ -54,7 +54,7 @@ sysBuffer( SCREENWIDTH,SCREENHEIGHT )
 
 	// initialize gdi+
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-	Gdiplus::GdiplusStartup( &gdiplusToken,&gdiplusStartupInput,NULL );
+	Gdiplus::GdiplusStartup( &gdiplusToken,&gdiplusStartupInput,nullptr );
 }
 
 D3DGraphics::~D3DGraphics()
@@ -62,17 +62,17 @@ D3DGraphics::~D3DGraphics()
 	if( pDevice )
 	{
 		pDevice->Release();
-		pDevice = NULL;
+		pDevice = nullptr;
 	}
 	if( pDirect3D )
 	{
 		pDirect3D->Release();
-		pDirect3D = NULL;
+		pDirect3D = nullptr;
 	}
 	if( pBackBuffer )
 	{
 		pBackBuffer->Release();
-		pBackBuffer = NULL;
+		pBackBuffer = nullptr;
 	}
 
 	// clean up gdi+
@@ -89,7 +89,7 @@ void D3DGraphics::EndFrame()
 	HRESULT result;
 	D3DLOCKED_RECT backRect;
 
-	result = pBackBuffer->LockRect( &backRect,NULL,NULL );
+	result = pBackBuffer->LockRect( &backRect,nullptr,0 );
 	assert( !FAILED( result ) );
 
 
@@ -99,7 +99,7 @@ void D3DGraphics::EndFrame()
 	result = pBackBuffer->UnlockRect( );
 	assert( !FAILED( result ) );
 
-	result = pDevice->Present( NULL,NULL,NULL,NULL );
+	result = pDevice->Present( nullptr,nullptr,nullptr,nullptr );
 	assert( !FAILED( result ) );
 }
 

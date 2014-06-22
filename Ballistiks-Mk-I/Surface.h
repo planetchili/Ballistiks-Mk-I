@@ -31,14 +31,14 @@ public:
 			UINT  num = 0;          // number of image encoders
 			UINT  size = 0;         // size of the image encoder array in bytes
 
-			Gdiplus::ImageCodecInfo* pImageCodecInfo = NULL;
+			Gdiplus::ImageCodecInfo* pImageCodecInfo = nullptr;
 
 			Gdiplus::GetImageEncodersSize( &num,&size );
 			if( size == 0 )
 				return -1;  // Failure
 
 			pImageCodecInfo = ( Gdiplus::ImageCodecInfo* )( malloc( size ) );
-			if( pImageCodecInfo == NULL )
+			if( pImageCodecInfo == nullptr )
 				return -1;  // Failure
 
 			GetImageEncoders( num,size,pImageCodecInfo );
@@ -62,7 +62,7 @@ public:
 		GetEncoderClsid( L"image/bmp",&bmpID );
 		// create bitmap object attached to this surface buffer and save it
 		Gdiplus::Bitmap( width,height,pitch * sizeof( Color ),
-			PixelFormat32bppARGB,(BYTE*)buffer ).Save( filename.c_str(),&bmpID,NULL );
+			PixelFormat32bppARGB,(BYTE*)buffer ).Save( filename.c_str(),&bmpID,nullptr );
 	}
 	inline void Clear( Color fillValue  )
 	{

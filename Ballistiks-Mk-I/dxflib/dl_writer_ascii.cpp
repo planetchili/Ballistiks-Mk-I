@@ -128,7 +128,7 @@ void DL_WriterA::dxfHex(int gc, int value) const {
  * @param value String
  */
 void DL_WriterA::dxfString(int gc, const char* value) const {
-    if (value==NULL) {
+    if (value==nullptr) {
 #ifndef __GCC2x__
         //throw DL_NullStrExc();
 #endif

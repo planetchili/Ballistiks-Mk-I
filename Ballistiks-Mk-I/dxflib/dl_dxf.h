@@ -113,14 +113,14 @@ public:
             DL_CreationInterface* creationInterface);
     bool readDxfGroups(FILE* fp,
                        DL_CreationInterface* creationInterface,
-					   int* errorCounter = NULL);
+					   int* errorCounter = nullptr);
     static bool getChoppedLine(char* s, unsigned int size,
                                FILE *stream);
     
 #ifndef __GCC2x__
     bool readDxfGroups(std::stringstream &stream,
                        DL_CreationInterface* creationInterface,
-					   int* errorCounter = NULL);
+					   int* errorCounter = nullptr);
     bool in(std::stringstream &stream,
             DL_CreationInterface* creationInterface);
     static bool getChoppedLine(char *s, unsigned int size,
@@ -183,7 +183,7 @@ public:
 	
     void endSequence(DL_CreationInterface* creationInterface);
 	
-	int  stringToInt(const char* s, bool* ok=NULL);	
+	int  stringToInt(const char* s, bool* ok=nullptr);	
 
     DL_WriterA* out(const char* file,
                     DL_Codes::version version=VER_2000);
@@ -315,12 +315,12 @@ public:
 
     /**
      * Converts the given string into a double or returns the given 
-     * default valud (def) if value is NULL or empty.
+     * default valud (def) if value is nullptr or empty.
      */
     static double toReal(const char* value, double def=0.0) {
-       if (value!=NULL && value[0] != '\0') {
+       if (value!=nullptr && value[0] != '\0') {
             double ret;
-            if (strchr(value, ',') != NULL) {
+            if (strchr(value, ',') != nullptr) {
                char* tmp = new char[strlen(value)+1];
 #pragma warning( push )
 #pragma warning( disable : 4996 )
@@ -340,10 +340,10 @@ public:
     }
     /**
      * Converts the given string into an int or returns the given 
-     * default valud (def) if value is NULL or empty.
+     * default valud (def) if value is nullptr or empty.
      */
     static int toInt(const char* value, int def=0) {
-        if (value!=NULL && value[0] != '\0') {
+        if (value!=nullptr && value[0] != '\0') {
             return atoi(value);
         } else {
             return def;
@@ -351,10 +351,10 @@ public:
     }
     /**
      * Converts the given string into a string or returns the given 
-     * default valud (def) if value is NULL or empty.
+     * default valud (def) if value is nullptr or empty.
      */
     static const char* toString(const char* value, const char* def="") {
-        if (value!=NULL && value[0] != '\0') {
+        if (value!=nullptr && value[0] != '\0') {
             return value;
         } else {
             return def;
