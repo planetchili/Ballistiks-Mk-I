@@ -59,6 +59,15 @@ void Game::UpdateModel( )
 			transitioning = true;
 			batman.Play();
 		}
+
+		while( !kbd.KeyEmpty() )
+		{
+			KeyEvent e = kbd.ReadKey();
+			if( e.GetCode() == VK_SPACE && e.IsPress() )
+			{
+				obs.Notify();
+			}
+		}
 	}
 	else
 	{
