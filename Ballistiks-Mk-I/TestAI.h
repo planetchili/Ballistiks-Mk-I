@@ -19,6 +19,10 @@ protected:
 class TestAIFactory : public AI::Factory
 {
 public:
+	TestAIFactory()
+		:
+		Factory( "DerpyMcDerpersten" )
+	{}
 	virtual std::unique_ptr< AI > Make( ControllablePlayer& player,const ViewableWorld& view ) override
 	{
 		return std::make_unique< TestAI >( player,view );

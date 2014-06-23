@@ -39,6 +39,10 @@ protected:
 class AssholeAIFactory : public AI::Factory
 {
 public:
+	AssholeAIFactory()
+		:
+		Factory( "SomeAsshole" )
+	{}
 	virtual std::unique_ptr< AI > Make( ControllablePlayer& player,const ViewableWorld& view ) override
 	{
 		return std::make_unique< AssholeAI >( player,view );
