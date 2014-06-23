@@ -23,7 +23,7 @@
 #include <vector>
 #include <assert.h>
 
-#define PI (float)M_PI
+#define PI (float)3.14159265358979323846
 
 template <typename T>
 T sgn( T val )
