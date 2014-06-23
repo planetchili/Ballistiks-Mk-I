@@ -19,6 +19,7 @@
  *	along with The Chili DirectX Framework.  If not, see <http://www.gnu.org/licenses/>.  *
  ******************************************************************************************/
 #include "Game.h"
+// dumb bullshit
 
 Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 :	gfx( hWnd ),
