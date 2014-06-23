@@ -4,26 +4,27 @@
 #include <algorithm>
 #include "AI.h"
 
-/********************************/
-/*  User AI Headers             */
+/*************************/
+/*  User AI Headers      */
 
 #include "TestAI.h"
 #include "AssholeAI.h"
+#include "ChiliBot.h"
 
-/********************************/
+/*************************/
 
 class AIFactoryCodex
 {
 public:
 	AIFactoryCodex()
 	{
-		/********************************/
-		/*  User AI Factory Pushes      */
+		/**********************************/
+		/*  User AI Factory Registration  */
 
-		factories.push_back( std::make_unique< TestAIFactory >() );
-		factories.push_back( std::make_unique< AssholeAIFactory >() );
+		Register< TestAIFactory >();
+		Register< AssholeAIFactory >();
 
-		/********************************/
+		/**********************************/
 	}
 	AI::Factory& GetRandomFactory()
 	{
@@ -36,6 +37,12 @@ public:
 		{
 			return f->GetAuthor() == author;
 		} );
+	}
+private:
+	template <typename T>
+	void Register()
+	{
+		factories.push_back( std::make_unique< T >() );
 	}
 private:
 	std::vector< std::unique_ptr< AI::Factory > > factories;
