@@ -20,7 +20,6 @@
  ******************************************************************************************/
 #pragma once
 
-// DIIIIIIIIIIIIICKS!!!!
 
 #include <memory>
 #include "D3DGraphics.h"

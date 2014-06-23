@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClInclude Include="AlertZone.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="DInput.h" />
     <ClInclude Include="GoalCrease.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChiliMath.h" />
@@ -131,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3DGraphics.cpp" />
+    <ClCompile Include="DInput.cpp" />
     <ClCompile Include="dxflib\dl_dxf.cpp" />
     <ClCompile Include="dxflib\dl_writer_ascii.cpp" />
     <ClCompile Include="Game.cpp">

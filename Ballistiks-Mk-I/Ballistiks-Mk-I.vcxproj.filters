@@ -168,6 +168,9 @@
     <ClInclude Include="GoalCrease.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="DInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -196,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="dxflib\dl_writer_ascii.cpp">
       <Filter>Source Files\Framework\dxflib</Filter>
+    </ClCompile>
+    <ClCompile Include="DInput.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
