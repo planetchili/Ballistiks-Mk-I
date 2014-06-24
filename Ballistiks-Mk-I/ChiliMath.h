@@ -80,7 +80,7 @@ T gaussian( T x,T o )
 template <typename T>
 inline T RandError( T deviation,T mean = (T)0.0 )
 {
-	return mean + deviation - 2.0f * ( (T)rand() / (T)RAND_MAX ) * deviation;
+	return mean + deviation - (T)2.0 * ( (T)rand() / (T)RAND_MAX ) * deviation;
 }
 
 inline int RandError( int deviation,int mean = 0 )
