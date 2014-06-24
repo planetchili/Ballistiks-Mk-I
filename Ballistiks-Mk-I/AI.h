@@ -15,6 +15,10 @@ public:
 			author( author )
 		{}
 		virtual std::unique_ptr< AI > Make( ControllablePlayer& player,const ViewableWorld& view ) = 0;
+		virtual std::unique_ptr< AI > Make( ControllablePlayer& player,const ViewableWorld& view,unsigned int version )
+		{
+			assert( false && "This factory does not support versioning." );
+		}
 		virtual ~Factory() {}
 		const std::string& GetAuthor() const
 		{
