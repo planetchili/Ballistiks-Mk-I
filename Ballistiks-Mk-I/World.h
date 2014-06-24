@@ -92,6 +92,7 @@ public:
 	}
 	void Step( const float dt )
 	{
+		const float dtStep = dt / (float)stepsPerFrame;
 		for( unsigned int x = 0; x < stepsPerFrame; x++ )
 		{
 			if( stepCount % stepsPerInput == 0 )
@@ -104,7 +105,7 @@ public:
 			for( auto& c : circles )
 			{
 				dp.ProcessDrag( *c );
-				c->Update( dt / (float)stepsPerFrame );
+				c->Update( dtStep );
 			}
 			for( auto i = circles.begin(),end = circles.end(); i != end; i++ )
 			{
@@ -129,6 +130,7 @@ public:
 				}
 			}
 			stepCount++;
+			timeElapsed += dtStep;
 		}
 	}
 	void Render( DrawTarget& tgt ) const
@@ -160,6 +162,10 @@ public: // viewer interface
 	{
 		return balls;
 	}
+	inline virtual float GetTimeElapsed() const override
+	{
+		return timeElapsed;
+	}
 private:
 	std::vector< PhysicalCircle* > circles;
 	std::vector< Player > players;
@@ -170,6 +176,7 @@ private:
 	std::vector< std::unique_ptr< Controller > > controllers;
 	AIFactoryCodex codex;
 	DragProcessor dp;
+	float timeElapsed = 0.0f;
 	const unsigned int stepsPerFrame = 8;
 	const unsigned int stepsPerInput = 8;
 	unsigned int stepCount = 0;
