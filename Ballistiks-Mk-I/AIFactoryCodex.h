@@ -10,7 +10,6 @@
 
 #include "TestAI.h"
 #include "AssholeAI.h"
-#include "ChiliBot.h"
 
 /*************************/
 
