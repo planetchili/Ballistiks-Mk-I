@@ -13,6 +13,7 @@
 // includes:
 #include <dinput.h>
 #include <cassert>
+#include "Vec2.h"
 
 
  /* Callbackfunction is called ONCE for every InputDevice, when we enumerate through the devices. */
@@ -32,10 +33,22 @@ public:
 	DINPUT(HINSTANCE AppInstance, HWND hWnd, bool& IsWindowActive);
 	~DINPUT();
 
-	/* Get the Information from the devices. */
+	/* Update the Device States. */
 	void Update();
 
+	// Keyboard Functions:
+	/* Is a key pressed? */
 	bool KeyIsPressed(UCHAR keycode);
+
+	// Mouse Functions:
+	/* Is the left Mouse Button pressed? */
+	bool MouseLeftPressed();
+	/* Is the right Mouse Button pressed? */
+	bool MouseRightPressed();
+	/* Is the Mousewheel Pressed? */
+	bool MouseMiddlePressed();
+	/* Get Mousemovement*/
+	Vei2 GetMouseMovement();
 
 	// private:
 private:

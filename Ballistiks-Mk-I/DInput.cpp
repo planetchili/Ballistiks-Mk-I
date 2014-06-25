@@ -186,6 +186,7 @@ void DINPUT::Update()
 
 }
 
+// Keyboard Functions:
 bool DINPUT::KeyIsPressed(UCHAR keycode)
 {
 	if (mKeys[keycode] & 0x80)	// Is the 8th Bit set ?(the key is then pressed!)
@@ -196,4 +197,34 @@ bool DINPUT::KeyIsPressed(UCHAR keycode)
 	// The Key wasn't pressed!
 	return false;
 	
+}
+
+// Mouse Functions:
+bool DINPUT::MouseLeftPressed()
+{
+	if (mMouseData.rgbButtons[0] & 0x80)
+	{
+		return true;
+	}
+	return false;
+}
+bool DINPUT::MouseRightPressed()
+{
+	if (mMouseData.rgbButtons[1] & 0x80)
+	{
+		return true;
+	}
+	return false;
+}
+bool DINPUT::MouseMiddlePressed()
+{
+	if (mMouseData.rgbButtons[2] & 0x80)
+	{
+		return true;
+	}
+	return false;
+}
+Vei2 DINPUT::GetMouseMovement()
+{
+	return Vei2((int)mMouseData.lX, (int)mMouseData.lY);
 }
