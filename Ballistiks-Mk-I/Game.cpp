@@ -20,13 +20,14 @@
  ******************************************************************************************/
 #include "Game.h"
 
-Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
+Game::Game(HWND hWnd, HINSTANCE AppInstance, KeyboardServer& kServer, MouseServer& mServer)
 :	gfx( hWnd ),
 	audio( hWnd ),
+	Input(AppInstance, hWnd),
 	kbd( kServer ),
 	mouse( mServer ),
 	vp( gfx,gfx.GetScreenRect() ),
-	pWorld( std::make_unique< World >( kbd,vp,obs ) ),
+	pWorld( std::make_unique< World >( kbd,vp,obs,Input ) ),
 	cam( vp,vp.GetWidth(),vp.GetHeight(),{ vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ),
 	dick(TriangleStrip::ExtractSolidStripCollection(PolyClosed("shipd.dxf"))),
 	batman(audio.CreateSound("batman.wav")),
@@ -67,7 +68,7 @@ void Game::UpdateModel( )
 		{
 			transitionTime = 0.0f;
 			transitioning = false;
-			pWorld = std::make_unique< World >( kbd,vp,obs );
+			pWorld = std::make_unique< World >( kbd,vp,obs, Input );
 			obs.Reset();
 			cam.SetZoom( 1.0f );
 		}

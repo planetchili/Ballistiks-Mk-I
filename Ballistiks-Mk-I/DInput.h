@@ -14,8 +14,9 @@
 #include <dinput.h>
 #include <cassert>
 
-/* Callbackfunction is called ONCE for every InputDevice, when we enumerate through the devices. */
-BOOL CALLBACK DeviceCallback(LPCDIDEVICEINSTANCE DeviceInstance, void* pRef)
+
+ /* Callbackfunction is called ONCE for every InputDevice, when we enumerate through the devices. */
+static BOOL CALLBACK DeviceCallback(LPCDIDEVICEINSTANCE DeviceInstance, void* pRef)
 {
 	// Not used at the moment (will use it later for gamepad devices!).
 
@@ -23,28 +24,43 @@ BOOL CALLBACK DeviceCallback(LPCDIDEVICEINSTANCE DeviceInstance, void* pRef)
 	return DIENUM_CONTINUE;
 }
 
-class DInput
+class DINPUT
 {
 	// functions:
 	// public:
 public:
-	DInput( HINSTANCE AppInstance, HWND hWnd );
-	~DInput();
+	DINPUT(HINSTANCE AppInstance, HWND hWnd);
+	~DINPUT();
+
+	/* Get the Information from the devices. */
+	void Update();
+
+	bool KeyIsPressed(UCHAR keycode);
+
+	// private:
+private:
+	
 
 	// member:
 	// private:
 private:
 	/* the main DirectInput8 interface. */
-	LPDIRECTINPUT8 pDirectInput;
+	LPDIRECTINPUT8 mDirectInput;
 	// The Supported InputDevices
-	LPDIRECTINPUTDEVICE8 pKeyboard;
-	LPDIRECTINPUTDEVICE8 pMouse;
-	LPDIRECTINPUTDEVICE8 pGamepad;
+	LPDIRECTINPUTDEVICE8 mKeyboard;
+	LPDIRECTINPUTDEVICE8 mMouse;
+	LPDIRECTINPUTDEVICE8 mGamepad;
+
+	// Datastorage for the Input Devices.
+	/* Storage for the Keyboard. */
+	BYTE mKeys[256];
+	/* Storage for the mouse. */
+	DIMOUSESTATE mMouseData;
 
 };
 
 
 ///// To-Do-List
-// 1st: Get the Application Interface from the Windows function.
-// 2nd: IF the Window looses focus DInput need to reaquire the Interfaces.
-// 3rd: Get the HWND from the Windows function.
+// 1st: IF the Window looses focus DInput need to reaquire the Interfaces.
+// 2nd: Need to react to "WM_DEVICECHANGE" message, to react to controllers that are plugged in while running.
+// 3rd: What if I disconnect a device, DInput got an working interface on?

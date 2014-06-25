@@ -23,6 +23,7 @@
 
 #include <memory>
 #include "D3DGraphics.h"
+#include "DInput.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Sound.h"
@@ -71,7 +72,7 @@ private:
 class Game
 {
 public:
-	Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer );
+	Game(HWND hWnd, HINSTANCE AppInstance, KeyboardServer& kServer, MouseServer& mServer);
 	~Game();
 	void Go();
 private:
@@ -82,6 +83,7 @@ private:
 	/********************************/
 private:
 	D3DGraphics gfx;
+	DINPUT Input;
 	KeyboardClient kbd;
 	MouseClient mouse;
 	DSound audio;

@@ -19,6 +19,7 @@
  *	along with The Chili DirectX Framework.  If not, see <http://www.gnu.org/licenses/>.  *
  ******************************************************************************************/
 #include <Windows.h>
+#include <Dbt.h>
 #include <wchar.h>
 #include "D3DGraphics.h"
 #include "Game.h"
@@ -35,6 +36,16 @@ LRESULT WINAPI MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
         case WM_DESTROY:
             PostQuitMessage( 0 );
             break;
+		/* Changes to the plugged devices has been made: */
+		case WM_DEVICECHANGE:
+		if (wParam == DBT_DEVNODES_CHANGED)	// A New Device has been connected
+		{
+			// Us this for DInput to Detect a Gamepad Controller while programm is running.
+
+			int a = 10;
+		}
+		break;
+		
 
 		// ************ KEYBOARD MESSAGES ************ //
 		case WM_KEYDOWN:
@@ -154,9 +165,11 @@ int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR,INT )
                               NULL,NULL,wc.hInstance,NULL );
 
     ShowWindow( hWnd,SW_SHOWDEFAULT );
-    UpdateWindow( hWnd );
 
-	Game theGame( hWnd,kServ,mServ );
+    UpdateWindow( hWnd );
+	SetFocus(hWnd);
+
+	Game theGame( hWnd, hInst, kServ,mServ );
 	
     MSG msg;
     ZeroMemory( &msg,sizeof( msg ) );

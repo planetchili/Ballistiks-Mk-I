@@ -11,6 +11,7 @@
 #include "GoalCrease.h"
 #include "Walls.h"
 #include "Viewport.h"
+#include "DInput.h"
 
 class GoalObs : public AlertZone::Observer
 {
@@ -30,7 +31,7 @@ private:
 class World
 {
 public:
-	World( KeyboardClient& kbd,const Viewport& vp,AlertZone::Observer& obs )
+	World( KeyboardClient& kbd,const Viewport& vp,AlertZone::Observer& obs, DINPUT& Input )
 		:
 		walls( 
 			{ { 80.0f,40.0f },
@@ -70,7 +71,7 @@ public:
 		creases.push_back( GoalCrease( true,{ 79.0f,360.0f },100.0f ) );
 		creases.push_back( GoalCrease( false,{ 1200.0f,360.0f },100.0f ) );
 
-		controller = std::make_unique< KeyboardController >( players[ 0 ],kbd );
+		controller = std::make_unique< KeyboardController >( players[ 0 ],kbd, Input );
 
 		for( PhysicalCircle& c : players )
 		{
