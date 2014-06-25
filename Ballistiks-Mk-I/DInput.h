@@ -29,7 +29,7 @@ class DINPUT
 	// functions:
 	// public:
 public:
-	DINPUT(HINSTANCE AppInstance, HWND hWnd);
+	DINPUT(HINSTANCE AppInstance, HWND hWnd, bool& IsWindowActive);
 	~DINPUT();
 
 	/* Get the Information from the devices. */
@@ -56,6 +56,10 @@ private:
 	BYTE mKeys[256];
 	/* Storage for the mouse. */
 	DIMOUSESTATE mMouseData;
+
+	// Helper Variables.
+	/* Tracks the activeness of the window. */
+	bool& mIsWindowActive;
 
 };
 

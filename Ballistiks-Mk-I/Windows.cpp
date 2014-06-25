@@ -28,6 +28,7 @@
 
 static KeyboardServer kServ;
 static MouseServer mServ;
+bool IsWindowActive = false;
 
 LRESULT WINAPI MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
@@ -46,6 +47,17 @@ LRESULT WINAPI MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 		}
 		break;
 		
+		case WM_ACTIVATE:
+			if (wParam == WA_ACTIVE || wParam == WA_CLICKACTIVE)
+			{
+				IsWindowActive = true;
+			}
+			else if (wParam == WA_INACTIVE)
+			{
+				IsWindowActive = false;
+			}
+			break;
+
 
 		// ************ KEYBOARD MESSAGES ************ //
 		case WM_KEYDOWN:
@@ -169,7 +181,7 @@ int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR,INT )
     UpdateWindow( hWnd );
 	SetFocus(hWnd);
 
-	Game theGame( hWnd, hInst, kServ,mServ );
+	Game theGame( hWnd, hInst, kServ,mServ, IsWindowActive );
 	
     MSG msg;
     ZeroMemory( &msg,sizeof( msg ) );

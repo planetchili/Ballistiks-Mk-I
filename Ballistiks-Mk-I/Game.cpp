@@ -20,10 +20,10 @@
  ******************************************************************************************/
 #include "Game.h"
 
-Game::Game(HWND hWnd, HINSTANCE AppInstance, KeyboardServer& kServer, MouseServer& mServer)
+Game::Game(HWND hWnd, HINSTANCE AppInstance, KeyboardServer& kServer, MouseServer& mServer, bool& IsWindowActive)
 :	gfx( hWnd ),
 	audio( hWnd ),
-	Input(AppInstance, hWnd),
+	Input(AppInstance, hWnd, IsWindowActive),
 	kbd( kServer ),
 	mouse( mServer ),
 	vp( gfx,gfx.GetScreenRect() ),

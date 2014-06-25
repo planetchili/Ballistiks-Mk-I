@@ -72,7 +72,7 @@ private:
 class Game
 {
 public:
-	Game(HWND hWnd, HINSTANCE AppInstance, KeyboardServer& kServer, MouseServer& mServer);
+	Game(HWND hWnd, HINSTANCE AppInstance, KeyboardServer& kServer, MouseServer& mServer, bool& IsWindowActive);
 	~Game();
 	void Go();
 private:

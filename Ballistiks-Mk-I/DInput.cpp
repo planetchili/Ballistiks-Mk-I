@@ -10,12 +10,13 @@
 
 // functions:
 // public:
-DINPUT::DINPUT(HINSTANCE AppInstance, HWND hWnd)
+DINPUT::DINPUT(HINSTANCE AppInstance, HWND hWnd, bool& IsWindowActive)
 	:
 	mDirectInput(nullptr),
 	mKeyboard(nullptr),
 	mMouse(nullptr),
-	mGamepad(nullptr)
+	mGamepad(nullptr),
+	mIsWindowActive(IsWindowActive)
 {
 	HRESULT result;
 
@@ -120,25 +121,28 @@ void DINPUT::Update()
 		Entry = 0;
 	}
 	
-
+	
 	// 1.2. Get the Data from the Device
-	if (mKeyboard)	// Only do that if we have a valid interface
+	if (mIsWindowActive) // Only get information when the Window is active
 	{
-		result = mKeyboard->GetDeviceState(256, mKeys);
-		if (result == DIERR_INPUTLOST)	// Couldn't get the Input-Data.
+		if (mKeyboard)	// Only do that if we have a valid interface
 		{
-			result = mKeyboard->Acquire();
-			if (FAILED(result))
+			result = mKeyboard->GetDeviceState(256, mKeys);
+			if (result == DIERR_INPUTLOST)	// Couldn't get the Input-Data.
 			{
-				// Could not get access to the device;
-			}
-			else
-			{
-				// We were able to reacquire access to the device, so try to et the Devicestate again.
-				result = mKeyboard->GetDeviceState(256, mKeys);
-				assert(!FAILED(result));
-			}
+				result = mKeyboard->Acquire();
+				if (FAILED(result))
+				{
+					// Could not get access to the device;
+				}
+				else
+				{
+					// We were able to reacquire access to the device, so try to et the Devicestate again.
+					result = mKeyboard->GetDeviceState(256, mKeys);
+					assert(!FAILED(result));
+				}
 
+			}
 		}
 	}
 	
@@ -155,23 +159,26 @@ void DINPUT::Update()
 
 
 	// 2.2 Get the Data from the Device.
-	if (mMouse)
+	if (mIsWindowActive) // Only get information when the Window is active
 	{
-		result = mMouse->GetDeviceState(sizeof(DIMOUSESTATE), &mMouseData);
-		if (result == DIERR_INPUTLOST)	// Couldn't get the Input-Data.
+		if (mMouse) // Only do that if we have a valid interface
 		{
-			result = mMouse->Acquire();
-			if (FAILED(result))
+			result = mMouse->GetDeviceState(sizeof(DIMOUSESTATE), &mMouseData);
+			if (result == DIERR_INPUTLOST)	// Couldn't get the Input-Data.
 			{
-				// Could not get access to the device;
-			}
-			else
-			{
-				// We were able to reacquire access to the device, so try to et the Devicestate again.
-				result = mKeyboard->GetDeviceState(256, mKeys);
-				assert(!FAILED(result));
-			}
+				result = mMouse->Acquire();
+				if (FAILED(result))
+				{
+					// Could not get access to the device;
+				}
+				else
+				{
+					// We were able to reacquire access to the device, so try to et the Devicestate again.
+					result = mKeyboard->GetDeviceState(256, mKeys);
+					assert(!FAILED(result));
+				}
 
+			}
 		}
 	}
 	
