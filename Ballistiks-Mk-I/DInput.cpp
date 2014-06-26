@@ -224,8 +224,8 @@ void DINPUT::Update()
 	}
 
 	// 3.2 Get the Data from the Device.
-	//if (mIsWindowActive) // Only get information when the Window is active
-	//{
+	if (mIsWindowActive) // Only get information when the Window is active
+	{
 		if (mGamepad) // Only do that if we have a valid interface
 		{
 			result = mGamepad->Poll();
@@ -246,7 +246,7 @@ void DINPUT::Update()
 
 			}
 		}
-	//}
+	}
 
 
 }
