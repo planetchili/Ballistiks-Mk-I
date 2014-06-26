@@ -338,7 +338,7 @@ void DINPUT::CalibrateJoystick()
 		DeadZone.diph.dwSize = sizeof(DIPROPDWORD);
 		DeadZone.diph.dwObj = 0;
 		DeadZone.diph.dwHow = DIPH_DEVICE;		// Changes made shall be used for the whole device (therefore dwObj must be 0!)
-		DeadZone.dwData = 750;					// 5,000 = 50% DeadZone! (750 = 7.5% DeadZone).
+		DeadZone.dwData = 1200;					// 5,000 = 50% DeadZone! (1200 = 12% DeadZone).
 		result = mGamepad->SetProperty(DIPROP_DEADZONE, &DeadZone.diph);
 		assert(!FAILED(result));
 
@@ -347,7 +347,7 @@ void DINPUT::CalibrateJoystick()
 		Saturation.diph.dwSize = sizeof(DIPROPDWORD);
 		Saturation.diph.dwObj = 0;
 		Saturation.diph.dwHow = DIPH_DEVICE;		// Changes made shall be used for the whole device (therefore dwObj must be 0!)
-		Saturation.dwData = 9000;					// 5,000 = 50% Saturation! (9000 = 90% Saturation).
+		Saturation.dwData = 9500;					// 5,000 = 50% Saturation! (9500 = 95% Saturation).
 		result = mGamepad->SetProperty(DIPROP_SATURATION, &Saturation.diph);
 		assert(!FAILED(result));
 
