@@ -61,17 +61,17 @@ public:
 			vp.GetHeight() / 2.0f + float( rand() % 11 - 5 )
 		} ) );
 		goalZones.push_back( 
-			GoalZone( PolyClosed { {	{ 80.0f,425.0f },
+			GoalZone( PolyClosed { {	{ 77.0f,424.8f },
 										{ 30.0f,415.0f },
 										{ 30.0f,305.0f },
-										{ 80.0f,295.0f } } } ) );		
+										{ 77.0f,295.2f } } } ) );		
 		goalZones.push_back(
-			GoalZone( PolyClosed { {	{ 1200.0f,295.0f },
+			GoalZone( PolyClosed { {	{ 1203.0f,295.2f },
 										{ 1250.0f,305.0f },
 										{ 1250.0f,415.0f },
-										{ 1200.0f,425.0f } } } ) );
-		creases.push_back( GoalCrease( true,{ 79.0f,360.0f },100.0f ) );
-		creases.push_back( GoalCrease( false,{ 1200.0f,360.0f },100.0f ) );
+										{ 1203.0f,424.8f } } } ) );
+		creases.push_back( GoalCrease( true,{ 76.0f,360.0f },105.0f ) );
+		creases.push_back( GoalCrease( false,{ 1203.0f,360.0f },105.0f ) );
 
 		goalZones[0].AddObserver( obs );
 		goalZones[1].AddObserver( obs );
@@ -79,7 +79,7 @@ public:
 		goalZones[1].AddObserver( wobs );
 
 		controllers.push_back( codex.GetFactoryByAuthor( "DerpyMcDerpersten" ).Make( players[0],*this ) );
-		controllers.push_back( codex.GetFactoryByAuthor( "SomeAsshole" ).Make( players[1],*this ) );
+		controllers.push_back( codex.GetFactoryByAuthor( "SomeAsshole"		 ).Make( players[1],*this ) );
 
 		for( PhysicalCircle& c : players )
 		{
