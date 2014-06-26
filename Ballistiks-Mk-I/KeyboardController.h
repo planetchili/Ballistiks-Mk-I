@@ -26,12 +26,15 @@ protected:
 			( kbd.KeyIsPressed( VK_RIGHT )	? Vec2 {  1.0f, 0.0f } : Vec2 { 0.0f,0.0f } ) );
 		*/
 		Input.Update();
-
+		/*
 		player.SetThrustVector(
 			(Input.KeyIsPressed(DIK_UPARROW) ? Vec2{ 0.0f, -1.0f } : Vec2{ 0.0f, 0.0f }) +
 			(Input.KeyIsPressed(DIK_DOWNARROW) ? Vec2{ 0.0f, 1.0f } : Vec2{ 0.0f, 0.0f }) +
 			(Input.KeyIsPressed(DIK_LEFTARROW) ? Vec2{ -1.0f, 0.0f } : Vec2{ 0.0f, 0.0f }) +
 			(Input.KeyIsPressed(DIK_RIGHTARROW) ? Vec2{ 1.0f, 0.0f } : Vec2{ 0.0f, 0.0f }));
+		*/
+
+		player.SetThrustVector(Vec2{ ((float)Input.GetGamePadXAxis()) / 500.0f, ((float)Input.GetGamePadYAxis()) / 500.0f });
 
 		/*
 		while( !kbd.KeyEmpty() )
@@ -42,10 +45,16 @@ protected:
 				player.Burst();
 			}
 		}*/
+		/*
 		if (Input.KeyIsPressed(DIK_SPACE))
 		{
 			player.Burst();
+		}*/
+		if (Input.GamePadButtonIsPressed(0))
+		{
+			player.Burst();
 		}
+
 
 
 	}

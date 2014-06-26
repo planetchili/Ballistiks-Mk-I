@@ -16,13 +16,35 @@
 #include "Vec2.h"
 
 
+// XBOX 360 Controller
+// Left Stick: x,y
+// Right Stick: Rx, Ry
+// Digital: POV 1
+// LT: z+
+// RT: z-
+// A: 0
+// B: 1
+// X: 2
+// Y: 3
+// LB: 4
+// RB: 5
+// Back: 6
+// Start: 7
+// L3: 8
+// R3: 9
+
+// static global GUID for the gamepad.
+static GUID GamepadGUID;
+
  /* Callbackfunction is called ONCE for every InputDevice, when we enumerate through the devices. */
 static BOOL CALLBACK DeviceCallback(LPCDIDEVICEINSTANCE DeviceInstance, void* pRef)
 {
-	// Not used at the moment (will use it later for gamepad devices!).
+	// Use the first gamepad connected to the system.
+	GamepadGUID = DeviceInstance->guidInstance;
 
-	// return to the next device of the enumeration.
-	return DIENUM_CONTINUE;
+
+	// Stop the enumeration
+	return DIENUM_STOP;
 }
 
 class DINPUT
@@ -50,9 +72,14 @@ public:
 	/* Get Mousemovement*/
 	Vei2 GetMouseMovement();
 
+	// Gamepad Functions:
+	LONG GetGamePadXAxis();
+	LONG GetGamePadYAxis();
+	bool GamePadButtonIsPressed(UCHAR Number);
+
 	// private:
 private:
-	
+	void CalibrateJoystick();
 
 	// member:
 	// private:
@@ -69,6 +96,8 @@ private:
 	BYTE mKeys[256];
 	/* Storage for the mouse. */
 	DIMOUSESTATE mMouseData;
+	/* Storage for the Gamepad. */
+	DIJOYSTATE mGamepadData;
 
 	// Helper Variables.
 	/* Tracks the activeness of the window. */
