@@ -78,8 +78,8 @@ public:
 		goalZones[0].AddObserver( wobs );
 		goalZones[1].AddObserver( wobs );
 
-		controllers.push_back( std::make_unique< KeyboardController >(players[0],kbd) );
-		controllers.push_back( codex.GetRandomFactory().Make( players[1],*this ) );
+		controllers.push_back( codex.GetFactoryByAuthor( "DerpyMcDerpersten" ).Make( players[0],*this ) );
+		controllers.push_back( codex.GetFactoryByAuthor( "SomeAsshole" ).Make( players[1],*this ) );
 
 		for( PhysicalCircle& c : players )
 		{
