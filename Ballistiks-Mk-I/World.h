@@ -11,23 +11,28 @@
 #include "GoalCrease.h"
 #include "Walls.h"
 #include "Viewport.h"
+#include "ViewableWorld.h"
+#include "AIFactoryCodex.h"
 
 class GoalObs : public AlertZone::Observer
 {
 public:
-	GoalObs( std::unique_ptr< KeyboardController >& controller )
+	GoalObs( std::vector< std::unique_ptr< Controller > >& controllers )
 		:
-		controller( controller )
+		controllers( controllers )
 	{}
 	virtual void Notify() override
 	{
-		controller->Disable();
+		for( std::unique_ptr< Controller >& c : controllers )
+		{
+			c->Disable();
+		}
 	}
 private:
-	std::unique_ptr< KeyboardController >& controller;
+	std::vector< std::unique_ptr< Controller > >& controllers;
 };
 
-class World
+class World : public ViewableWorld
 {
 public:
 	World( KeyboardClient& kbd,const Viewport& vp,AlertZone::Observer& obs )
@@ -45,13 +50,16 @@ public:
 			{ 30.0f,415.0f },
 			{ 30.0f,305.0f },
 			{ 80.0f,295.0f } } ),
-		wobs( controller )
+		wobs( controllers )
 	{
 		players.push_back( Player( 
-			{ vp.GetWidth() / 2.0f - vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f } ) );
+			{ vp.GetWidth() / 2.0f - vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f },0 ) );
 		players.push_back( Player(
-			{ vp.GetWidth() / 2.0f + vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f } ) );
-		balls.push_back( Ball( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) );
+			{ vp.GetWidth() / 2.0f + vp.GetWidth() / 8.0f,vp.GetHeight() / 2.0f },1 ) );
+		balls.push_back( Ball( { 
+			vp.GetWidth()  / 2.0f + float( rand() % 11 - 5 ),
+			vp.GetHeight() / 2.0f + float( rand() % 11 - 5 )
+		} ) );
 		goalZones.push_back( 
 			GoalZone( PolyClosed { {	{ 80.0f,425.0f },
 										{ 30.0f,415.0f },
@@ -62,15 +70,16 @@ public:
 										{ 1250.0f,305.0f },
 										{ 1250.0f,415.0f },
 										{ 1200.0f,425.0f } } } ) );
+		creases.push_back( GoalCrease( true,{ 79.0f,360.0f },100.0f ) );
+		creases.push_back( GoalCrease( false,{ 1200.0f,360.0f },100.0f ) );
+
 		goalZones[0].AddObserver( obs );
 		goalZones[1].AddObserver( obs );
 		goalZones[0].AddObserver( wobs );
 		goalZones[1].AddObserver( wobs );
 
-		creases.push_back( GoalCrease( true,{ 79.0f,360.0f },100.0f ) );
-		creases.push_back( GoalCrease( false,{ 1200.0f,360.0f },100.0f ) );
-
-		controller = std::make_unique< KeyboardController >( players[ 0 ],kbd );
+		controllers.push_back( std::make_unique< KeyboardController >(players[0],kbd) );
+		controllers.push_back( codex.GetRandomFactory().Make( players[1],*this ) );
 
 		for( PhysicalCircle& c : players )
 		{
@@ -83,16 +92,20 @@ public:
 	}
 	void Step( const float dt )
 	{
+		const float dtStep = dt / (float)stepsPerFrame;
 		for( unsigned int x = 0; x < stepsPerFrame; x++ )
 		{
 			if( stepCount % stepsPerInput == 0 )
 			{
-				controller->Process();
+				for( std::unique_ptr< Controller >& c : controllers )
+				{
+					c->Process();
+				}
 			}
 			for( auto& c : circles )
 			{
 				dp.ProcessDrag( *c );
-				c->Update( dt / (float)stepsPerFrame );
+				c->Update( dtStep );
 			}
 			for( auto i = circles.begin(),end = circles.end(); i != end; i++ )
 			{
@@ -117,6 +130,7 @@ public:
 				}
 			}
 			stepCount++;
+			timeElapsed += dtStep;
 		}
 	}
 	void Render( DrawTarget& tgt ) const
@@ -139,6 +153,19 @@ public:
 		}
 		tgt.Draw( walls.GetDrawable() );
 	}
+public: // viewer interface
+	inline virtual const std::vector< Player >& GetPlayers() const override
+	{
+		return players;
+	}
+	inline virtual const std::vector< Ball >& GetBalls() const override
+	{
+		return balls;
+	}
+	inline virtual float GetTimeElapsed() const override
+	{
+		return timeElapsed;
+	}
 private:
 	std::vector< PhysicalCircle* > circles;
 	std::vector< Player > players;
@@ -146,8 +173,10 @@ private:
 	std::vector< GoalZone > goalZones;
 	std::vector< GoalCrease > creases;
 	Walls walls;
-	std::unique_ptr< KeyboardController > controller;
+	std::vector< std::unique_ptr< Controller > > controllers;
+	AIFactoryCodex codex;
 	DragProcessor dp;
+	float timeElapsed = 0.0f;
 	const unsigned int stepsPerFrame = 8;
 	const unsigned int stepsPerInput = 8;
 	unsigned int stepCount = 0;

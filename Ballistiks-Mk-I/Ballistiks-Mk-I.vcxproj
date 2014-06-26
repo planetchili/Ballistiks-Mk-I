@@ -85,7 +85,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AI.h" />
+    <ClInclude Include="AIFactoryCodex.h" />
     <ClInclude Include="AlertZone.h" />
+    <ClInclude Include="AssholeAI.h" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="GoalCrease.h" />
     <ClInclude Include="Camera.h" />
@@ -117,14 +120,17 @@
     <ClInclude Include="Parameters.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PolyClosed.h" />
+    <ClInclude Include="Randomizer.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Surface.h" />
+    <ClInclude Include="TestAI.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="TriangleStrip.h" />
     <ClInclude Include="Vec2.h" />
+    <ClInclude Include="ViewableWorld.h" />
     <ClInclude Include="Viewport.h" />
     <ClInclude Include="Walls.h" />
     <ClInclude Include="World.h" />

@@ -27,6 +27,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Sound.h"
+#include "Randomizer.h"
 
 #include "World.h"
 #include "Viewport.h"
@@ -86,6 +87,7 @@ private:
 	KeyboardClient kbd;
 	MouseClient mouse;
 	DSound audio;
+	Randomizer randomizer;
 	/********************************/
 	/*  User Variables              */
 	Sound batman;

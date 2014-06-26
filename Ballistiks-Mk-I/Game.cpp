@@ -59,6 +59,15 @@ void Game::UpdateModel( )
 			transitioning = true;
 			batman.Play();
 		}
+
+		while( !mouse.MouseEmpty() )
+		{
+			MouseEvent e = mouse.ReadMouse();
+			if( e.GetType() == MouseEvent::LPress )
+			{
+				obs.Notify();
+			}
+		}
 	}
 	else
 	{

@@ -34,13 +34,14 @@ public:
 		const Player& parent;
 	};
 public:
-	Player( Vec2 pos,float radius,float density )
+	Player( Vec2 pos,unsigned int uid,float radius,float density,float drag )
 		:
-		PhysicalCircle( radius,density,pos )
+		PhysicalCircle( radius,density,pos,drag ),
+		uid( uid )
 	{}
-	Player( Vec2 pos )
+	Player( Vec2 pos,unsigned int uid )
 		:
-		PhysicalCircle( PLAYER_RADIUS,PLAYER_DENSITY,pos,PLAYER_DRAG )
+		Player( pos,uid,PLAYER_RADIUS,PLAYER_DENSITY,PLAYER_DRAG )
 	{}
 	virtual void SetThrustVector( Vec2 vector ) override
 	{
@@ -69,6 +70,11 @@ public:
 	{
 		return *this;
 	}
+	Drawable GetDrawable() const
+	{
+		return Drawable( *this );
+	}
+public:	// viewer interface
 	inline float GetRefactoryTime() const
 	{
 		return refactoryTimeLeft;
@@ -77,9 +83,17 @@ public:
 	{
 		return refactoryPeriod;
 	}
-	Drawable GetDrawable() const
+	inline unsigned int GetUID() const
 	{
-		return Drawable( *this );
+		return uid;
+	}
+	inline bool operator==( const Player& rhs ) const
+	{
+		return uid == rhs.uid;
+	}
+	inline bool operator!=( const Player& rhs ) const
+	{
+		return !( *this == rhs );
 	}
 private:
 	const float thrustForce = PLAYER_THRUST;
@@ -89,4 +103,5 @@ private:
 	Vec2 thrustVector = { 0.0f,0.0f };
 	const Color color0 = TEAM_LEFT_COLOR0;
 	const Color color1 = TEAM_LEFT_COLOR1;
+	const unsigned int uid;
 };

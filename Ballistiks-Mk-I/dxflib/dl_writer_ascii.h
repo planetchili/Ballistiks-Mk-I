@@ -44,7 +44,7 @@ using std::string;
  * @para fname File name of the file to be created.
  * @para version DXF version. Defaults to VER_2002.
  *
- * @todo What if \c fname is NULL?  Or \c fname can't be opened for
+ * @todo What if \c fname is nullptr?  Or \c fname can't be opened for
  * another reason?
  */
 class DL_WriterA : public DL_Writer {
