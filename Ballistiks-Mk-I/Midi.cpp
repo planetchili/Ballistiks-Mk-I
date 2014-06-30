@@ -34,7 +34,7 @@ MidiSong::MidiSong( const std::wstring path,float start,float end )
 		mciSendString( setFormatCmd.c_str(),nullptr,0,nullptr );
 		const std::wstring setSeekCmd = std::wstring( L"Set " ) + GetAlias() +
 			std::wstring( L" seek exactly on" );
-		mciSendString( setFormatCmd.c_str(),nullptr,0,nullptr );
+		mciSendString( setSeekCmd.c_str(),nullptr,0,nullptr );
 
 		if( end == -1.0f )
 		{
