@@ -11,6 +11,7 @@
 #pragma comment(lib, "winmm.lib" )
 
 std::set< unsigned int > MidiSong::usedIDs;
+unsigned int MidiSong::nextID = 0;
 
 MidiSong::MidiSong( const std::wstring path,float start,float end )
 	:
@@ -102,14 +103,15 @@ MidiSong::~MidiSong()
 
 unsigned int MidiSong::ReserveID()
 {
-	for( int n = 0; n < maxSongs; n++ )
+	for( unsigned int n = nextID; n != nextID - 1; n++ )
 	{
 		if( usedIDs.count( n ) == 0 )
 		{
 			usedIDs.insert( n );
+			nextID = n + 1;
 			return n;
 		}
 	}
 	assert( false );
-	return maxSongs;
+	return 0;
 }

@@ -15,7 +15,7 @@ private:
 	std::wstring GetAlias() const;
 	static unsigned int ReserveID();
 private:
-	static const unsigned int maxSongs = 128;
+	static unsigned int nextID;
 	static std::set< unsigned int > usedIDs;
 private:
 	std::mutex mutex;
