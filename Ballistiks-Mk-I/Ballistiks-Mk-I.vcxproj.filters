@@ -186,6 +186,9 @@
     <ClInclude Include="Randomizer.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
+    <ClInclude Include="Midi.h">
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -215,6 +218,9 @@
     <ClCompile Include="dxflib\dl_writer_ascii.cpp">
       <Filter>Source Files\Framework\dxflib</Filter>
     </ClCompile>
+    <ClCompile Include="Midi.cpp">
+      <Filter>Source Files\Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ChiliDirectXFramework.res">
@@ -223,6 +229,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shipd.dxf">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="batman_edit.mid">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

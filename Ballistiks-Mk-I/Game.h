@@ -27,6 +27,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Sound.h"
+#include "Midi.h"
 #include "Randomizer.h"
 
 #include "World.h"
@@ -36,15 +37,17 @@
 class GoalObserver : public AlertZone::Observer
 {
 public:
-	GoalObserver( DSound& audio )
+	GoalObserver( DSound& audio,MidiSong& theme )
 		:
-		whistle( audio.CreateSound( "whistle.wav" ) )
+		whistle( audio.CreateSound( "whistle.wav" ) ),
+		theme( theme )
 	{}
 	virtual void Notify() override
 	{
 		if( !goalScored )
 		{
 			goalScored = true;
+			theme.Stop();
 			whistle.Play();
 		}
 	}
@@ -68,6 +71,7 @@ private:
 	float timeSinceScored = 0.0f;
 	bool goalScored = false;
 	Sound whistle;
+	MidiSong& theme;
 };
 
 class Game
@@ -91,6 +95,7 @@ private:
 	/********************************/
 	/*  User Variables              */
 	Sound batman;
+	MidiSong batmanTheme;
 	Viewport vp;
 	Camera cam;
 	std::unique_ptr< World > pWorld;

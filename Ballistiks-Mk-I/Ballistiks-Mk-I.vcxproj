@@ -94,6 +94,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChiliMath.h" />
     <ClInclude Include="GoalZone.h" />
+    <ClInclude Include="Midi.h" />
     <ClInclude Include="PhysicalCircle.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="Controller.h" />
@@ -145,6 +146,7 @@
       <EnableEnhancedInstructionSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Midi.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -154,6 +156,7 @@
     <Resource Include="ChiliDirectXFramework.res" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="batman_edit.mid" />
     <None Include="shipd.dxf" />
   </ItemGroup>
   <ItemGroup>

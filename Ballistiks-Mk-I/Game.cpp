@@ -30,8 +30,10 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 	cam( vp,vp.GetWidth(),vp.GetHeight(),{ vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ),
 	dick(TriangleStrip::ExtractSolidStripCollection(PolyClosed("shipd.dxf"))),
 	batman(audio.CreateSound("batman.wav")),
-	obs( audio )
+	obs( audio,batmanTheme ),
+	batmanTheme(L"batman_edit.mid",1.5f)
 {
+	batmanTheme.Play();
 }
 
 Game::~Game()
@@ -79,6 +81,7 @@ void Game::UpdateModel( )
 			pWorld = std::make_unique< World >( kbd,vp,obs );
 			obs.Reset();
 			cam.SetZoom( 1.0f );
+			batmanTheme.Play();
 		}
 	}
 }
