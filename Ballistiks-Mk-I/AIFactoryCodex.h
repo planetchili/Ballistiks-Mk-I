@@ -15,7 +15,8 @@
 
 class AIFactoryCodex
 {
-public: // container interface
+#pragma region Custom Iterator Container Interface
+public:
 	class iterator
 	{
 	public:
@@ -107,6 +108,7 @@ public: // container interface
 	{
 		return const_iterator( factories.cend() );
 	}
+#pragma endregion
 public:
 	AIFactoryCodex()
 	{
