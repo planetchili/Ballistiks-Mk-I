@@ -19,7 +19,10 @@ MidiSong::MidiSong( const std::wstring path,float start,float end )
 	startMilliSeconds( unsigned int( start * 1000.0f ) ),
 	isPlaying( false ),
 	isDying( false )
-{	
+{
+	// block loop thread initialization until main thread can wait on cv
+	std::unique_lock<std::mutex> threadInitLock( mutex );
+
 	std::thread( [this,path,end]()
 	{
 		std::unique_lock<std::mutex> conditionLock( mutex );
@@ -51,6 +54,9 @@ MidiSong::MidiSong( const std::wstring path,float start,float end )
 
 		while( !isDying )
 		{
+			// unblock main thread (init done)
+			cv.notify_all();
+			// wait for command
 			cv.wait( conditionLock );
 			while( isPlaying )
 			{
@@ -64,7 +70,12 @@ MidiSong::MidiSong( const std::wstring path,float start,float end )
 		}
 		const std::wstring closeCmd = std::wstring( L"Close " ) + GetAlias();
 		mciSendString( closeCmd.c_str(),nullptr,0,nullptr );
+		// unblock main thread waiting for death
+		cv.notify_all();
 	} ).detach();
+
+	// unblock loop thread and wait for init to finish
+	cv.wait( threadInitLock );
 }
 
 void MidiSong::Play()
@@ -94,11 +105,14 @@ std::wstring MidiSong::GetAlias() const
 
 MidiSong::~MidiSong()
 {
-	std::lock_guard<std::mutex> lock( mutex );
+	std::unique_lock<std::mutex> lock( mutex );
 	usedIDs.erase( id );
 	isPlaying = false;
 	isDying = true;
-	cv.notify_all();
+	// wake up loop thread
+	cv.notify_one();
+	// unblock loop thread and wait on condition variable for loop thread death signal
+	cv.wait( lock );
 }
 
 unsigned int MidiSong::ReserveID()
