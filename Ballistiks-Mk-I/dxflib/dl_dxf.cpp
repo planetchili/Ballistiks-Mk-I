@@ -47,28 +47,28 @@ DL_Dxf::DL_Dxf() {
     styleHandleStd = 0;
     version = VER_2000;
 
-    vertices = NULL;
+    vertices = nullptr;
     maxVertices = 0;
     vertexIndex = 0;
 
-    knots = NULL;
+    knots = nullptr;
     maxKnots = 0;
     knotIndex = 0;
 
-    controlPoints = NULL;
+    controlPoints = nullptr;
     maxControlPoints = 0;
     controlPointIndex = 0;
 
-    leaderVertices = NULL;
+    leaderVertices = nullptr;
     maxLeaderVertices = 0;
     leaderVertexIndex = 0;
 
-    hatchLoops = NULL;
+    hatchLoops = nullptr;
     maxHatchLoops = 0;
     hatchLoopIndex = -1;
-    hatchEdges = NULL;
-    maxHatchEdges = NULL;
-    hatchEdgeIndex = NULL;
+    hatchEdges = nullptr;
+    maxHatchEdges = nullptr;
+    hatchEdgeIndex = nullptr;
     dropEdges = false;
 }
 
@@ -78,33 +78,33 @@ DL_Dxf::DL_Dxf() {
  * Destructor.
  */
 DL_Dxf::~DL_Dxf() {
-    if (vertices!=NULL) {
+    if (vertices!=nullptr) {
         delete[] vertices;
     }
-    if (knots!=NULL) {
+    if (knots!=nullptr) {
         delete[] knots;
     }
-    if (controlPoints!=NULL) {
+    if (controlPoints!=nullptr) {
         delete[] controlPoints;
     }
-    if (leaderVertices!=NULL) {
+    if (leaderVertices!=nullptr) {
         delete[] leaderVertices;
     }
-    if (hatchLoops!=NULL) {
+    if (hatchLoops!=nullptr) {
         delete[] hatchLoops;
     }
-    if (hatchEdges!=NULL) {
+    if (hatchEdges!=nullptr) {
         for (int i=0; i<maxHatchLoops; ++i) {
-            if (hatchEdges[i]!=NULL) {
+            if (hatchEdges[i]!=nullptr) {
                 delete[] hatchEdges[i];
             }
         }
         delete[] hatchEdges;
     }
-    if (maxHatchEdges!=NULL) {
+    if (maxHatchEdges!=nullptr) {
         delete[] maxHatchEdges;
     }
-    if (hatchEdgeIndex!=NULL) {
+    if (hatchEdgeIndex!=nullptr) {
         delete[] hatchEdgeIndex;
     }
 }
@@ -218,7 +218,7 @@ bool DL_Dxf::readDxfGroups(FILE *fp, DL_CreationInterface* creationInterface,
             processDXFGroup(creationInterface, groupCode, groupValue);
         } else {
             std::cerr << "DXF read error: Line: " << line << "\n";
-            if (errorCounter!=NULL) {
+            if (errorCounter!=nullptr) {
                 (*errorCounter)++;
             }
             // try to fix:
@@ -257,7 +257,7 @@ bool DL_Dxf::readDxfGroups(std::stringstream& stream,
             processDXFGroup(creationInterface, groupCode, groupValue);
         } else {
             std::cerr << "DXF read error: Line: " << line << "\n";
-            if (errorCounter!=NULL) {
+            if (errorCounter!=nullptr) {
                 (*errorCounter)++;
             }
             // try to fix:
@@ -278,7 +278,7 @@ bool DL_Dxf::readDxfGroups(std::stringstream& stream,
  *
  * @param s Output\n
  *		Pointer to character array that chopped line will be returned in.
- * @param size Size of \p s.  (Including space for NULL.)
+ * @param size Size of \p s.  (Including space for nullptr.)
  * @param fp Input\n
  *		Handle of input file.
  *
@@ -287,27 +287,27 @@ bool DL_Dxf::readDxfGroups(std::stringstream& stream,
  *
  * @todo Change function to use safer FreeBSD strl* functions
  * @todo Is it a problem if line is blank (i.e., newline only)?
- *		Then, when function returns, (s==NULL).
+ *		Then, when function returns, (s==nullptr).
  */
 bool DL_Dxf::getChoppedLine(char *s, unsigned int size, FILE *fp) {
     if (!feof(fp)) {
-        // The whole line in the file.  Includes space for NULL.
+        // The whole line in the file.  Includes space for nullptr.
         char* wholeLine = new char[size];
         // Only the useful part of the line
         char* line;
 
         line = fgets(wholeLine, size, fp);
 
-        if (line!=NULL && line[0] != '\0') { // Evaluates to fgets() retval
+        if (line!=nullptr && line[0] != '\0') { // Evaluates to fgets() retval
             // line == wholeLine at this point.
-            // Both guaranteed to be NULL terminated.
+            // Both guaranteed to be nullptr terminated.
 
             // Strip leading whitespace and trailing CR/LF.
             stripWhiteSpace(&line);
 
             strncpy(s, line, size);
             s[size] = '\0';
-            // s should always be NULL terminated, because:
+            // s should always be nullptr terminated, because:
             assert(size > strlen(line));
         }
 
@@ -351,16 +351,16 @@ bool DL_Dxf::getChoppedLine(char *s, unsigned int size,
 
 /**
  * @brief Strips leading whitespace and trailing Carriage Return (CR)
- * and Line Feed (LF) from NULL terminated string.
+ * and Line Feed (LF) from nullptr terminated string.
  *
  * @param s Input and output.
- *		NULL terminates string.
+ *		nullptr terminates string.
  *
- * @retval true if \p s is non-NULL
- * @retval false if \p s is NULL
+ * @retval true if \p s is non-nullptr
+ * @retval false if \p s is nullptr
  */
 bool DL_Dxf::stripWhiteSpace(char** s) {
-    // last non-NULL char:
+    // last non-nullptr char:
     int lastChar = strlen(*s) - 1;
 
     // Is last character CR or LF?
@@ -407,7 +407,7 @@ bool DL_Dxf::processDXFGroup(DL_CreationInterface* creationInterface,
 
     // Indicates comment or dxflib version:
     if (groupCode==999) {
-        if (groupValue!=NULL) {
+        if (groupValue!=nullptr) {
             if (!strncmp(groupValue, "dxflib", 6)) {
                 libVersion = getLibVersion(&groupValue[7]);
             }
@@ -1155,7 +1155,7 @@ bool DL_Dxf::handleLWPolylineData(DL_CreationInterface* /*creationInterface*/) {
     if (groupCode==90) {
         maxVertices = toInt(groupValue);
         if (maxVertices>0) {
-            if (vertices!=NULL) {
+            if (vertices!=nullptr) {
                 delete[] vertices;
             }
             vertices = new double[4*maxVertices];
@@ -1201,7 +1201,7 @@ bool DL_Dxf::handleSplineData(DL_CreationInterface* /*creationInterface*/) {
     if (groupCode==72) {
         maxKnots = toInt(groupValue);
         if (maxKnots>0) {
-            if (knots!=NULL) {
+            if (knots!=nullptr) {
                 delete[] knots;
             }
             knots = new double[maxKnots];
@@ -1217,7 +1217,7 @@ bool DL_Dxf::handleSplineData(DL_CreationInterface* /*creationInterface*/) {
     else if (groupCode==73) {
         maxControlPoints = toInt(groupValue);
         if (maxControlPoints>0) {
-            if (controlPoints!=NULL) {
+            if (controlPoints!=nullptr) {
                 delete[] controlPoints;
             }
             controlPoints = new double[3*maxControlPoints];
@@ -1267,7 +1267,7 @@ bool DL_Dxf::handleLeaderData(DL_CreationInterface* /*creationInterface*/) {
     if (groupCode==76) {
         maxLeaderVertices = toInt(groupValue);
         if (maxLeaderVertices>0) {
-            if (leaderVertices!=NULL) {
+            if (leaderVertices!=nullptr) {
                 delete[] leaderVertices;
             }
             leaderVertices = new double[3*maxLeaderVertices];
@@ -1313,24 +1313,24 @@ bool DL_Dxf::handleHatchData(DL_CreationInterface* /*creationInterface*/) {
     // Allocate hatch loops (group code 91):
     if (groupCode==91 && toInt(groupValue)>0) {
 
-        if (hatchLoops!=NULL) {
+        if (hatchLoops!=nullptr) {
             delete[] hatchLoops;
-            hatchLoops = NULL;
+            hatchLoops = nullptr;
         }
-        if (maxHatchEdges!=NULL) {
+        if (maxHatchEdges!=nullptr) {
             delete[] maxHatchEdges;
-            maxHatchEdges = NULL;
+            maxHatchEdges = nullptr;
         }
-        if (hatchEdgeIndex!=NULL) {
+        if (hatchEdgeIndex!=nullptr) {
             delete[] hatchEdgeIndex;
-            hatchEdgeIndex = NULL;
+            hatchEdgeIndex = nullptr;
         }
-        if (hatchEdges!=NULL) {
+        if (hatchEdges!=nullptr) {
             for (int i=0; i<maxHatchLoops; ++i) {
                 delete[] hatchEdges[i];
             }
             delete[] hatchEdges;
-            hatchEdges = NULL;
+            hatchEdges = nullptr;
         }
         maxHatchLoops = toInt(groupValue);
 
@@ -1340,7 +1340,7 @@ bool DL_Dxf::handleHatchData(DL_CreationInterface* /*creationInterface*/) {
             hatchEdgeIndex = new int[maxHatchLoops];
             hatchEdges = new DL_HatchEdgeData*[maxHatchLoops];
             for (int i=0; i<maxHatchLoops; ++i) {
-                hatchEdges[i] = NULL;
+                hatchEdges[i] = nullptr;
                 maxHatchEdges[i] = 0;
             }
             hatchLoopIndex = -1;
@@ -1351,9 +1351,9 @@ bool DL_Dxf::handleHatchData(DL_CreationInterface* /*creationInterface*/) {
 
     // Allocate hatch edges, group code 93
     if (groupCode==93 && toInt(groupValue)>0) {
-        if (hatchLoopIndex<maxHatchLoops-1 && hatchLoops!=NULL &&
-                maxHatchEdges!=NULL && hatchEdgeIndex!=NULL &&
-                hatchEdges!=NULL) {
+        if (hatchLoopIndex<maxHatchLoops-1 && hatchLoops!=nullptr &&
+                maxHatchEdges!=nullptr && hatchEdgeIndex!=nullptr &&
+                hatchEdges!=nullptr) {
 
             dropEdges = false;
 
@@ -1373,9 +1373,9 @@ bool DL_Dxf::handleHatchData(DL_CreationInterface* /*creationInterface*/) {
     }
 
     // Init hatch edge for non-polyline boundary (group code 72)
-    if (hatchEdges!=NULL &&
-            hatchEdgeIndex!=NULL &&
-            maxHatchEdges!=NULL &&
+    if (hatchEdges!=nullptr &&
+            hatchEdgeIndex!=nullptr &&
+            maxHatchEdges!=nullptr &&
             hatchLoopIndex>=0 &&
             hatchLoopIndex<maxHatchLoops &&
             hatchEdgeIndex[hatchLoopIndex] <
@@ -1397,11 +1397,11 @@ bool DL_Dxf::handleHatchData(DL_CreationInterface* /*creationInterface*/) {
     // Handle hatch edges for non-polyline boundaries
     //   (group codes 10, 20, 11, 21, 40, 50, 51, 73)
     if (!dropEdges &&
-            hatchEdges!=NULL &&
-            hatchEdgeIndex!=NULL &&
+            hatchEdges!=nullptr &&
+            hatchEdgeIndex!=nullptr &&
             hatchLoopIndex>=0 &&
             hatchLoopIndex<maxHatchLoops &&
-            hatchEdges[hatchLoopIndex]!=NULL &&
+            hatchEdges[hatchLoopIndex]!=nullptr &&
             hatchEdgeIndex[hatchLoopIndex]>=0 &&
             hatchEdgeIndex[hatchLoopIndex] <
             maxHatchEdges[hatchLoopIndex] &&
@@ -1492,11 +1492,11 @@ bool DL_Dxf::handleHatchData(DL_CreationInterface* /*creationInterface*/) {
        // Handle hatch edges for polyline boundaries
        //  (group codes 10, 20, 42)
        if (!dropEdges &&
-               hatchEdges!=NULL &&
-               hatchEdgeIndex!=NULL &&
+               hatchEdges!=nullptr &&
+               hatchEdgeIndex!=nullptr &&
                hatchLoopIndex>=0 &&
                hatchLoopIndex<maxHatchLoops &&
-               hatchEdges[hatchLoopIndex]!=NULL &&
+               hatchEdges[hatchLoopIndex]!=nullptr &&
                //hatchEdgeIndex[hatchLoopIndex]>=0 &&
                hatchEdgeIndex[hatchLoopIndex] <
                maxHatchEdges[hatchLoopIndex] &&
@@ -2030,7 +2030,7 @@ void DL_Dxf::endSequence(DL_CreationInterface* creationInterface) {
  * ok is set to false if there was an error.
  */
 int DL_Dxf::stringToInt(const char* s, bool* ok) {
-    if (ok!=NULL) {
+    if (ok!=nullptr) {
         // check string:
         *ok = true;
         int i=0;
@@ -2075,7 +2075,7 @@ DL_WriterA* DL_Dxf::out(const char* file, DL_Codes::version version) {
     if (dw->openFailed()) {
         delete dw;
         delete[] f;
-        return NULL;
+        return nullptr;
     } else {
         delete[] f;
         return dw;

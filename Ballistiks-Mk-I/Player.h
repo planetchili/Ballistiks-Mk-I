@@ -1,5 +1,5 @@
 #pragma once
-#include "CollidableCircle.h"
+#include "PhysicalCircle.h"
 #include "Parameters.h"
 #include "Drawable.h"
 
@@ -15,7 +15,7 @@ class Player : public PhysicalCircle,
 			   public ControllablePlayer
 {
 public:
-	class Drawable : ::Drawable
+	class Drawable : public ::Drawable
 	{
 	public:
 		Drawable( const Player& parent )
@@ -27,19 +27,21 @@ public:
 		{
 			const float scaledRadius = parent.radius * trans.ExtractScaleIsometric();
 			const Vec2 screenPos = trans * Vec2{ 0.0f,0.0f };
-			gfx.DrawCircleClip( screenPos,(int)scaledRadius,clip,parent.color );
+			gfx.DrawFilledCircleClip( screenPos,(int)scaledRadius,clip,parent.color0 );
+			gfx.DrawFilledCircleClip( screenPos,(int)( scaledRadius * 0.8f ),clip,parent.color1 );
 		}
 	private:
 		const Player& parent;
 	};
 public:
-	Player( Vec2 pos,float radius,float density )
+	Player( Vec2 pos,unsigned int uid,float radius,float density,float drag )
 		:
-		PhysicalCircle( radius,density,pos )
+		PhysicalCircle( radius,density,pos,drag ),
+		uid( uid )
 	{}
-	Player( Vec2 pos )
+	Player( Vec2 pos,unsigned int uid )
 		:
-		PhysicalCircle( PLAYER_RADIUS,PLAYER_DENSITY,pos,PLAYER_DRAG )
+		Player( pos,uid,PLAYER_RADIUS,PLAYER_DENSITY,PLAYER_DRAG )
 	{}
 	virtual void SetThrustVector( Vec2 vector ) override
 	{
@@ -68,6 +70,11 @@ public:
 	{
 		return *this;
 	}
+	Drawable GetDrawable() const
+	{
+		return Drawable( *this );
+	}
+public:	// viewer interface
 	inline float GetRefactoryTime() const
 	{
 		return refactoryTimeLeft;
@@ -76,9 +83,17 @@ public:
 	{
 		return refactoryPeriod;
 	}
-	Drawable GetDrawable() const
+	inline unsigned int GetUID() const
 	{
-		return Drawable( *this );
+		return uid;
+	}
+	inline bool operator==( const Player& rhs ) const
+	{
+		return uid == rhs.uid;
+	}
+	inline bool operator!=( const Player& rhs ) const
+	{
+		return !( *this == rhs );
 	}
 private:
 	const float thrustForce = PLAYER_THRUST;
@@ -86,5 +101,7 @@ private:
 	const float burstImpulse = PLAYER_BURST;
 	float refactoryTimeLeft = 0.0f;
 	Vec2 thrustVector = { 0.0f,0.0f };
-	const Color color = WHITE;
+	const Color color0 = TEAM_LEFT_COLOR0;
+	const Color color1 = TEAM_LEFT_COLOR1;
+	const unsigned int uid;
 };

@@ -136,11 +136,11 @@ LRESULT WINAPI MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR,INT )
 {
 	WNDCLASSEX wc = { sizeof( WNDCLASSEX ),CS_CLASSDC,MsgProc,0,0,
-                      GetModuleHandle( NULL ),NULL,NULL,NULL,NULL,
-                      L"Chili DirectX Framework Window",NULL };
+                      GetModuleHandle( nullptr ),nullptr,nullptr,nullptr,nullptr,
+                      L"Chili DirectX Framework Window",nullptr };
     wc.hIconSm = (HICON)LoadImage( hInst,MAKEINTRESOURCE( IDI_APPICON16 ),IMAGE_ICON,16,16,0 );
 	wc.hIcon   = (HICON)LoadImage( hInst,MAKEINTRESOURCE( IDI_APPICON32 ),IMAGE_ICON,32,32,0 );
-	wc.hCursor = LoadCursor( NULL,IDC_ARROW );
+	wc.hCursor = LoadCursor( nullptr,IDC_ARROW );
     RegisterClassEx( &wc );
 	
 	RECT wr;
@@ -151,7 +151,7 @@ int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR,INT )
 	AdjustWindowRect( &wr,WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,FALSE );
     HWND hWnd = CreateWindowW( L"Chili DirectX Framework Window",L"Chili DirectX Framework",
                               WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,wr.left,wr.top,wr.right-wr.left,wr.bottom-wr.top,
-                              NULL,NULL,wc.hInstance,NULL );
+                              nullptr,nullptr,wc.hInstance,nullptr );
 
     ShowWindow( hWnd,SW_SHOWDEFAULT );
     UpdateWindow( hWnd );
@@ -162,7 +162,7 @@ int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR,INT )
     ZeroMemory( &msg,sizeof( msg ) );
     while( msg.message != WM_QUIT )
     {
-        if( PeekMessage( &msg,NULL,0,0,PM_REMOVE ) )
+        if( PeekMessage( &msg,nullptr,0,0,PM_REMOVE ) )
         {
             TranslateMessage( &msg );
             DispatchMessage( &msg );

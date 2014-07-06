@@ -219,6 +219,10 @@ public:
 		return TriangleStrip( std::move( vertices ) );
 	}
 public:
+	TriangleStrip( const PolyClosed& poly )
+		:
+		TriangleStrip( (std::vector< const Vec2 >&&)PolyClosed( poly ) )
+	{}
 	TriangleStrip( TriangleStrip&& strip )
 		:
 		vertices( std::move( strip.vertices ) )

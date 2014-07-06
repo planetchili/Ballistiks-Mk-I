@@ -23,16 +23,16 @@
 #include <vector>
 #include <assert.h>
 
-#define PI (float)M_PI
+#define PI (float)3.14159265358979323846
 
 template <typename T>
-T sgn( T val )
+inline T sgn( T val )
 {
 	return (T)( (T)0 <= val ) - ( val < (T)0 );
 }
 
 template <typename T>
-auto sq( T val ) -> decltype( val * val )
+inline auto sq( T val ) -> decltype( val * val )
 {
 	return val * val;
 }
@@ -69,9 +69,25 @@ inline unsigned int choose( unsigned int n,unsigned int k )
 	return num / factorial( n - k );
 }
 
+// value of gaussian distribution at x
 template <typename T>
 T gaussian( T x,T o )
 {
 	return ( ( T )1.0 / sqrt( ( T )2.0 * PI * sq( o ) ) ) 
 		* exp( -sq( x ) / ( ( T )2.0 * sq( o ) ) );
 }
+
+template <typename T>
+inline T RandError( T deviation,T mean = (T)0.0 )
+{
+	return mean + deviation - (T)2.0 * ( (T)rand() / (T)RAND_MAX ) * deviation;
+}
+
+inline int RandError( int deviation,int mean = 0 )
+{
+	return mean + deviation - rand() % ( deviation * 2 + 1 );
+}
+
+// uint nonsensical
+template <>
+unsigned int RandError< unsigned int >( unsigned int,unsigned int );

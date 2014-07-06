@@ -22,10 +22,18 @@
 
 Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 :	gfx( hWnd ),
-	//audio( hWnd ),
+	audio( hWnd ),
 	kbd( kServer ),
-	mouse( mServer )
+	mouse( mServer ),
+	vp( gfx,gfx.GetScreenRect() ),
+	pWorld( std::make_unique< World >( kbd,vp,obs ) ),
+	cam( vp,vp.GetWidth(),vp.GetHeight(),{ vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ),
+	dick(TriangleStrip::ExtractSolidStripCollection(PolyClosed("shipd.dxf"))),
+	batman(audio.CreateSound("batman.wav")),
+	obs( audio,batmanTheme ),
+	batmanTheme(L"batman_edit.mid",1.5f)
 {
+	batmanTheme.Play();
 }
 
 Game::~Game()
@@ -42,8 +50,71 @@ void Game::Go()
 
 void Game::UpdateModel( )
 {
+	const float dt = 1.0f / 60.0f;
+	if( !transitioning )
+	{
+		pWorld->Step( dt );
+		obs.Step( dt );
+
+		if( obs.GoalScored() )
+		{
+			transitioning = true;
+			batman.Play();
+		}
+
+		while( !mouse.MouseEmpty() )
+		{
+			MouseEvent e = mouse.ReadMouse();
+			if( e.GetType() == MouseEvent::LPress )
+			{
+				obs.Notify();
+			}
+		}
+	}
+	else
+	{
+		transitionTime += dt;
+		if( transitionTime >= transitionDuration )
+		{
+			transitionTime = 0.0f;
+			transitioning = false;
+			pWorld = std::make_unique< World >( kbd,vp,obs );
+			obs.Reset();
+			cam.SetZoom( 1.0f );
+			batmanTheme.Play();
+		}
+	}
 }
 
 void Game::ComposeFrame()
 {
+	if( !transitioning )
+	{
+		pWorld->Render( cam );
+	}
+	else
+	{
+		const float theta = ( transitionTime / transitionDuration ) * 2.0f * PI * 4.0f;
+		cam.SetZoom( 0.7f - 0.4f * sin( theta ) );
+		pWorld->Render( cam );
+
+		const Mat3 trans =
+			Mat3::Translation( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) *
+			Mat3::Scaling( 5.0f );
+		for( const TriangleStrip& s : dick )
+		{
+			vp.Draw( s.GetDrawable(
+				trans * Mat3::Rotation( theta * 0.33f ),GREEN ) );
+		}
+		for( const TriangleStrip& s : dick )
+		{
+			vp.Draw( s.GetDrawable(
+				trans * Mat3::Rotation( -theta * 0.73f + PI / 0.7f - PI / 4.0f ),RED ) );
+		}
+		for( const TriangleStrip& s : dick )
+		{
+			vp.Draw( s.GetDrawable(
+				trans * Mat3::Rotation( theta * 1.17f + PI / 2.43f + PI / 6.0f ),PURPLE ) );
+		}
+	}
 }

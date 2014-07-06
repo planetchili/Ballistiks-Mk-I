@@ -1,10 +1,10 @@
 #pragma once
-#include "CollidableCircle.h"
+#include "PhysicalCircle.h"
 
 class Ball : public PhysicalCircle
 {
 public:
-	class Drawable : ::Drawable
+	class Drawable : public ::Drawable
 	{
 	public:
 		Drawable( const Ball& parent )
@@ -16,7 +16,8 @@ public:
 		{
 			const float scaledRadius = parent.radius * trans.ExtractScaleIsometric();
 			const Vec2 screenPos = trans * Vec2 { 0.0f,0.0f };
-			gfx.DrawCircleClip( screenPos,(int)scaledRadius,clip,parent.color );
+			gfx.DrawFilledCircleClip( screenPos,(int)scaledRadius,clip,parent.color1 );
+			gfx.DrawCircleClip( screenPos,(int)scaledRadius,clip,parent.color0 );
 		}
 	private:
 		const Ball& parent;
@@ -31,5 +32,6 @@ public:
 		return Drawable( *this );
 	}
 private:
-	const Color color = WHITE;
+	const Color color0 = BALL_COLOR0;
+	const Color color1 = BALL_COLOR1;
 };

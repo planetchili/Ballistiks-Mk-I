@@ -20,10 +20,59 @@
  ******************************************************************************************/
 #pragma once
 
+// DIIIIIIIIIIIIICKS!!!!
+
+#include <memory>
 #include "D3DGraphics.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Sound.h"
+#include "Midi.h"
+#include "Randomizer.h"
+
+#include "World.h"
+#include "Viewport.h"
+#include "Camera.h"
+
+class GoalObserver : public AlertZone::Observer
+{
+public:
+	GoalObserver( DSound& audio,MidiSong& theme )
+		:
+		whistle( audio.CreateSound( "whistle.wav" ) ),
+		theme( theme )
+	{}
+	virtual void Notify() override
+	{
+		if( !goalScored )
+		{
+			goalScored = true;
+			theme.Stop();
+			whistle.Play();
+		}
+	}
+	bool GoalScored() const
+	{
+		return goalScored && timeSinceScored >= 2.0f;
+	}
+	void Reset()
+	{
+		goalScored = false;
+		timeSinceScored = 0.0f;
+	}
+	void Step( const float dt )
+	{
+		if( goalScored )
+		{
+			timeSinceScored += dt;
+		}
+	}
+private:
+	float timeSinceScored = 0.0f;
+	bool goalScored = false;
+	Sound whistle;
+	MidiSong& theme;
+};
 
 class Game
 {
@@ -41,9 +90,20 @@ private:
 	D3DGraphics gfx;
 	KeyboardClient kbd;
 	MouseClient mouse;
-	//DSound audio;
+	DSound audio;
+	Randomizer randomizer;
 	/********************************/
 	/*  User Variables              */
+	Sound batman;
+	MidiSong batmanTheme;
+	Viewport vp;
+	Camera cam;
+	std::unique_ptr< World > pWorld;
+	GoalObserver obs;
+	std::vector< const TriangleStrip > dick;
+	bool transitioning = false;
+	const float transitionDuration = 1.5f;
+	float transitionTime = 0.0f;
 
 	/********************************/
 	void UpdateModel();

@@ -57,7 +57,7 @@ public:
     /**
      * Constructor for DXF attributes.
      *
-     * @param layer Layer name for this entity or NULL for no layer
+     * @param layer Layer name for this entity or nullptr for no layer
      *              (every entity should be on a named layer!).
      * @param color Color number (0..256). 0 = BYBLOCK, 256 = BYLAYER.
      * @param width Line thickness. Defaults to zero. -1 = BYLAYER, 
@@ -77,7 +77,7 @@ public:
 
 
     /**
-     * Sets the layer. If the given pointer points to NULL, the
+     * Sets the layer. If the given pointer points to nullptr, the
      *  new layer name will be an empty but valid string.
      */
     void setLayer(const string& layer) {

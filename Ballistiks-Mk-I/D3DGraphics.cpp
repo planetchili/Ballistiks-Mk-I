@@ -27,15 +27,15 @@
 
 D3DGraphics::D3DGraphics( HWND hWnd )
 	:
-pDirect3D( NULL ),
-pDevice( NULL ),
-pBackBuffer( NULL ),
+pDirect3D( nullptr ),
+pDevice( nullptr ),
+pBackBuffer( nullptr ),
 sysBuffer( SCREENWIDTH,SCREENHEIGHT )
 {
 	HRESULT result;
 	
 	pDirect3D = Direct3DCreate9( D3D_SDK_VERSION );
-	assert( pDirect3D != NULL );
+	assert( pDirect3D != nullptr );
 
     D3DPRESENT_PARAMETERS d3dpp;
     ZeroMemory( &d3dpp,sizeof( d3dpp ) );
@@ -54,7 +54,7 @@ sysBuffer( SCREENWIDTH,SCREENHEIGHT )
 
 	// initialize gdi+
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-	Gdiplus::GdiplusStartup( &gdiplusToken,&gdiplusStartupInput,NULL );
+	Gdiplus::GdiplusStartup( &gdiplusToken,&gdiplusStartupInput,nullptr );
 }
 
 D3DGraphics::~D3DGraphics()
@@ -62,17 +62,17 @@ D3DGraphics::~D3DGraphics()
 	if( pDevice )
 	{
 		pDevice->Release();
-		pDevice = NULL;
+		pDevice = nullptr;
 	}
 	if( pDirect3D )
 	{
 		pDirect3D->Release();
-		pDirect3D = NULL;
+		pDirect3D = nullptr;
 	}
 	if( pBackBuffer )
 	{
 		pBackBuffer->Release();
-		pBackBuffer = NULL;
+		pBackBuffer = nullptr;
 	}
 
 	// clean up gdi+
@@ -89,7 +89,7 @@ void D3DGraphics::EndFrame()
 	HRESULT result;
 	D3DLOCKED_RECT backRect;
 
-	result = pBackBuffer->LockRect( &backRect,NULL,NULL );
+	result = pBackBuffer->LockRect( &backRect,nullptr,0 );
 	assert( !FAILED( result ) );
 
 
@@ -99,7 +99,7 @@ void D3DGraphics::EndFrame()
 	result = pBackBuffer->UnlockRect( );
 	assert( !FAILED( result ) );
 
-	result = pDevice->Present( NULL,NULL,NULL,NULL );
+	result = pDevice->Present( nullptr,nullptr,nullptr,nullptr );
 	assert( !FAILED( result ) );
 }
 
@@ -284,30 +284,39 @@ void D3DGraphics::DrawLineClip( Vec2 p0,Vec2 p1,Color color,const RectF& clip )
 
 void D3DGraphics::DrawCircle( int centerX,int centerY,int radius,Color color )
 {
-	int rSquared = sq( radius );
-	int xPivot = (int)( radius * 0.70710678118f + 0.5f );
-	for( int x = 0; x <= xPivot; x++ )
+	int x = radius,y = 0;
+	int radiusError = 1 - x;
+	while( x >= y )
 	{
-		int y = (int)(sqrt( (float)( rSquared - sq( x ) ) ) + 0.5f);
 		PutPixel( centerX + x,centerY + y,color );
 		PutPixel( centerX - x,centerY + y,color );
 		PutPixel( centerX + x,centerY - y,color );
 		PutPixel( centerX - x,centerY - y,color );
 		PutPixel( centerX + y,centerY + x,color );
-		PutPixel( centerX - y,centerY + x,color );
 		PutPixel( centerX + y,centerY - x,color );
+		PutPixel( centerX - y,centerY + x,color );
 		PutPixel( centerX - y,centerY - x,color );
+
+		y++;
+
+		if( radiusError < 0 )
+		{
+			radiusError += 2 * y + 1;
+		}
+		else
+		{
+			x--;
+			radiusError += 2 * ( y - x + 1 );
+		}
 	}
 }
 
 void D3DGraphics::DrawCircleClip( int centerX,int centerY,int radius,const RectI& clip,Color color )
 {
-	int rSquared = sq( radius );
-	int xPivot = (int)( radius * 0.70710678118f + 0.5f );
-	for( int x = 0; x <= xPivot; x++ )
+	int x = radius,y = 0;
+	int radiusError = 1 - x;
+	while( x >= y )
 	{
-		int y = (int)( sqrt( (float)( rSquared - sq( x ) ) ) + 0.5f );
-
 		Vei2 pout = { centerX + x,centerY + y };
 		if( clip.Contains( pout ) )
 			PutPixel( pout,color );
@@ -332,6 +341,56 @@ void D3DGraphics::DrawCircleClip( int centerX,int centerY,int radius,const RectI
 		pout = { centerX - y,centerY - x };
 		if( clip.Contains( pout ) )
 			PutPixel( pout,color );
+
+		y++;
+
+		if( radiusError < 0 )
+		{
+			radiusError += 2 * y + 1;
+		}
+		else
+		{
+			x--;
+			radiusError += 2 * ( y - x + 1 );
+		}
+	}
+}
+
+void D3DGraphics::DrawFilledCircleClip( int centerX,int centerY,int radius,const RectI& clip,Color color )
+{
+	auto DrawScanlineClip = [this,&clip,color]( int x0,int x1,int y )
+	{
+		if( ( y >= clip.top ) & ( y <= clip.bottom ) )
+		{
+			x0 = max( x0,clip.left );
+			x1 = min( x1,clip.right );
+			for( int x = x0; x <= x1; x++ )
+			{
+				PutPixel( x,y,color );
+			}
+		}
+	};
+	
+	int x = radius,y = 0;
+	int radiusError = 1 - x;
+	while( x >= y )
+	{
+		DrawScanlineClip( centerX - x,centerX + x,centerY - y );
+		DrawScanlineClip( centerX - x,centerX + x,centerY + y );
+		DrawScanlineClip( centerX - y,centerX + y,centerY - x );
+		DrawScanlineClip( centerX - y,centerX + y,centerY + x );
+
+		y++;
+
+		if( radiusError < 0 )
+		{
+			radiusError += 2 * y + 1;
+		}
+		else
+		{
+			x--;
+			radiusError += 2 * ( y - x + 1 );
+		}
 	}
 }
 

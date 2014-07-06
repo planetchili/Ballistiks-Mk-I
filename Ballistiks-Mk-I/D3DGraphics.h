@@ -69,6 +69,12 @@ public:
 		DrawCircleClip( (int)center.x,(int)center.y,radius,clip,c );
 	}
 	void DrawCircleClip( int centerX,int centerY,int radius,const RectI& clip,Color c );
+	template< typename T >
+	inline void DrawFilledCircleClip( _Vec2<T> center,int radius,const RectI& clip,Color c )
+	{
+		DrawFilledCircleClip( (int)center.x,(int)center.y,radius,clip,c );
+	}
+	void DrawFilledCircleClip( int centerX,int centerY,int radius,const RectI& clip,Color color );
 	void DrawTriangle( Vec2 p0,Vec2 p1,Vec2 p2,const RectI& clip,Color c );
 	void BeginFrame();
 	void EndFrame();
