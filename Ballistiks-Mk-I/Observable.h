@@ -2,14 +2,14 @@
 #include <vector>
 #include <algorithm>
 
-class Observable
+class Observer
 {
 public:
-	class Observer
-	{
-	public:
-		virtual void OnNotify() = 0;
-	};
+	virtual void OnNotify() = 0;
+};
+
+class Observable
+{
 public:
 	void AddObserver( Observer& obs )
 	{
