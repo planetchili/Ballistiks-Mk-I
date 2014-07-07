@@ -110,7 +110,7 @@ MidiSong::~MidiSong()
 	isPlaying = false;
 	isDying = true;
 	// wake up loop thread
-	cv.notify_one();
+	cv.notify_all();
 	// unblock loop thread and wait on condition variable for loop thread death signal
 	cv.wait( lock );
 }
