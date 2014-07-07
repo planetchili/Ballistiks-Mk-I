@@ -12,5 +12,10 @@ public:
 		font( family.c_str(),size )
 	{}
 private:
+	inline operator const Gdiplus::Font*() const
+	{
+		return &font;
+	}
+private:
 	Gdiplus::Font font;
 };
