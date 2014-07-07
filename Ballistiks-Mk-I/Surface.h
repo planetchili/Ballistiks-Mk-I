@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Colors.h"
+#include "Font.h"
 #include <gdiplus.h>
 #include <string>
 
@@ -12,7 +13,10 @@ public:
 		buffer( new Color[ pitch * height ] ),
 		width( width ),
 		height( height ),
-		pitch( pitch )
+		pitch( pitch ),
+		bitmap( width,height,pitch * sizeof( Color ),
+			PixelFormat32bppARGB,(BYTE*)buffer ),
+		g( &bitmap )
 	{}
 	Surface( unsigned int width,unsigned int height ) // 16-byte alignment
 		:
@@ -24,7 +28,7 @@ public:
 	{
 		delete [] buffer;
 	}
-	void Save( const std::wstring filename )
+	void Save( const std::wstring& filename )
 	{
 		auto GetEncoderClsid = []( const WCHAR* const format,CLSID* const pClsid ) -> int
 		{
@@ -60,9 +64,8 @@ public:
 		// get encoder class ID information for .bmp format
 		CLSID bmpID;
 		GetEncoderClsid( L"image/bmp",&bmpID );
-		// create bitmap object attached to this surface buffer and save it
-		Gdiplus::Bitmap( width,height,pitch * sizeof( Color ),
-			PixelFormat32bppARGB,(BYTE*)buffer ).Save( filename.c_str(),&bmpID,nullptr );
+		// save bitmap as windows .bmp
+		bitmap.Save( filename.c_str(),&bmpID,nullptr );
 	}
 	inline void Clear( Color fillValue  )
 	{
@@ -83,6 +86,13 @@ public:
 	inline Color GetPixel( unsigned int x,unsigned int y ) const
 	{
 		return buffer[y * pitch + x];
+	}
+	inline void DrawString( const std::wstring& string,Vec2 pt,const Font& font,Color c )
+	{
+		Gdiplus::Color textColor( c.r,c.g,c.b );
+		Gdiplus::SolidBrush textBrush( textColor );
+		g.DrawString( string.c_str(),-1,font,
+			Gdiplus::PointF( pt.x,pt.y ),&textBrush );
 	}
 	inline unsigned int GetWidth() const
 	{
@@ -109,4 +119,6 @@ private:
 	const unsigned int width;
 	const unsigned int height;
 	const unsigned int pitch;
+	Gdiplus::Bitmap	bitmap;
+	Gdiplus::Graphics g;
 };
