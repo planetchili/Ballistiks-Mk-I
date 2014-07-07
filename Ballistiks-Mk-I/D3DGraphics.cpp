@@ -23,7 +23,6 @@
 #include <assert.h>
 #include <functional>
 #pragma comment( lib,"d3d9.lib" )
-#pragma comment( lib,"gdiplus.lib" )
 
 D3DGraphics::D3DGraphics( HWND hWnd )
 	:
@@ -51,10 +50,6 @@ sysBuffer( SCREENWIDTH,SCREENHEIGHT )
 
 	result = pDevice->GetBackBuffer( 0,0,D3DBACKBUFFER_TYPE_MONO,&pBackBuffer );
 	assert( !FAILED( result ) );
-
-	// initialize gdi+
-	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-	Gdiplus::GdiplusStartup( &gdiplusToken,&gdiplusStartupInput,nullptr );
 }
 
 D3DGraphics::~D3DGraphics()
@@ -74,9 +69,6 @@ D3DGraphics::~D3DGraphics()
 		pBackBuffer->Release();
 		pBackBuffer = nullptr;
 	}
-
-	// clean up gdi+
-	Gdiplus::GdiplusShutdown( gdiplusToken );
 }
 
 void D3DGraphics::BeginFrame()

@@ -90,6 +90,7 @@
     <ClInclude Include="AlertZone.h" />
     <ClInclude Include="AssholeAI.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="GdiPlusManager.h" />
     <ClInclude Include="GoalCrease.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ChiliMath.h" />
@@ -145,6 +146,7 @@
       <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</BufferSecurityCheck>
       <EnableEnhancedInstructionSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
+    <ClCompile Include="GdiPlusManager.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Midi.cpp" />
     <ClCompile Include="Mouse.cpp" />

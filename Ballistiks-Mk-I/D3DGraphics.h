@@ -21,6 +21,7 @@
 #pragma once
 
 #include <d3d9.h>
+#include "GdiPlusManager.h"
 #include "Vec2.h"
 #include "Rect.h"
 #include "Colors.h"
@@ -93,10 +94,10 @@ private:
 	void DrawFlatTriangle( float y1,float y2,float m1,float m2,
 		float b1,float b2,const RectI& clip,Color c );
 private:
+	GdiPlusManager		gdiPlusManager;
 	const Color			FILLVALUE =	BLACK;
 	IDirect3D9*			pDirect3D;
 	IDirect3DDevice9*	pDevice;
 	IDirect3DSurface9*	pBackBuffer;
 	Surface				sysBuffer;
-	ULONG_PTR			gdiplusToken;
 };
