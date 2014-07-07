@@ -77,6 +77,10 @@ public:
 	}
 	void DrawFilledCircleClip( int centerX,int centerY,int radius,const RectI& clip,Color color );
 	void DrawTriangle( Vec2 p0,Vec2 p1,Vec2 p2,const RectI& clip,Color c );
+	inline void DrawString( const std::wstring& string,Vec2 pt,const Font& font,Color c )
+	{
+		sysBuffer.DrawString( string,pt,font,c );
+	}
 	void BeginFrame();
 	void EndFrame();
 	virtual void Draw( Drawable& obj ) override
