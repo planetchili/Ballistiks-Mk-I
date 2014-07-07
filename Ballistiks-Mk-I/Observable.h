@@ -11,11 +11,11 @@ public:
 class Observable
 {
 public:
-	void AddObserver( Observer& obs )
+	inline void AddObserver( Observer& obs )
 	{
 		observers.push_back( &obs );
 	}
-	void RemoveObserver( Observer& obs )
+	inline void RemoveObserver( Observer& obs )
 	{
 		const auto end = observers.end();
 		const auto i = std::find( observers.begin(),end,&obs );
@@ -24,8 +24,20 @@ public:
 			observers.erase( i );
 		}
 	}
+	inline void Disable()
+	{
+		enabled = false;
+	}
+	inline void Enable()
+	{
+		enabled = true;
+	}
+	inline bool IsEnabled() const
+	{
+		return enabled;
+	}
 protected:
-	void Notify()
+	inline void Notify()
 	{
 		for( Observer* const o : observers )
 		{
@@ -34,4 +46,5 @@ protected:
 	}
 private:
 	std::vector< Observer* const > observers;
+	bool enabled = true;
 };
