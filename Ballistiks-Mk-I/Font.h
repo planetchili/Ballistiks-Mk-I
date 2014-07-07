@@ -9,7 +9,7 @@ class Font
 public:
 	Font( const std::wstring& family,float size )
 		:
-		font( family.c_str(),size )
+		font( family.c_str(),size,Gdiplus::FontStyleBold )
 	{}
 private:
 	inline operator const Gdiplus::Font*() const
