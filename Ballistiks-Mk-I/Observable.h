@@ -24,6 +24,14 @@ public:
 			observers.erase( i );
 		}
 	}
+protected:
+	void Notify()
+	{
+		for( Observer* const o : observers )
+		{
+			o->OnNotify();
+		}
+	}
 private:
 	std::vector< Observer* const > observers;
 };
