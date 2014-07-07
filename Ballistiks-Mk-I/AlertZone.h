@@ -7,21 +7,34 @@
 class AlertZone : public Observable
 {
 public:
-	AlertZone( PolyClosed&& poly )
+	enum Type
+	{
+		Continuous,
+		OneShot
+	};
+public:
+	AlertZone( PolyClosed&& poly,Type type = OneShot  )
 		:
-		poly( poly )
+		poly( poly ),
+		type( type )
 	{}
-	AlertZone( const PolyClosed& poly )
+	AlertZone( const PolyClosed& poly,Type type = OneShot )
 		:
-		poly( poly )
+		poly( poly ),
+		type( type )
 	{}
 	void HandleCollision( PhysicalCircle& obj )
 	{
-		if( poly.HandleCollision( obj,PolyClosed::ReboundNone ) )
+		if( IsEnabled() && poly.HandleCollision( obj,PolyClosed::ReboundNone ) )
 		{
 			Notify();
+			if( type == OneShot )
+			{
+				Disable();
+			}
 		}
 	}
 private:
+	const Type type;
 	PolyClosed poly;
 };
