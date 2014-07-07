@@ -14,14 +14,14 @@
 #include "ViewableWorld.h"
 #include "AIFactoryCodex.h"
 
-class GoalObs : public AlertZone::Observer
+class GoalObs : public Observer
 {
 public:
 	GoalObs( std::vector< std::unique_ptr< Controller > >& controllers )
 		:
 		controllers( controllers )
 	{}
-	virtual void Notify() override
+	virtual void OnNotify() override
 	{
 		for( std::unique_ptr< Controller >& c : controllers )
 		{
@@ -35,7 +35,7 @@ private:
 class World : public ViewableWorld
 {
 public:
-	World( KeyboardClient& kbd,const Viewport& vp,AlertZone::Observer& obs )
+	World( KeyboardClient& kbd,const Viewport& vp,Observer& obs )
 		:
 		walls( 
 			{ { 80.0f,40.0f },

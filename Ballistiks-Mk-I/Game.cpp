@@ -67,7 +67,7 @@ void Game::UpdateModel( )
 			MouseEvent e = mouse.ReadMouse();
 			if( e.GetType() == MouseEvent::LPress )
 			{
-				obs.Notify();
+				obs.OnNotify();
 			}
 		}
 	}

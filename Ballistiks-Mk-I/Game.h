@@ -34,7 +34,7 @@
 #include "Viewport.h"
 #include "Camera.h"
 
-class GoalObserver : public AlertZone::Observer
+class GoalObserver : public Observer
 {
 public:
 	GoalObserver( DSound& audio,MidiSong& theme )
@@ -42,7 +42,7 @@ public:
 		whistle( audio.CreateSound( "whistle.wav" ) ),
 		theme( theme )
 	{}
-	virtual void Notify() override
+	virtual void OnNotify() override
 	{
 		if( !goalScored )
 		{
