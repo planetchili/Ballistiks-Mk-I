@@ -91,6 +91,7 @@
     <ClInclude Include="AssholeAI.h" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GdiPlusManager.h" />
     <ClInclude Include="GoalCrease.h" />
     <ClInclude Include="Camera.h" />
