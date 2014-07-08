@@ -8,9 +8,9 @@ public:
 	class Factory
 	{
 	public:
-		Factory( const std::wstring author )
+		Factory( const std::wstring name )
 			:
-			author( author )
+			name( name )
 		{}
 		virtual std::unique_ptr< Controller > Make( ControllablePlayer& player,const ViewableWorld& view ) = 0;
 		virtual std::unique_ptr< Controller > Make( ControllablePlayer& player,const ViewableWorld& view,unsigned int parameter )

@@ -147,7 +147,7 @@ private:
 	{
 		std::unique_ptr< Controller::Factory > pFactory = std::make_unique< T >();
 
-		if( !ContainsAuthor( pFactory->GetAuthor() ) )
+		if( !ContainsAuthor( pFactory->GetName() ) )
 		{
 			factories.push_back( std::move( pFactory ) );
 		}
