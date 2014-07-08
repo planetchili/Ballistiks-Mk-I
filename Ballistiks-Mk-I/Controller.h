@@ -1,8 +1,31 @@
 #pragma once
 #include "Player.h"
+#include "ViewableWorld.h"
 
 class Controller
 {
+public:
+	class Factory
+	{
+	public:
+		Factory( const std::string author )
+			:
+			author( author )
+		{}
+		virtual std::unique_ptr< Controller > Make( ControllablePlayer& player,const ViewableWorld& view ) = 0;
+		virtual std::unique_ptr< Controller > Make( ControllablePlayer& player,const ViewableWorld& view,unsigned int parameter )
+		{
+			assert( "This factory does not support a make parameter." && false );
+			return { nullptr };
+		}
+		virtual ~Factory() {}
+		const std::string& GetAuthor() const
+		{
+			return author;
+		}
+	private:
+		const std::string author;
+	};
 public:
 	Controller( ControllablePlayer& player )
 		:

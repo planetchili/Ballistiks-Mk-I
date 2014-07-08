@@ -21,10 +21,10 @@ public:
 	{
 	public:
 		typedef iterator self_type;
-		typedef AI::Factory value_type;
-		typedef AI::Factory& reference;
-		typedef AI::Factory* pointer;
-		typedef std::vector< std::unique_ptr< AI::Factory > >::iterator internal_iterator;
+		typedef Controller::Factory value_type;
+		typedef Controller::Factory& reference;
+		typedef Controller::Factory* pointer;
+		typedef std::vector< std::unique_ptr< Controller::Factory > >::iterator internal_iterator;
 		typedef std::forward_iterator_tag iterator_category;
 		typedef int difference_type;
 		inline iterator( internal_iterator ptr ) : ptr_( ptr ) { }
@@ -53,10 +53,10 @@ public:
 	{
 	public:
 		typedef const_iterator self_type;
-		typedef AI::Factory value_type;
-		typedef AI::Factory& reference;
-		typedef AI::Factory* pointer;
-		typedef std::vector< std::unique_ptr< AI::Factory > >::const_iterator internal_iterator;
+		typedef Controller::Factory value_type;
+		typedef Controller::Factory& reference;
+		typedef Controller::Factory* pointer;
+		typedef std::vector< std::unique_ptr< Controller::Factory > >::const_iterator internal_iterator;
 		typedef int difference_type;
 		typedef std::forward_iterator_tag iterator_category;
 		inline const_iterator( internal_iterator ptr ) : ptr_( ptr ) { }
@@ -120,14 +120,14 @@ public:
 
 		/**********************************/
 	}
-	AI::Factory& GetRandomFactory()
+	Controller::Factory& GetRandomFactory()
 	{
 		return *factories[rand() % factories.size()];
 	}
-	AI::Factory& GetFactoryByAuthor( const std::string author )
+	Controller::Factory& GetFactoryByAuthor( const std::string author )
 	{
 		return **std::find_if( factories.begin(),factories.end(),
-			[&author]( const std::unique_ptr< AI::Factory >& f ) -> bool
+			[&author]( const std::unique_ptr< Controller::Factory >& f ) -> bool
 		{
 			return f->GetAuthor() == author;
 		} );
@@ -136,7 +136,7 @@ public:
 	{
 
 		return 0 < std::count_if( factories.begin(),factories.end(),
-			[&author]( const std::unique_ptr< AI::Factory >& f ) -> bool
+			[&author]( const std::unique_ptr< Controller::Factory >& f ) -> bool
 		{
 			return f->GetAuthor() == author;
 		} );
@@ -145,7 +145,7 @@ private:
 	template <typename T>
 	void Register()
 	{
-		std::unique_ptr< AI::Factory > pFactory = std::make_unique< T >();
+		std::unique_ptr< Controller::Factory > pFactory = std::make_unique< T >();
 
 		if( !ContainsAuthor( pFactory->GetAuthor() ) )
 		{
@@ -157,5 +157,5 @@ private:
 		}
 	}
 private:
-	std::vector< std::unique_ptr< AI::Factory > > factories;
+	std::vector< std::unique_ptr< Controller::Factory > > factories;
 };
