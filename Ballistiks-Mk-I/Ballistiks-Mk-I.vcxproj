@@ -130,6 +130,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Surface.h" />
+    <ClInclude Include="Team.h" />
     <ClInclude Include="TestAI.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Triangle.h" />
