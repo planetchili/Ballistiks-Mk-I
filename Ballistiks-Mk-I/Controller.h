@@ -8,7 +8,7 @@ public:
 	class Factory
 	{
 	public:
-		Factory( const std::string author )
+		Factory( const std::wstring author )
 			:
 			author( author )
 		{}
@@ -19,12 +19,12 @@ public:
 			return { nullptr };
 		}
 		virtual ~Factory() {}
-		const std::string& GetAuthor() const
+		const std::wstring& GetAuthor() const
 		{
 			return author;
 		}
 	private:
-		const std::string author;
+		const std::wstring author;
 	};
 public:
 	Controller( ControllablePlayer& player )

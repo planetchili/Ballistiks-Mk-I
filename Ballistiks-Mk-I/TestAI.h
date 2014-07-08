@@ -21,7 +21,7 @@ class TestAIFactory : public Controller::Factory
 public:
 	TestAIFactory()
 		:
-		Factory( "DerpyMcDerpersten" )
+		Factory( L"DerpyMcDerpersten" )
 	{}
 	virtual std::unique_ptr< Controller > Make( ControllablePlayer& player,const ViewableWorld& view ) override
 	{

@@ -41,7 +41,7 @@ class AssholeAIFactory : public Controller::Factory
 public:
 	AssholeAIFactory()
 		:
-		Factory( "SomeAsshole" )
+		Factory( L"SomeAsshole" )
 	{}
 	virtual std::unique_ptr< Controller > Make( ControllablePlayer& player,const ViewableWorld& view ) override
 	{
