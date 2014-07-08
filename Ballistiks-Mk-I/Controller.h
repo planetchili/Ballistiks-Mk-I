@@ -19,12 +19,12 @@ public:
 			return { nullptr };
 		}
 		virtual ~Factory() {}
-		const std::wstring& GetAuthor() const
+		const std::wstring& GetName() const
 		{
-			return author;
+			return name;
 		}
 	private:
-		const std::wstring author;
+		const std::wstring name;
 	};
 public:
 	Controller( ControllablePlayer& player )

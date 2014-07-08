@@ -124,12 +124,12 @@ public:
 	{
 		return *factories[rand() % factories.size()];
 	}
-	Controller::Factory& GetFactoryByAuthor( const std::wstring author )
+	Controller::Factory& GetFactoryByName( const std::wstring author )
 	{
 		return **std::find_if( factories.begin(),factories.end(),
 			[&author]( const std::unique_ptr< Controller::Factory >& f ) -> bool
 		{
-			return f->GetAuthor() == author;
+			return f->GetName() == author;
 		} );
 	}
 	bool ContainsAuthor( const std::wstring author ) const
@@ -138,7 +138,7 @@ public:
 		return 0 < std::count_if( factories.begin(),factories.end(),
 			[&author]( const std::unique_ptr< Controller::Factory >& f ) -> bool
 		{
-			return f->GetAuthor() == author;
+			return f->GetName() == author;
 		} );
 	}
 private:
