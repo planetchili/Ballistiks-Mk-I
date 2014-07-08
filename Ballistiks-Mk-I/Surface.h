@@ -8,6 +8,13 @@
 class Surface
 {
 public:
+	enum Alignment
+	{
+		Left,
+		Right,
+		Center
+	};
+public:
 	Surface( unsigned int width,unsigned int height,unsigned int pitch )
 		:
 		buffer( new Color[ pitch * height ] ),
@@ -93,6 +100,30 @@ public:
 		Gdiplus::SolidBrush textBrush( textColor );
 		g.DrawString( string.c_str(),-1,font,
 			Gdiplus::PointF( pt.x,pt.y ),&textBrush );
+	}
+	inline void DrawString( const std::wstring& string,const RectF& rect,const Font& font,
+		Color c = WHITE,Alignment a = Center )
+	{
+		Gdiplus::StringFormat format;
+		switch( a )
+		{
+		case Left:
+			format.SetAlignment( Gdiplus::StringAlignmentNear );
+			break;
+		case Right:
+			format.SetAlignment( Gdiplus::StringAlignmentFar );
+			break;
+		case Center:
+		default:
+			format.SetAlignment( Gdiplus::StringAlignmentCenter );
+			break;
+		}
+		Gdiplus::Color textColor( c.r,c.g,c.b );
+		Gdiplus::SolidBrush textBrush( textColor );
+		g.DrawString( string.c_str(),-1,font,
+			Gdiplus::RectF( rect.left,rect.top,rect.GetWidth(),rect.GetHeight() ),
+			&format,
+			&textBrush );
 	}
 	inline unsigned int GetWidth() const
 	{

@@ -7,9 +7,9 @@ class Font
 {
 	friend class Surface;
 public:
-	Font( const std::wstring& family,float size )
+	Font( const std::wstring& family,float size,bool bold = true )
 		:
-		font( family.c_str(),size,Gdiplus::FontStyleBold )
+		font( family.c_str(),size,bold ? Gdiplus::FontStyleBold : Gdiplus::FontStyleRegular )
 	{}
 private:
 	inline operator const Gdiplus::Font*() const

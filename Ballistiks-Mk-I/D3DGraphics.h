@@ -77,9 +77,13 @@ public:
 	}
 	void DrawFilledCircleClip( int centerX,int centerY,int radius,const RectI& clip,Color color );
 	void DrawTriangle( Vec2 p0,Vec2 p1,Vec2 p2,const RectI& clip,Color c );
-	inline void DrawString( const std::wstring& string,Vec2 pt,const Font& font,Color c )
+	inline void DrawString( const std::wstring& string,Vec2 pt,const Font& font,Color c = WHITE )
 	{
 		sysBuffer.DrawString( string,pt,font,c );
+	}
+	inline void DrawString( const std::wstring& string,const RectF &rect,const Font& font,Color c = WHITE,Surface::Alignment a = Surface::Center  )
+	{
+		sysBuffer.DrawString( string,rect,font,c,a );
 	}
 	void BeginFrame();
 	void EndFrame();
