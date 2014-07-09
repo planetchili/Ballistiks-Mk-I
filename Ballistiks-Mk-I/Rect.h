@@ -89,6 +89,15 @@ public:
 		// branchless (but is it faster...? or do I even care?)
 		return bool( ( r.bottom > top ) & (r.top < bottom ) & ( r.right > left ) & (r.left < right ) );
 	}
+	std::vector< const _Vec2< T > > ExtractVertices() const
+	{
+		std::vector< const _Vec2< T > > vertices;
+		vertices.push_back( { left,top } );
+		vertices.push_back( { right,top } );
+		vertices.push_back( { right,bottom } );
+		vertices.push_back( { left,bottom } );
+		return vertices;
+	}
 
 public:
 	T top;
