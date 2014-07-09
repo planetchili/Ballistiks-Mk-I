@@ -27,21 +27,24 @@ public:
 		{
 			const float scaledRadius = parent.radius * trans.ExtractScaleIsometric();
 			const Vec2 screenPos = trans * Vec2{ 0.0f,0.0f };
-			gfx.DrawFilledCircleClip( screenPos,(int)scaledRadius,clip,parent.color0 );
-			gfx.DrawFilledCircleClip( screenPos,(int)( scaledRadius * 0.8f ),clip,parent.color1 );
+			gfx.DrawFilledCircleClip( screenPos,(int)scaledRadius,clip,parent.color1 );
+			gfx.DrawFilledCircleClip( screenPos,(int)( scaledRadius * 0.8f ),clip,parent.color0 );
 		}
 	private:
 		const Player& parent;
 	};
 public:
-	Player( Vec2 pos,unsigned int uid,float radius,float density,float drag )
+	Player( Vec2 pos,unsigned int uid,float radius,float density,
+		float drag,Color primary,Color secondary )
 		:
 		PhysicalCircle( radius,density,pos,drag ),
-		uid( uid )
+		uid( uid ),
+		color0( primary ),
+		color1( secondary)
 	{}
-	Player( Vec2 pos,unsigned int uid )
+	Player( Vec2 pos,unsigned int uid,Color primary,Color secondary )
 		:
-		Player( pos,uid,PLAYER_RADIUS,PLAYER_DENSITY,PLAYER_DRAG )
+		Player( pos,uid,PLAYER_RADIUS,PLAYER_DENSITY,PLAYER_DRAG,primary,secondary )
 	{}
 	virtual void SetThrustVector( Vec2 vector ) override
 	{
@@ -101,7 +104,7 @@ private:
 	const float burstImpulse = PLAYER_BURST;
 	float refactoryTimeLeft = 0.0f;
 	Vec2 thrustVector = { 0.0f,0.0f };
-	const Color color0 = TEAM_LEFT_COLOR0;
-	const Color color1 = TEAM_LEFT_COLOR1;
+	const Color color0;
+	const Color color1;
 	const unsigned int uid;
 };
