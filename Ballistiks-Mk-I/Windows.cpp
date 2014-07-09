@@ -167,7 +167,7 @@ int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR,INT )
             TranslateMessage( &msg );
             DispatchMessage( &msg );
         }
-        //else
+        else
 		{
 			theGame.Go();
 		}
