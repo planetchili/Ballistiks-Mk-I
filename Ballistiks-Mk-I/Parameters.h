@@ -10,7 +10,7 @@
 #define BALL_RADIUS			7.0f
 #define BALL_DENSITY		1.0f / 150.0f
 #define BALL_DRAG			0.20f
-#define TEAM_A_COLOR0		Color( 48,48,224 )
+#define TEAM_A_COLOR0		Color( 64,64,224 )
 #define TEAM_A_COLOR1		Color( 0,0,128 )
 #define TEAM_B_COLOR0		Color( 192,48,48 )
 #define TEAM_B_COLOR1		Color( 96,0,0 )

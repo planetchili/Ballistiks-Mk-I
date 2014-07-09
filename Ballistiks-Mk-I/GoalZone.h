@@ -25,10 +25,11 @@ public:
 		const GoalZone& parent;
 	};
 public:
-	GoalZone( const PolyClosed& poly )
+	GoalZone( const PolyClosed& poly,Color color )
 		:
 		AlertZone( poly ),
-		strips( TriangleStrip::ExtractSolidStripCollection( poly ) )
+		strips( TriangleStrip::ExtractSolidStripCollection( poly ) ),
+		color( color )
 	{}
 	Drawable GetDrawable() const
 	{
@@ -36,5 +37,5 @@ public:
 	}
 private:
 	const std::vector< const TriangleStrip > strips;
-	const Color color = Color( 160,32,32 );
+	const Color color;
 };
