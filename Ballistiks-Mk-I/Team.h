@@ -2,6 +2,8 @@
 #include "Observable.h"
 #include "Controller.h"
 #include "GoalZone.h"
+#include "Colors.h"
+#include <array>
 
 class Team
 {
@@ -23,11 +25,13 @@ private:
 		Team& team;
 	};
 public:
-	Team( Controller::Factory& factory,unsigned int nMembers = 1 )
+	Team( Controller::Factory& factory,const std::array<Color,2> colors,
+		unsigned int nMembers = 1 )
 		:
 		nMembers( nMembers ),
 		factory( factory ),
-		goalRelay( *this )
+		goalRelay( *this ),
+		colors( colors )
 	{}
 	void ObserveGoal( GoalZone& goal )
 	{
@@ -49,9 +53,18 @@ public:
 	{
 		return factory;
 	}
+	Color GetPrimaryColor() const
+	{
+		return colors[0];
+	}
+	Color GetSecondaryColor() const
+	{
+		return colors[1];
+	}
 private:
 	const unsigned int nMembers;
 	unsigned int score = 0;
 	Controller::Factory& factory;
 	GoalObserverRelay goalRelay;
+	const std::array<Color,2> colors;
 };
