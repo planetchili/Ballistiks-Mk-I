@@ -12,15 +12,20 @@ private:
 							  public Observable
 	{
 	public:
-		GoalObserverRelay( Team& team )
-			:
-			team( team )
-		{}
 		virtual void OnNotify() override
 		{
 			team.score++;
 			Notify();
 		}
+		static std::shared_ptr< GoalObserverRelay > Make( Team& team )
+		{
+			return std::shared_ptr<GoalObserverRelay>( new GoalObserverRelay( team ) );
+		}
+	private:
+		GoalObserverRelay( Team& team )
+			:
+			team( team )
+		{}
 	private:
 		Team& team;
 	};
@@ -30,16 +35,16 @@ public:
 		:
 		nMembers( nMembers ),
 		factory( factory ),
-		goalRelay( *this ),
+		goalRelay( GoalObserverRelay::Make( *this ) ),
 		colors( colors )
 	{}
 	void ObserveGoal( GoalZone& goal )
 	{
 		goal.AddObserver( goalRelay );
 	}
-	void AddGoalRelayObserver( Observer& obs )
+	void AddGoalRelayObserver( std::shared_ptr< Observer > obs )
 	{
-		goalRelay.AddObserver( obs );
+		goalRelay->AddObserver( obs );
 	}
 	inline unsigned int GetScore() const
 	{
@@ -65,6 +70,6 @@ private:
 	const unsigned int nMembers;
 	unsigned int score = 0;
 	Controller::Factory& factory;
-	GoalObserverRelay goalRelay;
+	std::shared_ptr< GoalObserverRelay > goalRelay;
 	const std::array<Color,2> colors;
 };

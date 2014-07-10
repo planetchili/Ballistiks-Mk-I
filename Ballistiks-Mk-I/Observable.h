@@ -11,17 +11,31 @@ public:
 class Observable
 {
 public:
-	inline void AddObserver( Observer& obs )
+	inline void AddObserver( std::shared_ptr< Observer > obs )
 	{
-		observers.push_back( &obs );
+		observers.push_back( std::weak_ptr< Observer >( obs ) );
 	}
-	inline void RemoveObserver( Observer& obs )
+	inline void RemoveObserver( std::shared_ptr< Observer > obs )
 	{
-		const auto end = observers.end();
-		const auto i = std::find( observers.begin(),end,&obs );
-		if( i != end )
+		for( int i = 0,end = observers.size(); i < end; i++ )
 		{
-			observers.erase( i );
+			const auto locked = observers[i].lock();
+			if( locked )
+			{
+				if( locked == obs )
+				{
+					const auto j = observers.begin() + i;
+					observers.erase( j );
+					return;
+				}
+			}
+			else
+			{
+				const auto j = observers.begin() + i;
+				observers.erase( j );
+				i--;
+				end--;
+			}
 		}
 	}
 	inline void Disable()
@@ -39,12 +53,23 @@ public:
 protected:
 	inline void Notify()
 	{
-		for( Observer* const o : observers )
+		for( int i = 0,end = observers.size(); i < end; i++ )
 		{
-			o->OnNotify();
+			const auto locked = observers[i].lock();
+			if( locked )
+			{
+				locked->OnNotify();
+			}
+			else
+			{
+				const auto j = observers.begin() + i;
+				observers.erase( j );
+				i--;
+				end--;
+			}
 		}
 	}
 private:
-	std::vector< Observer* const > observers;
+	std::vector< std::weak_ptr< Observer > > observers;
 	bool enabled = true;
 };
