@@ -21,6 +21,7 @@
 #pragma once
 
 #include "Vec2.h"
+#include <minmax.h>
 
 template < typename T >
 class _Rect
