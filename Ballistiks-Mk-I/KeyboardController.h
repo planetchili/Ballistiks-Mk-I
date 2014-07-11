@@ -31,3 +31,19 @@ protected:
 private:
 	KeyboardClient& kbd;
 };
+
+class KeyboardControllerFactory : public Controller::Factory
+{
+public:
+	KeyboardControllerFactory( KeyboardClient& kbd )
+		:
+		Factory( L"Human(Keyboard)" ),
+		kbd( kbd )
+	{}
+	virtual std::unique_ptr< Controller > Make( ControllablePlayer& player,const ViewableWorld& view ) override
+	{
+		return std::make_unique< KeyboardController >( player,kbd );
+	}
+private:
+	KeyboardClient& kbd;
+};
