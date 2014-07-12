@@ -30,7 +30,6 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 	mouse( mServer ),
 	vp( gfx,gfx.GetScreenRect() ),
 	cam( vp,vp.GetWidth(),vp.GetHeight(),{ vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ),
-	dick(TriangleStrip::ExtractSolidStripCollection(PolyClosed("shipd.dxf"))),
 	scoreFont(L"Verdana",25.0f),
 	nameFont(L"Arial",12.0f,false),
 	timeFont(L"Tahoma",25.0f),

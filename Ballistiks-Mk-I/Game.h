@@ -58,7 +58,6 @@ private:
 	/*  User Variables              */
 	Viewport vp;
 	Camera cam;
-	std::vector< const TriangleStrip > dick;
 	RectF clockRect;
 	std::vector< const TriangleStrip > clockBack;
 	Font scoreFont;

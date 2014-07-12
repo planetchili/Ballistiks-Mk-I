@@ -221,13 +221,13 @@ private:
 public:
 	Presentator( DSound& sound,Camera& cam,Viewport& vp )
 		:
-		whistleShort( sound.CreateSound( "whistleshort.wav" ) ),
-		vsSound( sound.CreateSound( "vs.wav" ) ),
-		whistleBurst(sound.CreateSound("whistleburst.wav")),
-		crowd(sound.CreateSound("crowd.wav")),
-		whistleLong(sound.CreateSound("whistlelong.wav")),
-		horn(sound.CreateSound("horn.wav")),
-		batmanTheme( L"batman_edit.mid",1.3f ),
+		whistleShort( sound.CreateSound( "Sound\\whistleshort.wav" ) ),
+		vsSound( sound.CreateSound( "Sound\\vs.wav" ) ),
+		whistleBurst(sound.CreateSound("Sound\\whistleburst.wav")),
+		crowd(sound.CreateSound("Sound\\crowd.wav")),
+		whistleLong(sound.CreateSound("Sound\\whistlelong.wav")),
+		horn(sound.CreateSound("Sound\\horn.wav")),
+		batmanTheme( L"Sound\\batman_edit.mid",1.3f ),
 		state(std::make_unique< NullState >( *this )),
 		ptObs(FlagObserver::Make()),
 		perObs(FlagObserver::Make()),
@@ -249,6 +249,7 @@ public:
 	}
 	inline void StartGame( Controller::Factory& teamA,Controller::Factory& teamB )
 	{
+		batmanTheme.Stop();
 		manager = std::make_unique< GameManager >( teamA,teamB );
 		perObs->Reset();
 		ptObs->Reset();

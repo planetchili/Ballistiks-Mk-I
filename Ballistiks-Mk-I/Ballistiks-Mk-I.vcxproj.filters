@@ -132,9 +132,6 @@
     <ClInclude Include="Vec2.h">
       <Filter>Header Files\Framework\Math</Filter>
     </ClInclude>
-    <ClInclude Include="DragProcessor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Parameters.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -148,9 +145,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Controller.h">
-      <Filter>Header Files\Control</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyboardController.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
     <ClInclude Include="PhysicalCircle.h">
@@ -186,17 +180,23 @@
     <ClInclude Include="Randomizer.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
+    <ClInclude Include="KeyboardController.h">
+      <Filter>Header Files\Control</Filter>
+    </ClInclude>
     <ClInclude Include="Midi.h">
-      <Filter>Header Files\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GdiPlusManager.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Presentator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Team.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GdiPlusManager.h">
+      <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
       <Filter>Header Files\Framework</Filter>
@@ -204,11 +204,8 @@
     <ClInclude Include="Observable.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Team.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Presentator.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="DragProcessor.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -242,11 +239,11 @@
     <ClCompile Include="Midi.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="GdiPlusManager.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Presentator.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GdiPlusManager.cpp">
+      <Filter>Source Files\Framework</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -255,18 +252,27 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shipd.dxf">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="batman_edit.mid">
+    <None Include="Sound\batman_edit.mid">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="whistle.wav">
+    <Media Include="Sound\crowd.wav">
       <Filter>Resource Files</Filter>
     </Media>
-    <Media Include="batman.wav">
+    <Media Include="Sound\horn.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sound\vs.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sound\whistleburst.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sound\whistlelong.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Sound\whistleshort.wav">
       <Filter>Resource Files</Filter>
     </Media>
   </ItemGroup>

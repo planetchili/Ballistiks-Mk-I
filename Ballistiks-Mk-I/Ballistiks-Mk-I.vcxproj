@@ -164,12 +164,15 @@
     <Resource Include="ChiliDirectXFramework.res" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="batman_edit.mid" />
-    <None Include="shipd.dxf" />
+    <None Include="Sound\batman_edit.mid" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="batman.wav" />
-    <Media Include="whistle.wav" />
+    <Media Include="Sound\crowd.wav" />
+    <Media Include="Sound\horn.wav" />
+    <Media Include="Sound\vs.wav" />
+    <Media Include="Sound\whistleburst.wav" />
+    <Media Include="Sound\whistlelong.wav" />
+    <Media Include="Sound\whistleshort.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
