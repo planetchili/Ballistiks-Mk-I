@@ -33,6 +33,8 @@ void Presentator::GameOnState::Draw( DrawTarget& tgt )
 }
 #pragma endregion
 
+
+#pragma region BeginTitleState
 void Presentator::BeginTitleState::OnCountdownFinished()
 {
 	parent.Transition( std::make_unique< GameOnState >( parent ) );
@@ -45,7 +47,10 @@ void Presentator::BeginTitleState::Draw( DrawTarget& tgt )
 	tgt.Draw( txtB );
 	tgt.Draw( vs );
 }
+#pragma endregion
 
+
+#pragma region GoalScoredState
 void Presentator::GoalScoredState::Draw( DrawTarget& tgt )
 {
 	parent.manager->RenderWorld( tgt );
@@ -62,7 +67,10 @@ void Presentator::GoalScoredState::_Step( float dt )
 {
 	parent.manager->Step( dt );
 }
+#pragma endregion
 
+
+#pragma region PeriodEndState
 void Presentator::PeriodEndState::Draw( DrawTarget& tgt )
 {
 	parent.manager->RenderWorld( tgt );
@@ -80,7 +88,10 @@ void Presentator::PeriodEndState::_Step( float dt )
 {
 	parent.manager->Step( dt );
 }
+#pragma endregion
 
+
+#pragma region GameEndState
 void Presentator::GameEndState::Draw( DrawTarget& tgt )
 {
 	parent.manager->RenderWorld( tgt );
@@ -91,3 +102,4 @@ void Presentator::GameEndState::Step( float dt )
 {
 	parent.manager->Step( dt );
 }
+#pragma endregion
