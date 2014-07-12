@@ -58,6 +58,22 @@ void Game::UpdateModel( )
 {
 	const float dt = 1.0f / 60.0f;
 	pres.Step( dt );
+
+	if( !mouse.MouseEmpty() )
+	{
+		const MouseEvent e = mouse.ReadMouse();
+		switch( e.GetType() )
+		{
+		case MouseEvent::LPress:
+			pres.StartGame( kbdFactory,codex.GetRandomFactory() );
+			break;
+		case MouseEvent::RPress:
+			pres.StartGame( codex.GetRandomFactory(),codex.GetRandomFactory() );
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void Game::ComposeFrame()

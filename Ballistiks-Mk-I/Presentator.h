@@ -250,6 +250,8 @@ public:
 	inline void StartGame( Controller::Factory& teamA,Controller::Factory& teamB )
 	{
 		manager = std::make_unique< GameManager >( teamA,teamB );
+		perObs->Reset();
+		ptObs->Reset();
 		manager->AddPeriodObserver( perObs );
 		manager->AddTeamObservers( ptObs,ptObs );
 		Transition( std::make_unique<BeginTitleState>( *this ) );
