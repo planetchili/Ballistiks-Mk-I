@@ -31,19 +31,15 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 	vp( gfx,gfx.GetScreenRect() ),
 	cam( vp,vp.GetWidth(),vp.GetHeight(),{ vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ),
 	dick(TriangleStrip::ExtractSolidStripCollection(PolyClosed("shipd.dxf"))),
-	batman(audio.CreateSound("batman.wav")),
-	pointObs( GoalObserver::Make( audio,batmanTheme ) ),
-	periodObs( PeriodObserver::Make( audio,batmanTheme ) ),
-	batmanTheme(L"batman_edit.mid",1.5f),
 	scoreFont(L"Verdana",25.0f),
 	nameFont(L"Arial",12.0f,false),
 	timeFont(L"Tahoma",25.0f),
 	clockRect( {-4.0f,35.0f,vp.GetWidth() / 2.0f - 80.0f,vp.GetWidth() / 2.0f + 80.0f } ),
 	clockBack( TriangleStrip::ExtractSolidStripCollection( clockRect.ExtractVertices() ) ),
-	kbdFactory( kbd )
+	kbdFactory( kbd ),
+	pres(audio,cam,vp)
 {
-	MakeAIVsAI();
-	batmanTheme.Play();
+	pres.StartGame( codex.GetRandomFactory(),codex.GetRandomFactory() );
 }
 
 Game::~Game()
@@ -61,107 +57,48 @@ void Game::Go()
 void Game::UpdateModel( )
 {
 	const float dt = 1.0f / 60.0f;
-	if( transitioningPoint )
-	{
-		transitionTime += dt;
-		if( transitionTime >= transitionDuration )
-		{
-			transitionTime = 0.0f;
-			transitioningPoint = false;
-			gameManager->StartNewPoint();
-			pointObs->Reset();
-			cam.SetZoom( 1.0f );
-			batmanTheme.Play();
-		}
-	}
-	else if( transitioningPeriod )
-	{
-		transitionTime += dt;
-		if( transitionTime >= transitionDuration )
-		{
-			transitionTime = 0.0f;
-			transitioningPeriod = false;
-			gameManager->StartNewPeriod();
-			periodObs->Reset();
-			cam.SetZoom( 1.0f );
-			batmanTheme.Play();
-		}
-	}
-	else
-	{
-		gameManager->Step( dt );
-		pointObs->Step( dt );
-		periodObs->Step( dt );
-
-		if( pointObs->GoalScored() )
-		{
-			transitioningPoint = true;
-			batman.Play();
-		}
-		else if( periodObs->PeriodEnded() )
-		{
-			if( gameManager->GetPeriod() < 1 )
-			{
-				transitioningPeriod = true;
-				batman.Play();
-			}
-		}
-	}
-
-	while( !kbd.KeyEmpty() )
-	{
-		KeyEvent e = kbd.ReadKey();
-		if( e.IsPress() )
-		{
-			switch( e.GetCode() )
-			{
-			case VK_F1:
-				MakeAIVsAI();
-				break;
-			case VK_F2:
-				MakeAIVsHuman();
-				break;
-			}
-		}
-	}
+	pres.Step( dt );
 }
 
 void Game::ComposeFrame()
 {
-	if( !transitioningPoint && !transitioningPeriod )
-	{
-		gameManager->RenderWorld( cam );
-	}
-	else
-	{
-		const float theta = ( transitionTime / transitionDuration ) * 2.0f * PI * 4.0f;
-		cam.SetZoom( 0.7f - 0.4f * sin( theta ) );
-		gameManager->RenderWorld( cam );
+	//if( !transitioningPoint && !transitioningPeriod )
+	//{
+	//	gameManager->RenderWorld( cam );
+	//}
+	//else
+	//{
+	//	const float theta = ( transitionTime / transitionDuration ) * 2.0f * PI * 4.0f;
+	//	cam.SetZoom( 0.7f - 0.4f * sin( theta ) );
+	//	gameManager->RenderWorld( cam );
 
-		const Mat3 trans =
-			Mat3::Translation( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) *
-			Mat3::Scaling( 5.0f );
-		for( const TriangleStrip& s : dick )
-		{
-			vp.Draw( s.GetDrawable(
-				trans * Mat3::Rotation( theta * 0.33f ),GREEN ) );
-		}
-		for( const TriangleStrip& s : dick )
-		{
-			vp.Draw( s.GetDrawable(
-				trans * Mat3::Rotation( -theta * 0.73f + PI / 0.7f - PI / 4.0f ),RED ) );
-		}
-		for( const TriangleStrip& s : dick )
-		{
-			vp.Draw( s.GetDrawable(
-				trans * Mat3::Rotation( theta * 1.17f + PI / 2.43f + PI / 6.0f ),PURPLE ) );
-		}
-	}
+	//	const Mat3 trans =
+	//		Mat3::Translation( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) *
+	//		Mat3::Scaling( 5.0f );
+	//	for( const TriangleStrip& s : dick )
+	//	{
+	//		vp.Draw( s.GetDrawable(
+	//			trans * Mat3::Rotation( theta * 0.33f ),GREEN ) );
+	//	}
+	//	for( const TriangleStrip& s : dick )
+	//	{
+	//		vp.Draw( s.GetDrawable(
+	//			trans * Mat3::Rotation( -theta * 0.73f + PI / 0.7f - PI / 4.0f ),RED ) );
+	//	}
+	//	for( const TriangleStrip& s : dick )
+	//	{
+	//		vp.Draw( s.GetDrawable(
+	//			trans * Mat3::Rotation( theta * 1.17f + PI / 2.43f + PI / 6.0f ),PURPLE ) );
+	//	}
+	//}
 
-	const Team& leftTeam = gameManager->GetPeriod() % 2 == 0 ? gameManager->GetTeamA()
-															: gameManager->GetTeamB();
-	const Team& rightTeam = gameManager->GetPeriod() % 2 == 0 ? gameManager->GetTeamB()
-															 : gameManager->GetTeamA();
+	pres.Draw( vp );
+
+	const GameManager& gameManager = pres.GetManager();
+	const Team& leftTeam = gameManager.GetPeriod() % 2 == 0 ? gameManager.GetTeamA()
+															: gameManager.GetTeamB();
+	const Team& rightTeam = gameManager.GetPeriod() % 2 == 0 ? gameManager.GetTeamB()
+															 : gameManager.GetTeamA();
 
 	gfx.DrawString( leftTeam.GetName(),
 		RectF {
@@ -190,8 +127,8 @@ void Game::ComposeFrame()
 	
 	vp.Draw( clockBack.front().GetDrawable( Color( 96,80,140 ) ) );
 	std::wstringstream s;
-	s	<< L'P' << gameManager->GetPeriod() << L' '
-		<< int( gameManager->GetTimeRemaining() ) / 60 << L":"
-		<< std::setfill( L'0' ) << std::setw( 2 ) << int( gameManager->GetTimeRemaining() ) % 60;
+	s	<< L'P' << gameManager.GetPeriod() + 1 << L' '
+		<< int( gameManager.GetTimeRemaining() ) / 60 << L":"
+		<< std::setfill( L'0' ) << std::setw( 2 ) << int( gameManager.GetTimeRemaining() ) % 60;
 	gfx.DrawString( s.str(),clockRect,timeFont,GREEN );
 }

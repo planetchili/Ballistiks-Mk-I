@@ -33,100 +33,11 @@
 #include "GameManager.h"
 #include "Viewport.h"
 #include "Camera.h"
+#include "Presentator.h"
 
 
 class Game
 {
-private:
-	class GoalObserver : public Observer
-	{
-	public:
-		virtual void OnNotify() override
-		{
-			if( !goalScored )
-			{
-				goalScored = true;
-				theme.Stop();
-				whistle.Play();
-			}
-		}
-		bool GoalScored() const
-		{
-			return goalScored && timeSinceScored >= 2.0f;
-		}
-		void Reset()
-		{
-			goalScored = false;
-			timeSinceScored = 0.0f;
-		}
-		void Step( const float dt )
-		{
-			if( goalScored )
-			{
-				timeSinceScored += dt;
-			}
-		}
-		static std::shared_ptr< GoalObserver > Make( DSound& audio,MidiSong& theme )
-		{
-			return std::shared_ptr< GoalObserver >( new GoalObserver( audio,theme ) );
-		}
-	private:
-		GoalObserver( DSound& audio,MidiSong& theme )
-			:
-			whistle( audio.CreateSound( "whistle.wav" ) ),
-			theme( theme )
-		{}
-	private:
-		float timeSinceScored = 0.0f;
-		bool goalScored = false;
-		Sound whistle;
-		MidiSong& theme;
-	};
-	class PeriodObserver : public Observer
-	{
-	public:
-		virtual void OnNotify() override
-		{
-			if( !periodEnded )
-			{
-				periodEnded = true;
-				theme.Stop();
-				whistle.Play();
-			}
-		}
-		bool PeriodEnded() const
-		{
-			return periodEnded && timeSincePeriodEnd >= 2.0f;
-		}
-		void Reset()
-		{
-			periodEnded = false;
-			timeSincePeriodEnd = 0.0f;
-		}
-		void Step( const float dt )
-		{
-			if( periodEnded )
-			{
-				timeSincePeriodEnd += dt;
-			}
-		}
-		static std::shared_ptr< PeriodObserver > Make( DSound& audio,MidiSong& theme )
-		{
-			return std::shared_ptr< PeriodObserver >( new PeriodObserver( audio,theme ) );
-		}
-	private:
-		PeriodObserver( DSound& audio,MidiSong& theme )
-			:
-			whistle( audio.CreateSound( "whistle.wav" ) ),
-			theme( theme )
-		{}
-	private:
-		float timeSincePeriodEnd = 0.0f;
-		bool periodEnded = false;
-		Sound whistle;
-		MidiSong& theme;
-	};
-
 public:
 	Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer );
 	~Game();
@@ -135,19 +46,6 @@ private:
 	void ComposeFrame();
 	/********************************/
 	/*  User Functions              */
-
-	void MakeAIVsAI()
-	{
-		gameManager = std::make_unique< GameManager >( codex.GetRandomFactory(),codex.GetRandomFactory() );
-		gameManager->AddTeamObservers( pointObs,pointObs );
-		gameManager->AddPeriodObserver( periodObs );
-	}
-	void MakeAIVsHuman()
-	{
-		gameManager = std::make_unique< GameManager >( kbdFactory,codex.GetRandomFactory() );
-		gameManager->AddTeamObservers( pointObs,pointObs );
-		gameManager->AddPeriodObserver( periodObs );
-	}
 
 	/********************************/
 private:
@@ -158,26 +56,18 @@ private:
 	Randomizer randomizer;
 	/********************************/
 	/*  User Variables              */
-	Sound batman;
-	MidiSong batmanTheme;
 	Viewport vp;
 	Camera cam;
-	std::shared_ptr< GoalObserver > pointObs;
-	std::shared_ptr< PeriodObserver > periodObs;
 	std::vector< const TriangleStrip > dick;
 	RectF clockRect;
 	std::vector< const TriangleStrip > clockBack;
-	bool transitioningPoint = false;
-	bool transitioningPeriod = false;
-	const float transitionDuration = 1.5f;
-	float transitionTime = 0.0f;
 	Font scoreFont;
 	Font nameFont;
 	Font timeFont;
 
 	AIFactoryCodex codex;
 	KeyboardControllerFactory kbdFactory;
-	std::unique_ptr< GameManager > gameManager;
+	Presentator pres;
 
 	/********************************/
 	void UpdateModel();

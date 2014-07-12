@@ -4,24 +4,81 @@
 #include "DrawTarget.h"
 #include "Midi.h"
 #include "Sound.h"
+#include "Viewport.h"
+#include "Camera.h"
 
 class Presentator
 {
+private:
+	class Text : public Drawable
+	{
+	public:
+		Text( const std::wstring& string,const RectF& rect,const Font& font,Color color )
+			:
+			string( string ),
+			rect( rect ),
+			font( font ),
+			color( color )
+		{}
+		virtual void Rasterize( D3DGraphics& gfx ) const override
+		{
+			gfx.DrawString( string,rect,font,color );
+		}
+	private:
+		const std::wstring string;
+		const RectF rect;
+		const Font& font;
+		const Color color;
+	};
+private:
+	class FlagObserver : public Observer
+	{
+	public:
+		inline bool IsSet() const
+		{
+			return isSet;
+		}
+		inline void Reset()
+		{
+			isSet = false;
+		}
+		virtual void OnNotify() override
+		{
+			isSet = true;
+		}
+		static std::shared_ptr< FlagObserver > Make()
+		{
+			return std::shared_ptr< FlagObserver >( new FlagObserver() );
+		}
+	private:
+		FlagObserver() {}
+	private:
+		bool isSet = false;
+	};
 #pragma region States
 private:
 	class State
 	{
-	public:
+	protected:
 		State( Presentator& parent )
 			:
 			parent( parent )
 		{}
+	public:
+		virtual ~State() {}
 		virtual void Step( float dt ) {}
-		virtual void OnGoal() {}
-		virtual void OnPeriod() {}
+		virtual void Observe() {}
 		virtual void Draw( DrawTarget& tgt ) {}
 	protected:
 		Presentator& parent;
+	};
+	class NullState : public State
+	{
+	public:
+		NullState( Presentator& parent )
+			:
+			State( parent )
+		{}
 	};
 	class WaitState : public State
 	{
@@ -33,91 +90,154 @@ private:
 		{}
 		virtual void Step( float dt ) final
 		{
+			_Step( dt );
 			countdownTime -= dt;
 			if( countdownTime <= 0.0f )
 			{
 				OnCountdownFinished();
-			}			
+			}
 		}
 	protected:
 		virtual void OnCountdownFinished() = 0;
+		virtual void _Step( float dt ) {}
 	protected:
 		float countdownTime;
 	};
 	class BeginTitleState : public WaitState
 	{
+	public:
+		BeginTitleState( Presentator& parent )
+			:
+			WaitState( parent,3.0f ),
+			nameFont( L"Times New Roman",60 ),
+			txtA(parent.GetManager().GetTeamA().GetName(),
+				{ parent.vp.GetHeight() / 2.0f - 200.0f,
+				  parent.vp.GetHeight() / 2.0f,0.0f,parent.vp.GetWidth() },
+				  nameFont,parent.GetManager().GetTeamA().GetPrimaryColor() ),
+			txtB( parent.GetManager().GetTeamB().GetName(),
+				{ parent.vp.GetHeight() / 2.0f + 100.0f,
+				  parent.vp.GetHeight() / 2.0f + 300.0f,0.0f,parent.vp.GetWidth() },
+				  nameFont,parent.GetManager().GetTeamB().GetPrimaryColor() ),
+			vs(L"VS",
+				{ parent.vp.GetHeight() / 2.0f - 50.0f,
+				  parent.vp.GetHeight() / 2.0f + 50.0f,0.0f,parent.vp.GetWidth() },
+				  nameFont,WHITE)
+		{
+			parent.vsSound.Play(-500);
+		}
 	protected:
 		virtual void OnCountdownFinished() override;
 		virtual void Draw( DrawTarget& dt );
+	private:
+		const Font nameFont;
+		Text txtA;
+		Text txtB;
+		Text vs;
 	};
-	class NullState : public State
+	class GameOnState : public State
 	{
 	public:
-		NullState( Presentator& parent )
-			:
-			State( parent )
-		{}
-	};
-	class GameOn : public State
-	{
-	public:
-		GameOn( Presentator& parent )
+		GameOnState( Presentator& parent )
 			:
 			State( parent )
 		{
+			parent.batmanTheme.Play();
 			parent.whistleShort.Play();
 		}
-		virtual void OnGoal() override;
-		virtual void OnPeriod() override;
+		virtual void Observe() override;
 		virtual void Draw( DrawTarget& tgt ) override;
+		virtual void Step( float dt ) override;
 	};
-#pragma endregion
-#pragma region Observers
-private:
-	class PointObserver : public Observer
+	class GoalScoredState : public WaitState
 	{
 	public:
-		virtual void OnNotify() override
-		{
-			parent.state->OnGoal();
-		}
-		static std::shared_ptr< PointObserver > Make( Presentator& parent )
-		{
-			return std::shared_ptr< PointObserver >( new PointObserver( parent ) );
-		}
-	private:
-		PointObserver( Presentator& parent )
+		GoalScoredState( Presentator& parent )
 			:
-			parent( parent )
-		{}
+			WaitState( parent,5.0f ),
+			nameFont( L"Times New Roman",80 ),
+			scoreText( L"GOAL SCORED!",
+			{ parent.vp.GetHeight() / 2.0f - 50.0f,
+			parent.vp.GetHeight() / 2.0f + 50.0f,0.0f,parent.vp.GetWidth() },
+			nameFont,WHITE )
+		{
+			parent.whistleBurst.Play();
+			parent.crowd.Play();
+			parent.batmanTheme.Stop();
+		}
+		virtual void Draw( DrawTarget& dt ) override;
+	protected:
+		virtual void OnCountdownFinished() override;
+		virtual void _Step( float dt ) override;
 	private:
-		Presentator& parent;
+		const Font nameFont;
+		Text scoreText;
 	};
-	class PeriodObserver : public Observer
+	class PeriodEndState : public WaitState
 	{
 	public:
-		virtual void OnNotify() override
-		{
-			parent.state->OnPeriod();
-		}
-	private:
-		PeriodObserver( Presentator& parent )
+		PeriodEndState( Presentator& parent )
 			:
-			parent( parent )
-		{}
+			WaitState( parent,3.0f ),
+			nameFont( L"Times New Roman",60 ),
+			endText( L"Period " + std::to_wstring( parent.manager->GetPeriod() + 1 ) + L" Over",
+			{ parent.vp.GetHeight() / 2.0f - 50.0f,
+			parent.vp.GetHeight() / 2.0f + 50.0f,0.0f,parent.vp.GetWidth() },
+			nameFont,WHITE )
+		{
+			parent.whistleLong.Play();
+			parent.batmanTheme.Stop();
+		}
+		virtual void Draw( DrawTarget& dt ) override;
+	protected:
+		virtual void OnCountdownFinished() override;
+		virtual void _Step( float dt ) override;
 	private:
-		Presentator& parent;
+		const Font nameFont;
+		Text endText;
+	};
+	class GameEndState : public State
+	{
+	public:
+		GameEndState( Presentator& parent )
+			:
+			State( parent ),
+			nameFont( L"Times New Roman",60 ),
+			endText( L"Game Over",
+			{ parent.vp.GetHeight() / 2.0f - 50.0f,
+			parent.vp.GetHeight() / 2.0f + 50.0f,0.0f,parent.vp.GetWidth() },
+			nameFont,WHITE )
+		{
+			parent.batmanTheme.Stop();
+			parent.horn.Play(-150);
+			parent.crowd.Play();
+		}
+		virtual void Step( float dt ) override;
+		virtual void Draw( DrawTarget& tgt ) override;
+	private:
+		const Font nameFont;
+		Text endText;
 	};
 #pragma endregion
 public:
-	Presentator( DSound& sound )
+	Presentator( DSound& sound,Camera& cam,Viewport& vp )
 		:
-		whistleShort( sound.CreateSound( "whistle.wav" ) ),
-		state(std::make_unique< NullState >( *this ))
+		whistleShort( sound.CreateSound( "whistleshort.wav" ) ),
+		vsSound( sound.CreateSound( "vs.wav" ) ),
+		whistleBurst(sound.CreateSound("whistleburst.wav")),
+		crowd(sound.CreateSound("crowd.wav")),
+		whistleLong(sound.CreateSound("whistlelong.wav")),
+		horn(sound.CreateSound("horn.wav")),
+		batmanTheme( L"batman_edit.mid",1.3f ),
+		state(std::make_unique< NullState >( *this )),
+		ptObs(FlagObserver::Make()),
+		perObs(FlagObserver::Make()),
+		cam( cam),
+		vp(vp)
 	{}
 	inline void Step( float dt )
 	{
 		state->Step( dt );
+		state->Observe();
 	}
 	inline void Draw( DrawTarget& tgt )
 	{
@@ -130,7 +250,9 @@ public:
 	inline void StartGame( Controller::Factory& teamA,Controller::Factory& teamB )
 	{
 		manager = std::make_unique< GameManager >( teamA,teamB );
-		Transition( std::make_unique<GameOn>( *this ) );
+		manager->AddPeriodObserver( perObs );
+		manager->AddTeamObservers( ptObs,ptObs );
+		Transition( std::make_unique<BeginTitleState>( *this ) );
 	}
 private:
 	inline void Transition( std::unique_ptr< State > newState )
@@ -138,13 +260,17 @@ private:
 		state = std::move( newState );
 	}
 private:
-	//MidiSong batmanTheme;
-	//MidiSong littleHobo;
+	Camera& cam;
+	Viewport& vp;
+	MidiSong batmanTheme;
 	Sound whistleShort;
-	//Sound whistleLong;
-	//Sound batmanTransition;
+	Sound whistleBurst;
+	Sound vsSound;
+	Sound crowd;
+	Sound whistleLong;
+	Sound horn;
 	std::unique_ptr< State > state;
 	std::unique_ptr< GameManager > manager;
-	std::shared_ptr< PointObserver > ptObs;
-	std::shared_ptr< PeriodObserver > perObs;
+	std::shared_ptr< FlagObserver > ptObs;
+	std::shared_ptr< FlagObserver > perObs;
 };
