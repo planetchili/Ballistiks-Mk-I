@@ -137,6 +137,7 @@
     <ClInclude Include="TournamentManager.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="TriangleStrip.h" />
+    <ClInclude Include="UpBot.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="ViewableWorld.h" />
     <ClInclude Include="Viewport.h" />

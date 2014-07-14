@@ -10,6 +10,7 @@
 
 #include "TestAI.h"
 #include "AssholeAI.h"
+#include "UpBot.h"
 
 /*************************/
 
@@ -115,6 +116,7 @@ public:
 		/**********************************/
 		/*  User AI Factory Registration  */
 
+		Register< UpBotFactory >();
 		Register< TestAIFactory >();
 		Register< AssholeAIFactory >();
 
