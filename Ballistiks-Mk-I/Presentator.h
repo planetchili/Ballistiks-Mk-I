@@ -55,6 +55,14 @@ private:
 	private:
 		bool isSet = false;
 	};
+	class GameOverEvent : public Observable
+	{
+	public:
+		inline void OnGameOver()
+		{
+			Notify();
+		}
+	};
 #pragma region States
 private:
 	class State
@@ -210,12 +218,23 @@ private:
 			parent.batmanTheme.Stop();
 			parent.horn.Play(-150);
 			parent.crowd.Play();
+			parent.overEvent.OnGameOver();
 		}
 		virtual void Step( float dt ) override;
 		virtual void Draw( DrawTarget& tgt ) override;
 	private:
 		const Font nameFont;
 		Text endText;
+	};
+	class GameSimulatingState : public State
+	{
+	public:
+		GameSimulatingState( Presentator& parent )
+			:
+			State( parent )
+		{}
+		virtual void Observe() override;
+		virtual void Step( float dt ) override;
 	};
 #pragma endregion
 public:
@@ -257,6 +276,19 @@ public:
 		manager->AddTeamObservers( ptObs,ptObs );
 		Transition( std::make_unique<BeginTitleState>( *this ) );
 	}
+	inline void StartSimulation( Controller::Factory& teamA,Controller::Factory& teamB )
+	{
+		manager = std::make_unique< GameManager >( teamA,teamB );
+		perObs->Reset();
+		ptObs->Reset();
+		manager->AddPeriodObserver( perObs );
+		manager->AddTeamObservers( ptObs,ptObs );
+		Transition( std::make_unique<GameSimulatingState>( *this ) );
+	}
+	inline void AddEndGameObserver( std::shared_ptr< Observer > obs )
+	{
+		overEvent.AddObserver( obs );
+	}
 private:
 	inline void Transition( std::unique_ptr< State > newState )
 	{
@@ -272,6 +304,7 @@ private:
 	Sound crowd;
 	Sound whistleLong;
 	Sound horn;
+	GameOverEvent overEvent;
 	std::unique_ptr< State > state;
 	std::unique_ptr< GameManager > manager;
 	std::shared_ptr< FlagObserver > ptObs;

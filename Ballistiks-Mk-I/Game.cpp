@@ -24,7 +24,8 @@
 #include <iostream>
 
 Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
-:	gfx( hWnd ),
+	:
+	gfx( hWnd ),
 	audio( hWnd ),
 	kbd( kServer ),
 	mouse( mServer ),
@@ -36,9 +37,23 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 	clockRect( {-4.0f,35.0f,vp.GetWidth() / 2.0f - 80.0f,vp.GetWidth() / 2.0f + 80.0f } ),
 	clockBack( TriangleStrip::ExtractSolidStripCollection( clockRect.ExtractVertices() ) ),
 	kbdFactory( kbd ),
-	pres(audio,cam,vp)
+	pres(audio,cam,vp),
+	endObs(std::make_shared< EndGameObserver >(*this))
 {
-	pres.StartGame( codex.GetRandomFactory(),codex.GetRandomFactory() );
+	pres.AddEndGameObserver( endObs );
+	if( simulation )
+	{
+		pres.StartSimulation( codex.GetRandomFactory(),codex.GetRandomFactory() );
+	}
+	else
+	{
+		pres.StartGame( codex.GetRandomFactory(),codex.GetRandomFactory() );
+	}
+}
+
+void Game::Exit()
+{
+	PostQuitMessage( 0 );
 }
 
 Game::~Game()
@@ -48,9 +63,12 @@ Game::~Game()
 void Game::Go()
 {
 	UpdateModel();
-	gfx.BeginFrame();
-	ComposeFrame();
-	gfx.EndFrame();
+	if( !simulation )
+	{
+		gfx.BeginFrame();
+		ComposeFrame();
+		gfx.EndFrame();
+	}
 }
 
 void Game::UpdateModel( )
@@ -58,7 +76,7 @@ void Game::UpdateModel( )
 	const float dt = 1.0f / 60.0f;
 	pres.Step( dt );
 
-	if( !mouse.MouseEmpty() )
+	if( !simulation && !mouse.MouseEmpty() )
 	{
 		const MouseEvent e = mouse.ReadMouse();
 		switch( e.GetType() )
@@ -77,36 +95,6 @@ void Game::UpdateModel( )
 
 void Game::ComposeFrame()
 {
-	//if( !transitioningPoint && !transitioningPeriod )
-	//{
-	//	gameManager->RenderWorld( cam );
-	//}
-	//else
-	//{
-	//	const float theta = ( transitionTime / transitionDuration ) * 2.0f * PI * 4.0f;
-	//	cam.SetZoom( 0.7f - 0.4f * sin( theta ) );
-	//	gameManager->RenderWorld( cam );
-
-	//	const Mat3 trans =
-	//		Mat3::Translation( { vp.GetWidth() / 2.0f,vp.GetHeight() / 2.0f } ) *
-	//		Mat3::Scaling( 5.0f );
-	//	for( const TriangleStrip& s : dick )
-	//	{
-	//		vp.Draw( s.GetDrawable(
-	//			trans * Mat3::Rotation( theta * 0.33f ),GREEN ) );
-	//	}
-	//	for( const TriangleStrip& s : dick )
-	//	{
-	//		vp.Draw( s.GetDrawable(
-	//			trans * Mat3::Rotation( -theta * 0.73f + PI / 0.7f - PI / 4.0f ),RED ) );
-	//	}
-	//	for( const TriangleStrip& s : dick )
-	//	{
-	//		vp.Draw( s.GetDrawable(
-	//			trans * Mat3::Rotation( theta * 1.17f + PI / 2.43f + PI / 6.0f ),PURPLE ) );
-	//	}
-	//}
-
 	pres.Draw( vp );
 
 	const GameManager& gameManager = pres.GetManager();

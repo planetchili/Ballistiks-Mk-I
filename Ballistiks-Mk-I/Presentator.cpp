@@ -103,3 +103,35 @@ void Presentator::GameEndState::Step( float dt )
 	parent.manager->Step( dt );
 }
 #pragma endregion
+
+
+#pragma region GameSimulatingState
+void Presentator::GameSimulatingState::Observe()
+{
+	if( parent.perObs->IsSet() )
+	{
+		parent.perObs->Reset();
+		if( parent.manager->GetPeriod() < 1 )
+		{
+			parent.manager->StartNewPeriod();
+			parent.Transition( std::make_unique<GameSimulatingState>( parent ) );
+		}
+		else
+		{
+			parent.overEvent.OnGameOver();
+			parent.Transition( std::make_unique<NullState>( parent ) );
+		}
+	}
+	else if( parent.ptObs->IsSet() )
+	{
+		parent.ptObs->Reset();
+		parent.manager->StartNewPoint();
+		parent.Transition( std::make_unique<GameSimulatingState>( parent ) );
+	}
+}
+
+void Presentator::GameSimulatingState::Step( float dt )
+{
+	parent.manager->Step( dt );
+}
+#pragma endregion

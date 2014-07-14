@@ -23,6 +23,8 @@
 // DIIIIIIIIIIIIICKS!!!!
 
 #include <memory>
+#include <iostream>
+#include <fstream>
 #include "D3DGraphics.h"
 #include "Keyboard.h"
 #include "Mouse.h"
@@ -39,11 +41,34 @@
 class Game
 {
 public:
+	class EndGameObserver : public Observer
+	{
+	public:
+		EndGameObserver( Game& parent )
+			:
+			parent( parent )
+		{}
+	protected:
+		void OnNotify() override
+		{
+			std::wofstream out( L"result.txt",std::ofstream::out );
+			out << parent.pres.GetManager().GetTeamA().GetName() << L": "
+				<< parent.pres.GetManager().GetTeamA().GetScore() << std::endl;
+			out << parent.pres.GetManager().GetTeamB().GetName() << L": "
+				<< parent.pres.GetManager().GetTeamB().GetScore() << std::endl;
+			out.close();
+			parent.Exit();
+		}
+	private:
+		Game& parent;
+	};
+public:
 	Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer );
 	~Game();
 	void Go();
 private:
 	void ComposeFrame();
+	void Exit();
 	/********************************/
 	/*  User Functions              */
 
@@ -67,6 +92,8 @@ private:
 	AIFactoryCodex codex;
 	KeyboardControllerFactory kbdFactory;
 	Presentator pres;
+	std::shared_ptr< EndGameObserver > endObs;
+	bool simulation = false;
 
 	/********************************/
 	void UpdateModel();
