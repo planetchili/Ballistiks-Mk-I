@@ -90,6 +90,7 @@ public:
 			ties = 0;
 			iGoals = 0;
 			jGoals = 0;
+			currentGameIndex = 0;
 			return true;
 		}
 		else
