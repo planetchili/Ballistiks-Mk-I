@@ -134,6 +134,7 @@
     <ClInclude Include="Team.h" />
     <ClInclude Include="TestAI.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TournamentManager.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="TriangleStrip.h" />
     <ClInclude Include="Vec2.h" />

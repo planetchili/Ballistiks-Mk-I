@@ -207,6 +207,9 @@
     <ClInclude Include="DragProcessor.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="TournamentManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
