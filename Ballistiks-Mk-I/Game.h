@@ -36,6 +36,7 @@
 #include "Viewport.h"
 #include "Camera.h"
 #include "Presentator.h"
+#include "TournamentManager.h"
 
 
 class Game
@@ -51,13 +52,19 @@ public:
 	protected:
 		void OnNotify() override
 		{
-			std::wofstream out( L"result.txt",std::ofstream::out );
-			out << parent.pres.GetManager().GetTeamA().GetName() << L": "
-				<< parent.pres.GetManager().GetTeamA().GetScore() << std::endl;
-			out << parent.pres.GetManager().GetTeamB().GetName() << L": "
-				<< parent.pres.GetManager().GetTeamB().GetScore() << std::endl;
-			out.close();
-			parent.Exit();
+			parent.manager.RecordGameResults();
+			if( !parent.manager.StartNextGame() )
+			{
+				parent.manager.RecordMatchResults();
+				if( !parent.manager.StartNextMatch() )
+				{
+					parent.Exit();
+				}
+				else
+				{
+					parent.manager.StartNextGame();
+				}
+			}
 		}
 	private:
 		Game& parent;
@@ -93,7 +100,8 @@ private:
 	KeyboardControllerFactory kbdFactory;
 	Presentator pres;
 	std::shared_ptr< EndGameObserver > endObs;
-	bool simulation = false;
+	bool simulation = true;
+	TournamentManager manager;
 
 	/********************************/
 	void UpdateModel();

@@ -13,6 +13,7 @@ private:
 	class TournamentStats
 	{
 	public:
+		// slightly buggy in places!
 		inline bool operator>( const TournamentStats& rhs ) const
 		{
 			if( matchWins > rhs.matchWins )
@@ -78,7 +79,8 @@ public:
 	}
 	bool StartNextMatch()
 	{
-		if( ++j != codex.end() )
+		j++;
+		if( j != codex.end() )
 		{
 			results << L"======================================================" << std::endl
 					<< i->GetName() << L" VS " << j->GetName() << std::endl
@@ -92,7 +94,8 @@ public:
 		}
 		else
 		{
-			if( ++i != codex.end() )
+			i++;
+			if( i != codex.end() )
 			{
 				j = i;
 				return StartNextMatch();

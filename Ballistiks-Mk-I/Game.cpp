@@ -38,12 +38,14 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 	clockBack( TriangleStrip::ExtractSolidStripCollection( clockRect.ExtractVertices() ) ),
 	kbdFactory( kbd ),
 	pres(audio,cam,vp),
-	endObs(std::make_shared< EndGameObserver >(*this))
+	endObs(std::make_shared< EndGameObserver >(*this)),
+	manager( codex,pres )
 {
 	pres.AddEndGameObserver( endObs );
 	if( simulation )
 	{
-		pres.StartSimulation( codex.GetRandomFactory(),codex.GetRandomFactory() );
+		manager.StartNextMatch();
+		manager.StartNextGame();
 	}
 	else
 	{

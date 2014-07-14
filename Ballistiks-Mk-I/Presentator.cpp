@@ -119,7 +119,9 @@ void Presentator::GameSimulatingState::Observe()
 		else
 		{
 			parent.overEvent.OnGameOver();
-			parent.Transition( std::make_unique<NullState>( parent ) );
+			// startsimulation already transitions this bs for us...
+			// maybe separate into createsimulation and start simulation...?
+			//parent.Transition( std::make_unique<NullState>( parent ) );
 		}
 	}
 	else if( parent.ptObs->IsSet() )
