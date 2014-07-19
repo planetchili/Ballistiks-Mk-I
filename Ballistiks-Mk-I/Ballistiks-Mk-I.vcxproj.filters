@@ -201,9 +201,6 @@
     <ClInclude Include="DragProcessor.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="UpBot.h">
-      <Filter>Header Files\Control</Filter>
-    </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>Header Files\Mangement</Filter>
     </ClInclude>
