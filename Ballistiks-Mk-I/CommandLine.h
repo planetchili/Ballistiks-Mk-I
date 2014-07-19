@@ -43,6 +43,7 @@ public:
 			type = Play;
 			str >> tok;
 			player0 = tok;
+			tok = L"";
 			str >> tok;
 			seed = tok == L"" ? rand() : std::stoul( tok );
 			break;
