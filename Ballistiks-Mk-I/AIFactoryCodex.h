@@ -11,6 +11,7 @@
 #include "TestAI.h"
 #include "AssholeAI.h"
 #include "ChiliBot.h"
+#include "LuXAI.h"
 
 /*************************/
 
@@ -119,6 +120,7 @@ public:
 		Register< TestAIFactory >();
 		Register< AssholeAIFactory >();
 		Register< ChiliBotFactory >();
+		Register< LuXAIFactory >( );
 
 		/**********************************/
 	}
