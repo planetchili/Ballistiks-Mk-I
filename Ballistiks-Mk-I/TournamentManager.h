@@ -102,9 +102,9 @@ public:
 			gameSeeds.push_back( std::move( gameSeedsTemp ) );
 		}
 
-		results << L"======================================================" << std::endl
+		results << L"=============================================================" << std::endl
 				<< L"  Master Seed: [ " << masterSeed << L" ]" << std::endl
-				<< L"======================================================" << std::endl << std::endl;
+				<< L"=============================================================" << std::endl << std::endl;
 	}
 	~TournamentManager()
 	{
@@ -116,10 +116,10 @@ public:
 		if( j != codex.end() )
 		{
 			currentMatchIndex++;
-			results << L"======================================================" << std::endl
+			results << L"=============================================================" << std::endl
 					<< i->GetName() << L" VS " << j->GetName() << std::endl
 					<< L"  Match Seed: [ " << matchSeeds[ currentMatchIndex] << L" ]" << std::endl
-					<< L"======================================================" << std::endl;
+					<< L"=============================================================" << std::endl;
 			iWins = 0;
 			jWins = 0;
 			ties = 0;
@@ -163,7 +163,7 @@ public:
 
 		results << L"\t" << i->GetName() << L": " << aScore << L"\t"
 				<< j->GetName() << L": " << bScore 
-				<< L"  [ " << std::setfill( L' ' ) << std::setw( 5 )
+				<< L"\t[ " << std::setfill( L' ' ) << std::setw( 5 )
 				<< gameSeeds[currentMatchIndex][currentGameIndex - 1] << L" ]" << std::endl;
 		
 		iGoals += aScore;
@@ -184,12 +184,12 @@ public:
 	}
 	void RecordMatchResults()
 	{
-		results << L"======================================================" << std::endl
+		results << L"=============================================================" << std::endl
 				<< L"Final Results:" << std::endl
 				<< i->GetName() << L": " << iWins << std::endl
 				<< j->GetName() << L": " << jWins << std::endl
 				<< L"Ties: " << ties << std::endl
-				<< L"======================================================" << std::endl
+				<< L"=============================================================" << std::endl
 				<< std::endl << std::endl;
 		
 		auto& iStat = stats[i->GetName()];
@@ -233,9 +233,9 @@ public:
 		int rank = 1;
 		for( auto& s : sortedStats )
 		{
-			results << L"======================================================" << std::endl
+			results << L"=============================================================" << std::endl
 					<< L"             #" << rank << L" " << s.second << std::endl
-					<< L"======================================================" << std::endl;
+					<< L"=============================================================" << std::endl;
 			s.first.WriteStats( results );
 			results << std::endl;
 			rank++;
