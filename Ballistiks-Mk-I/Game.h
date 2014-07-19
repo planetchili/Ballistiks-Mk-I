@@ -37,6 +37,7 @@
 #include "Camera.h"
 #include "Presentator.h"
 #include "TournamentManager.h"
+#include "Timer.h"
 
 
 class Game
@@ -52,17 +53,21 @@ public:
 	protected:
 		void OnNotify() override
 		{
-			parent.manager.RecordGameResults();
-			if( !parent.manager.StartNextGame() )
+			if( parent.simulation )
 			{
-				parent.manager.RecordMatchResults();
-				if( !parent.manager.StartNextMatch() )
+				parent.tManager->RecordGameResults();
+				if( !parent.tManager->StartNextGame() )
 				{
-					parent.Exit();
-				}
-				else
-				{
-					parent.manager.StartNextGame();
+					parent.tManager->RecordMatchResults();
+					if( !parent.tManager->StartNextMatch() )
+					{
+						parent.tManager->RecordTotalResults();
+						parent.Exit();
+					}
+					else
+					{
+						parent.tManager->StartNextGame();
+					}
 				}
 			}
 		}
@@ -70,7 +75,7 @@ public:
 		Game& parent;
 	};
 public:
-	Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer );
+	Game( HWND hWnd,const std::wstring cmdStr,KeyboardServer& kServer,MouseServer& mServer );
 	~Game();
 	void Go();
 private:
@@ -95,13 +100,14 @@ private:
 	Font scoreFont;
 	Font nameFont;
 	Font timeFont;
-
+	Font progressFont;
+	Timer frameTimer;
 	AIFactoryCodex codex;
-	KeyboardControllerFactory kbdFactory;
 	Presentator pres;
 	std::shared_ptr< EndGameObserver > endObs;
 	bool simulation = true;
-	TournamentManager manager;
+	std::unique_ptr< TournamentManager > tManager;
+	std::unique_ptr< KeyboardControllerFactory > kbdFactory;
 
 	/********************************/
 	void UpdateModel();

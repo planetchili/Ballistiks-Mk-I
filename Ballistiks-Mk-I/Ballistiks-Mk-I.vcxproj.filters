@@ -37,6 +37,12 @@
     <Filter Include="Header Files\Control">
       <UniqueIdentifier>{03a7f22d-7b9f-4cb8-9d63-751ba61735d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Mangement">
+      <UniqueIdentifier>{20d0b86d-3a25-4fce-a36b-512a85cc4d9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Management">
+      <UniqueIdentifier>{47985177-ac06-4234-9678-dfa56e62f524}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -141,9 +147,6 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Controller.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
@@ -186,15 +189,6 @@
     <ClInclude Include="Midi.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Presentator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Team.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GdiPlusManager.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
@@ -207,11 +201,26 @@
     <ClInclude Include="DragProcessor.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="TournamentManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="UpBot.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Header Files\Mangement</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandLine.h">
+      <Filter>Header Files\Mangement</Filter>
+    </ClInclude>
+    <ClInclude Include="Presentator.h">
+      <Filter>Header Files\Mangement</Filter>
+    </ClInclude>
+    <ClInclude Include="Team.h">
+      <Filter>Header Files\Mangement</Filter>
+    </ClInclude>
+    <ClInclude Include="TournamentManager.h">
+      <Filter>Header Files\Mangement</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Header Files\Mangement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -245,11 +254,11 @@
     <ClCompile Include="Midi.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="Presentator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GdiPlusManager.cpp">
       <Filter>Source Files\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Presentator.cpp">
+      <Filter>Source Files\Management</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

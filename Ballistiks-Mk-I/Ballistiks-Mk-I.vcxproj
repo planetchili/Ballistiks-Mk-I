@@ -90,6 +90,7 @@
     <ClInclude Include="AlertZone.h" />
     <ClInclude Include="AssholeAI.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="CommandLine.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GdiPlusManager.h" />

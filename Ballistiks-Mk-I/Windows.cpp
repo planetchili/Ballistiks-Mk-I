@@ -133,7 +133,7 @@ LRESULT WINAPI MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
     return DefWindowProc( hWnd, msg, wParam, lParam );
 }
 
-int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR,INT )
+int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE hi2,LPWSTR cmd,INT )
 {
 	WNDCLASSEX wc = { sizeof( WNDCLASSEX ),CS_CLASSDC,MsgProc,0,0,
                       GetModuleHandle( nullptr ),nullptr,nullptr,nullptr,nullptr,
@@ -156,7 +156,7 @@ int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE,LPWSTR,INT )
     ShowWindow( hWnd,SW_SHOWDEFAULT );
     UpdateWindow( hWnd );
 
-	Game theGame( hWnd,kServ,mServ );
+	Game theGame( hWnd,cmd,kServ,mServ );
 	
     MSG msg;
     ZeroMemory( &msg,sizeof( msg ) );

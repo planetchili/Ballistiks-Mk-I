@@ -22,8 +22,10 @@
 #include <sstream>
 #include <iomanip>
 #include <iostream>
+#include <memory>
+#include "CommandLine.h"
 
-Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
+Game::Game( HWND hWnd,const std::wstring cmdStr,KeyboardServer& kServer,MouseServer& mServer )
 	:
 	gfx( hWnd ),
 	audio( hWnd ),
@@ -36,21 +38,37 @@ Game::Game( HWND hWnd,KeyboardServer& kServer,MouseServer& mServer )
 	timeFont(L"Tahoma",25.0f),
 	clockRect( {-4.0f,35.0f,vp.GetWidth() / 2.0f - 80.0f,vp.GetWidth() / 2.0f + 80.0f } ),
 	clockBack( TriangleStrip::ExtractSolidStripCollection( clockRect.ExtractVertices() ) ),
-	kbdFactory( kbd ),
 	pres(audio,cam,vp),
 	endObs(std::make_shared< EndGameObserver >(*this)),
-	manager( codex,pres )
+	progressFont(L"Times New Roman",60.0f )
 {
 	pres.AddEndGameObserver( endObs );
-	if( simulation )
+
+	CommandLine cmd( cmdStr );
+	switch( cmd.type )
 	{
-		manager.StartNextMatch();
-		manager.StartNextGame();
+	case CommandLine::Simulate:
+		simulation = true;
+		tManager = std::make_unique<TournamentManager>( codex,pres,cmd.seed );
+		tManager->StartNextMatch();
+		tManager->StartNextGame();
+		break;
+	case CommandLine::Watch:
+		simulation = false;
+		srand( cmd.seed );
+		pres.StartGame(
+			codex.GetFactoryByName( cmd.player0 ),
+			codex.GetFactoryByName( cmd.player1 ) );
+		break;
+	case CommandLine::Play:
+		simulation = false;
+		kbdFactory = std::make_unique< KeyboardControllerFactory >( kbd );
+		pres.StartGame(	*kbdFactory,codex.GetFactoryByName( cmd.player0 ) );
+		break;
+	default:
+		throw;
 	}
-	else
-	{
-		pres.StartGame( codex.GetRandomFactory(),codex.GetRandomFactory() );
-	}
+	frameTimer.StartWatch();
 }
 
 void Game::Exit()
@@ -71,69 +89,73 @@ void Game::Go()
 		ComposeFrame();
 		gfx.EndFrame();
 	}
+	else if( frameTimer.GetTimeSec() > ( 5.0f / 60.0f ) )
+	{
+		gfx.BeginFrame();
+		ComposeFrame();
+		gfx.EndFrame();
+		frameTimer.StartWatch();
+	}
 }
 
 void Game::UpdateModel( )
 {
-	const float dt = 1.0f / 60.0f;
-	pres.Step( dt );
-
-	if( !simulation && !mouse.MouseEmpty() )
-	{
-		const MouseEvent e = mouse.ReadMouse();
-		switch( e.GetType() )
-		{
-		case MouseEvent::LPress:
-			pres.StartGame( kbdFactory,codex.GetRandomFactory() );
-			break;
-		case MouseEvent::RPress:
-			pres.StartGame( codex.GetRandomFactory(),codex.GetRandomFactory() );
-			break;
-		default:
-			break;
-		}
-	}
+	pres.Step( 1.0f / 60.0f );
 }
 
 void Game::ComposeFrame()
 {
-	pres.Draw( vp );
+	if( !simulation )
+	{
+		pres.Draw( vp );
 
-	const GameManager& gameManager = pres.GetManager();
-	const Team& leftTeam = gameManager.GetPeriod() % 2 == 0 ? gameManager.GetTeamA()
-															: gameManager.GetTeamB();
-	const Team& rightTeam = gameManager.GetPeriod() % 2 == 0 ? gameManager.GetTeamB()
-															 : gameManager.GetTeamA();
+		const GameManager& gameManager = pres.GetManager();
+		const Team& leftTeam = gameManager.GetPeriod() % 2 == 0 ? gameManager.GetTeamA()
+			: gameManager.GetTeamB();
+		const Team& rightTeam = gameManager.GetPeriod() % 2 == 0 ? gameManager.GetTeamB()
+			: gameManager.GetTeamA();
 
-	gfx.DrawString( leftTeam.GetName(),
-		RectF {
+		gfx.DrawString( leftTeam.GetName(),
+			RectF {
 			0.0f,
 			40.0f,
 			0.0f,
 			280.0f },nameFont,leftTeam.GetPrimaryColor(),Surface::Alignment::Left );
 		gfx.DrawString( std::to_wstring( leftTeam.GetScore() ),
-		RectF {
+			RectF {
 			15.0f,
 			65.0f,
 			0.0f,
 			60.0f },scoreFont,GREEN );
 		gfx.DrawString( rightTeam.GetName(),
-		RectF {
+			RectF {
 			0.0f,
 			40.0f,
 			1000.0f,
 			1276.0f },nameFont,rightTeam.GetPrimaryColor(),Surface::Alignment::Right );
 		gfx.DrawString( std::to_wstring( rightTeam.GetScore() ),
-		RectF {
+			RectF {
 			15.0f,
 			65.0f,
 			1220.0f,
 			1280.0f },scoreFont,GREEN );
-	
-	vp.Draw( clockBack.front().GetDrawable( Color( 96,80,140 ) ) );
-	std::wstringstream s;
-	s	<< L'P' << gameManager.GetPeriod() + 1 << L' '
-		<< int( gameManager.GetTimeRemaining() ) / 60 << L":"
-		<< std::setfill( L'0' ) << std::setw( 2 ) << int( gameManager.GetTimeRemaining() ) % 60;
-	gfx.DrawString( s.str(),clockRect,timeFont,GREEN );
+
+		vp.Draw( clockBack.front().GetDrawable( Color( 96,80,140 ) ) );
+		std::wstringstream s;
+		s << L'P' << gameManager.GetPeriod() + 1 << L' '
+			<< int( gameManager.GetTimeRemaining() ) / 60 << L":"
+			<< std::setfill( L'0' ) << std::setw( 2 ) << int( gameManager.GetTimeRemaining() ) % 60;
+		gfx.DrawString( s.str(),clockRect,timeFont,GREEN );
+	}
+	else
+	{
+		std::wstringstream s;
+		s << std::setprecision( 0 ) << std::fixed << tManager->GetCompletionPercent() << L"%";
+		gfx.DrawString(
+			s.str(),
+			RectF {
+			vp.GetHeight() / 2.0f - 60.0f,
+			vp.GetHeight() / 2.0f + 60.0f,
+			0.0f,vp.GetWidth() },progressFont );
+	}
 }

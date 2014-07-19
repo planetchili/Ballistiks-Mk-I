@@ -86,7 +86,7 @@ private:
 	}
 private:
 	unsigned int period = 0;
-	const float periodLength = 1.0f * 60.0f;
+	const float periodLength = PERIOD_LENGTH;
 	float pointStartTime = 0.0f;
 	Team teamA;
 	Team teamB;
