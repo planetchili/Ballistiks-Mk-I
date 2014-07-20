@@ -12,6 +12,7 @@
 #include "AssholeAI.h"
 #include "ChiliBot.h"
 #include "LuXAI.h"
+#include "CaAI.h"
 
 /*************************/
 
@@ -117,10 +118,11 @@ public:
 		/**********************************/
 		/*  User AI Factory Registration  */
 
-		Register< TestAIFactory >();
-		Register< AssholeAIFactory >();
+		//Register< TestAIFactory >();
+		//Register< AssholeAIFactory >();
 		Register< ChiliBotFactory >();
 		Register< LuXAIFactory >( );
+		Register< CaAIFactory >();
 
 		/**********************************/
 	}
