@@ -108,6 +108,7 @@ private:
 	bool simulation = true;
 	std::unique_ptr< TournamentManager > tManager;
 	std::unique_ptr< KeyboardControllerFactory > kbdFactory;
+	unsigned int frameskip = 0;
 
 	/********************************/
 	void UpdateModel();

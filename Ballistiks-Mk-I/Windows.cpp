@@ -24,6 +24,7 @@
 #include "Game.h"
 #include "resource.h"
 #include "Mouse.h"
+#include "CommandLine.h"
 
 static KeyboardServer kServ;
 static MouseServer mServ;
@@ -156,22 +157,29 @@ int WINAPI wWinMain( HINSTANCE hInst,HINSTANCE hi2,LPWSTR cmd,INT )
     ShowWindow( hWnd,SW_SHOWDEFAULT );
     UpdateWindow( hWnd );
 
-	Game theGame( hWnd,cmd,kServ,mServ );
-	
-    MSG msg;
-    ZeroMemory( &msg,sizeof( msg ) );
-    while( msg.message != WM_QUIT )
-    {
-        if( PeekMessage( &msg,nullptr,0,0,PM_REMOVE ) )
-        {
-            TranslateMessage( &msg );
-            DispatchMessage( &msg );
-        }
-        else
+	try
+	{
+		Game theGame( hWnd,cmd,kServ,mServ );
+
+		MSG msg;
+		ZeroMemory( &msg,sizeof( msg ) );
+		while( msg.message != WM_QUIT )
 		{
-			theGame.Go();
+			if( PeekMessage( &msg,nullptr,0,0,PM_REMOVE ) )
+			{
+				TranslateMessage( &msg );
+				DispatchMessage( &msg );
+			}
+			else
+			{
+				theGame.Go();
+			}
 		}
-    }
+	}
+	catch( CommandLine::Exception& e )
+	{
+		MessageBox( hWnd,e,L"Command Line Error",0 );
+	}
 
     UnregisterClass( L"Chili DirectX Framework Window",wc.hInstance );
     return 0;

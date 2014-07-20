@@ -1,6 +1,5 @@
 #pragma once
 
-#define FRAMESKIP			5
 #define PERIOD_LENGTH		3.0f * 60.0f
 #define GAMES_PER_MATCH		50
 #define GLOBAL_DRAG			0.0050f

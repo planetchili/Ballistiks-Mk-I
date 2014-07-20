@@ -59,14 +59,14 @@ Game::Game( HWND hWnd,const std::wstring cmdStr,KeyboardServer& kServer,MouseSer
 		pres.StartGame(
 			codex.GetFactoryByName( cmd.player0 ),
 			codex.GetFactoryByName( cmd.player1 ) );
+		frameskip = cmd.frameskip;
 		break;
 	case CommandLine::Play:
 		simulation = false;
 		kbdFactory = std::make_unique< KeyboardControllerFactory >( kbd );
 		pres.StartGame(	*kbdFactory,codex.GetFactoryByName( cmd.player0 ) );
+		frameskip = cmd.frameskip;
 		break;
-	default:
-		throw;
 	}
 	frameTimer.StartWatch();
 }
@@ -100,7 +100,7 @@ void Game::Go()
 
 void Game::UpdateModel( )
 {
-	for( int n = 0; n < FRAMESKIP + 1; n++ )
+	for( unsigned int n = 0; n < frameskip + 1; n++ )
 	{
 		pres.Step( 1.0f / 60.0f );
 	}
