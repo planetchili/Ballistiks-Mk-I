@@ -13,6 +13,7 @@
 #include "ChiliBot.h"
 #include "LuXAI.h"
 #include "CaAI.h"
+#include "SpaceAI.h"
 
 /*************************/
 
@@ -123,6 +124,7 @@ public:
 		Register< ChiliBotFactory >();
 		Register< LuXAIFactory >( );
 		Register< CaAIFactory >();
+		Register< SpaceAIFactory >();
 
 		/**********************************/
 	}

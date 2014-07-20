@@ -228,6 +228,9 @@
     <ClInclude Include="CaAI.h">
       <Filter>Header Files\Control</Filter>
     </ClInclude>
+    <ClInclude Include="SpaceAI.h">
+      <Filter>Header Files\Control</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">

@@ -134,6 +134,7 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="SpaceAI.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Team.h" />
     <ClInclude Include="TestAI.h" />
