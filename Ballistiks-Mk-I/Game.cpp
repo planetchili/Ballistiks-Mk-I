@@ -100,7 +100,10 @@ void Game::Go()
 
 void Game::UpdateModel( )
 {
-	pres.Step( 1.0f / 60.0f );
+	for( int n = 0; n < FRAMESKIP + 1; n++ )
+	{
+		pres.Step( 1.0f / 60.0f );
+	}
 }
 
 void Game::ComposeFrame()
