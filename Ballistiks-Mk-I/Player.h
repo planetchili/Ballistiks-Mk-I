@@ -9,6 +9,7 @@ public:
 	virtual void SetThrustVector( Vec2 vector ) = 0;
 	virtual void Burst() = 0;
 	virtual const class Player& PlayerConst() const = 0;
+	virtual void SetDebugColor( Color c,bool on = true ) = 0;
 };
 
 class Player : public PhysicalCircle,
@@ -29,6 +30,10 @@ public:
 			const Vec2 screenPos = trans * Vec2{ 0.0f,0.0f };
 			gfx.DrawFilledCircleClip( screenPos,(int)scaledRadius,clip,parent.color1 );
 			gfx.DrawFilledCircleClip( screenPos,(int)( scaledRadius * 0.8f ),clip,parent.color0 );
+			if( parent.debugColorEnabled )
+			{
+				gfx.DrawFilledCircleClip( screenPos,(int)( scaledRadius * 0.4f ),clip,parent.debugColor );
+			}
 		}
 	private:
 		const Player& parent;
@@ -54,6 +59,11 @@ public:
 			vector /= length;
 		}
 		thrustVector = vector;
+	}
+	virtual void SetDebugColor( Color c,bool use ) override
+	{
+		debugColorEnabled = use;
+		debugColor = c;
 	}
 	virtual void Burst() override
 	{
@@ -106,5 +116,7 @@ private:
 	Vec2 thrustVector = { 0.0f,0.0f };
 	const Color color0;
 	const Color color1;
+	Color debugColor;
+	bool debugColorEnabled = false;
 	const unsigned int uid;
 };
