@@ -122,9 +122,10 @@ public:
 		//Register< TestAIFactory >();
 		//Register< AssholeAIFactory >();
 		Register< ChiliBotFactory >();
+		Register< ChiliBotControlFactory >();
 		Register< LuXAIFactory >( );
-		Register< CaAIFactory >();
-		Register< SpaceAIFactory >();
+		//Register< CaAIFactory >();
+		//Register< SpaceAIFactory >();
 
 		/**********************************/
 	}

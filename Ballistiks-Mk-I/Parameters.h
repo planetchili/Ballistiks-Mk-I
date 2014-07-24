@@ -1,7 +1,7 @@
 #pragma once
 
 #define PERIOD_LENGTH		3.0f * 60.0f
-#define GAMES_PER_MATCH		50
+#define GAMES_PER_MATCH		100
 #define GLOBAL_DRAG			0.0050f
 #define PLAYER_RADIUS		25.0f
 #define PLAYER_DENSITY		1.0f / 250.0f

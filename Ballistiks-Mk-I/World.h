@@ -48,19 +48,29 @@ private:
 public:
 	World( float startTime,Team& leftTeam,Team& rightTeam,Observable& periodEvent )
 		:
-		walls( 
-			{ { 80.0f,40.0f },
-			{ 1200.0f,40.0f },
+		walls(
+			{ { 150.0f,40.0f },
+
+			{ 1130.0f,40.0f },
+			{ 1200.0f,110.0f },
+
 			{ 1200.0f,295.0f },
 			{ 1250.0f,305.0f },
 			{ 1250.0f,415.0f },
 			{ 1200.0f,425.0f },
-			{ 1200.0f,680.0f },
-			{ 80.0f,680.0f },
+
+			{ 1200.0f,610.0f },
+			{ 1130.0f,680.0f },
+
+			{ 150.0f,680.0f },
+			{ 80.0f,610.0f },
+
 			{ 80.0f,425.0f },
 			{ 30.0f,415.0f },
 			{ 30.0f,305.0f },
-			{ 80.0f,295.0f } } ),
+			{ 80.0f,295.0f },
+
+			{ 80.0f,110.0f } } ),
 		haltObserver( HaltPlayObs::Make( *this ) ),
 		timeElapsed( startTime )
 	{
